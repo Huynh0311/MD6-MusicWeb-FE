@@ -6,7 +6,6 @@ import {useParams} from "react-router-dom";
 
 const DetailSong = () => {
     const {id} = useParams();
-
     return (
         <div>
             <div id="wrapper">

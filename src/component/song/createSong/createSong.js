@@ -1,12 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {storage} from "./firebase"
 import {v4} from 'uuid';
-import {ref, uploadBytes, listAll, getDownloadURL} from "firebase/storage"
-import axios from "axios";
+import {ref, uploadBytes, getDownloadURL} from "firebase/storage"
 import "./create.css"
 import {useNavigate} from "react-router-dom";
-
-
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as Yup from "yup";
 import {addSongSV, getAllGenres} from "../../api/SongService/SongService";
@@ -14,13 +11,13 @@ import {addSongSV, getAllGenres} from "../../api/SongService/SongService";
 
 const validateSchema = Yup.object().shape({
     nameSong: Yup.string()
-        .min(5, 'Tên bài hát phải có ít nhất 5 ký tự')
-        .max(50, 'Tên bài hát không được quá 50 kí tự')
-        .required('Tên bài hát không được để trống'),
+        .min(5, 'Song name must be at least 5 characters long')
+        .max(50, 'Song name must be maximum 50 characters long')
+        .required('Song name cannot be null'),
     singer: Yup.string()
-        .min(5, 'Tên ca sĩ phải có ít nhất 5 ký tự')
-        .max(50, 'Tên ca sĩ không được quá 50 kí tự')
-        .required('Tên ca sĩ không được để trống'),
+        .min(3, 'Artist name must be at least 3 characters long')
+        .max(30, 'Artist name must be maximum 30 characters long')
+        .required('Artist name cannot be null'),
 });
 
 const CreateSong = () => {
@@ -41,7 +38,7 @@ const CreateSong = () => {
     const imageListRef = ref(storage, "images/")
     const [previewImage, setPreviewImage] = useState(null);
     const [defaultImg, setDefaultImg] = useState('https://www.billboard.com/wp-content/uploads/media/streaming-illustration-v-2019-billboard-1548.jpg');
-
+    const [isLoading, setIsLoading] = useState(false);
     const uploadAudio = async (imgFile) => {
         if (audioUpload == null) return;
         const audioRef = ref(storage, `audios/${audioUpload.name + v4()}`);
@@ -57,6 +54,7 @@ const CreateSong = () => {
 
 
     const uploadImg = async () => {
+        setIsLoading(true);
         if (imageUpload == null) return;
         const imgRef = ref(storage, `images/${imageUpload.name + v4()}`);
         try {
@@ -97,6 +95,7 @@ const CreateSong = () => {
             form.append("singer", singer);
             try {
                 const response = await addSongSV(form)
+                setIsLoading(false);
                 console.log(response.data);
                 let obj = response.data;
                 navigate(`/detailSong/${obj.id}`)
@@ -121,13 +120,15 @@ const CreateSong = () => {
 
     const showGenres = async () => {
         const response = await getAllGenres()
-        setGenresList(response.data)}
+        setGenresList(response.data)
+    }
     useEffect(() => {
         showGenres();
     }, [])
 
 
     return (
+
         <div id="wrapper">
             <Formik
                 initialValues={{
@@ -501,9 +502,17 @@ const CreateSong = () => {
                                                         </div>
                                                     </div>
                                                 </div>
+
                                                 <div className="card-footer text-center addcancelBtn">
                                                     <button type={"submit"} className="btn btn-primary acceptBtn"
-                                                            style={{minWidth: "140px"}}>Add Music
+                                                            style={{minWidth: "140px"}} disabled={isLoading}>
+                                                        {isLoading ? (
+                                                            <div className="spinner-border" role="status">
+                                                                <span className="visually-hidden">Loading...</span>
+                                                            </div>
+                                                        ) : (
+                                                            'Add Music'
+                                                        )}
                                                     </button>
                                                     <button className="btn btn-danger">Cancel</button>
                                                 </div>
