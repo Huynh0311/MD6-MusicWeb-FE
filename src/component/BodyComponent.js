@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import {Link, useNavigate} from "react-router-dom";
 
 const BodyComponent = () => {
+
     return (
         <div>
             <div id="wrapper">
@@ -353,10 +355,14 @@ const BodyComponent = () => {
                                                 </div>
                                             </li>
                                             <li className="dropdown-divider"></li>
-                                            <li><a className="dropdown-item d-flex align-items-center"
-                                                   href="profile.html"><i
-                                                className="ri-user-3-line fs-5"></i> <span
-                                                className="ps-2">Profile</span></a></li>
+                                            <li>
+                                                <Link to={"/updateProfile/1"}>
+                                                <div className="dropdown-item d-flex align-items-center">
+                                                    <i className="ri-user-3-line fs-5"></i>
+                                                    <span className="ps-2">Profile</span>
+                                                </div>
+                                                </Link>
+                                            </li>
                                             <li><a className="dropdown-item d-flex align-items-center"
                                                    href="favorites.html"><i
                                                 className="ri-heart-line fs-5"></i> <span
