@@ -3,7 +3,8 @@ import {Route, Routes} from "react-router-dom";
 import BodyComponent from "./component/BodyComponent";
 import NavbarComponent from "./component/navbarComponent";
 import Loader from "./component/Loader";
-import EditProfile from "./component/EditProfile";
+
+import DetailSong from "./component/Song/DetailSong";
 
 function App() {
     return (
@@ -12,7 +13,8 @@ function App() {
             <Loader/>
             <Routes>
                 <Route path={'/'} element={<BodyComponent/>}></Route>
-                <Route path={"/edit"} element={<EditProfile/>}/>
+
+                <Route path={"/detailSong/:id"} element={<DetailSong/>}/>
             </Routes>
         </div>
     );
