@@ -20,14 +20,10 @@ function App() {
             {showNavbar && <NavbarComponent/>}
             <Loader/>
             <Routes>
-
-               
                 <Route path="/song/create" element={<CreateSong/>}/>
-              
                 <Route path="/home" element={<BodyComponent/>}/>
                 <Route path="/register" element={<RegisterComponent setShowNavbar={setShowNavbar}/>}/>
                 <Route path="/login" element={<LoginComponent setShowNavbar={setShowNavbar}/>}/>
-
             </Routes>
             <ToastContainer/>
         </div>
