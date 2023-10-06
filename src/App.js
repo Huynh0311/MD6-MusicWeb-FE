@@ -1,19 +1,27 @@
-import './App.css';
+import React, {useState} from "react";
 import {Route, Routes} from "react-router-dom";
 import BodyComponent from "./component/BodyComponent";
-import NavbarComponent from "./component/navbarComponent";
 import Loader from "./component/Loader";
-import EditProfile from "./component/EditProfile";
+import RegisterComponent from "./component/RegisterComponent";
+import NavbarComponent from "./component/navbarComponent";
+import LoginComponent from "./component/LoginComponent";
+import 'react-toastify/dist/ReactToastify.css';
+import {ToastContainer} from "react-toastify";
+
 
 function App() {
+    const [showNavbar, setShowNavbar] = useState(true);
+
     return (
         <div className="App">
-            <NavbarComponent/>
+            {showNavbar && <NavbarComponent/>}
             <Loader/>
             <Routes>
-                <Route path={'/'} element={<BodyComponent/>}></Route>
-                <Route path={"/edit"} element={<EditProfile/>}/>
+                <Route path="/home" element={<BodyComponent/>}/>
+                <Route path="/register" element={<RegisterComponent setShowNavbar={setShowNavbar}/>}/>
+                <Route path="/login" element={<LoginComponent setShowNavbar={setShowNavbar}/>}/>
             </Routes>
+            <ToastContainer/>
         </div>
     );
 }
