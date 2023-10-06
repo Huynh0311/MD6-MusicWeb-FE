@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Link, useNavigate, useParams} from "react-router-dom";
-import _ from 'lodash';
-import axiosConfig from "./AccountService";
+import axiosConfig from "../api/AccountService/AccountService";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as Yup from "yup";
 import {toast} from "react-toastify";
@@ -110,7 +109,7 @@ const UpdatePassword = () => {
                 <main id="page_content">
                         <Formik
                             initialValues={{
-                                name: '',
+                                password: '',
                                 confirmPassword: '',
                             }}
                             validationSchema={validateSchema}
@@ -171,7 +170,7 @@ const UpdatePassword = () => {
                                                             <span style={{color: "red"}}><ErrorMessage
                                                                 name={'confirmPassword'}></ErrorMessage></span>
                                                         </div>
-                                                        <div className="col-12">
+                                                        <div className="col-12" style={{display: 'flex', justifyContent: 'center'}}>
                                                             <button type=" " className="btn btn-primary" style={{marginRight: "140px"}}>
                                                                 Update
                                                             </button>

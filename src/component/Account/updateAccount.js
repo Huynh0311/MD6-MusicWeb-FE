@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Link, useNavigate, useParams} from "react-router-dom";
 import _ from 'lodash';
-import axiosConfig from "./AccountService";
+import axiosConfig from "../api/AccountService/AccountService";
 import {storage} from "../../firebase/firebase";
 import {ref, uploadBytes, getDownloadURL} from "firebase/storage";
 import {v4} from "uuid";
@@ -77,7 +77,7 @@ const UpdateAccount = () => {
 
     useEffect(() => {
         findById();
-    }, []);
+    }, [id]);
 
     const findById = () => {
         axiosConfig.findById(id)
@@ -234,7 +234,7 @@ const UpdateAccount = () => {
                                                             <span style={{color: "red"}}><ErrorMessage
                                                                 name={'phone'}></ErrorMessage></span>
                                                         </div>
-                                                        <div className="col-12">
+                                                        <div className="col-12" style={{display: 'flex', justifyContent: 'center'}}>
                                                             <button type="submit" className="btn btn-primary">
                                                                 Update Profile
                                                             </button>

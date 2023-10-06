@@ -17,7 +17,7 @@ const NavbarComponent = () => {
                     <nav className="navbar d-block p-0">
                         <ul className="navbar-nav">
                             <li className="nav-item">
-                                <Link to={"/"}>
+                                <Link to={"/home"}>
                                     <p className="nav-link d-flex align-items-center active">
                                         <i className="ri-home-4-line fs-5"></i>
                                         <span className="ps-3">Home</span>

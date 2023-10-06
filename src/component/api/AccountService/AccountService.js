@@ -39,7 +39,7 @@ class AccountService {
 
     updatePassword = (account) => {
         return new Promise((resolve, reject) => {
-            axios.post("http://localhost:8080/apiAccount/save/", account)
+            axios.post("http://localhost:8080/apiAccount/save", account)
                 .then(response => {
                     resolve(response);
                 })
