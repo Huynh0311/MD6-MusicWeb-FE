@@ -3,7 +3,7 @@ import {Route, Routes} from "react-router-dom";
 import BodyComponent from "./component/BodyComponent";
 import NavbarComponent from "./component/navbarComponent";
 import Loader from "./component/Loader";
-import EditProfile from "./component/EditProfile";
+import ListSong from "./component/song/listSong/ListSong";
 
 function App() {
     return (
@@ -12,7 +12,7 @@ function App() {
             <Loader/>
             <Routes>
                 <Route path={'/'} element={<BodyComponent/>}></Route>
-                <Route path={"/edit"} element={<EditProfile/>}/>
+                <Route path='/song/all' element={<ListSong />}></Route>
             </Routes>
         </div>
     );
