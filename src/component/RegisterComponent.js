@@ -3,7 +3,14 @@ import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {toast} from 'react-toastify';
+import * as Yup from "yup";
 
+
+const validateSchema = Yup.object().shape({
+    confirmPassword: Yup.string()
+        .oneOf([Yup.ref('password'), null], 'Mật khẩu xác nhận phải trùng khớp với mật khẩu')
+        .required('Xác nhận mật khẩu không được để trống'),
+});
 const RegisterComponent = ({setShowNavbar}) => {
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
@@ -16,9 +23,9 @@ const RegisterComponent = ({setShowNavbar}) => {
     const validatePassword = (value) => {
         let errorMessage = '';
         if (!value) {
-            errorMessage = 'Mật khẩu phải có ít nhất 8 kí tự chữ và 1 kí tự số';
+            errorMessage = 'Mật khẩu phải có ít nhất 8 kí tự chữ và ít nhất 1 kí tự số';
         } else if (!/^(?=.*\d).{8,}$/.test(value)) {
-            errorMessage = 'Mật khẩu phải có ít nhất 8 kí tự chữ và 1 kí tự số';
+            errorMessage = 'Mật khẩu phải có ít nhất 8 kí tự chữ và ít nhất 1 kí tự số';
         }
         return errorMessage;
     };
@@ -71,50 +78,39 @@ const RegisterComponent = ({setShowNavbar}) => {
                 role: {
                     id: 1
                 }
-            }} onSubmit={(values) => {
-                if (values.password !== values.confirmPassword) {
-                    toast.error('Mật khẩu xác nhận không đúng', {
-                        position: "top-center",
-                        autoClose: 2000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "light",
-                    });
-                    return;
-                }
-                axios.post('http://localhost:8080/api/auth/register', values, {
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    }
-                }).then(() => {
-                    navigate('/login');
-                    toast.success('🦄 Wow so easy!', {
-                        position: "top-center",
-                        autoClose: 3000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "light",
-                    });
-                }).catch(error => {
-                    toast.error('Ôi,hỏng!', {
-                        position: "top-center",
-                        autoClose: 2000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "light",
-                    });
-                })
-            }}>
+            }}
+                    validationSchema={validateSchema}
+                    onSubmit={(values) => {
+                        axios.post('http://localhost:8080/api/auth/register', values, {
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(() => {
+                            navigate('/login');
+                            toast.success('Đăng kí thành công', {
+                                position: "top-center",
+                                autoClose: 3000,
+                                hideProgressBar: false,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                progress: undefined,
+                                theme: "light",
+                            });
+                        }).catch(error => {
+                            toast.error('Đăng kí thất bại!', {
+                                position: "top-center",
+                                autoClose: 2000,
+                                hideProgressBar: false,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                progress: undefined,
+                                theme: "light",
+                            });
+                        })
+                    }}>
                 <Form>
                     <div id="wrapper">
                         <div className="auth py-5">

@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Link, useNavigate} from "react-router-dom";
 
 const BodyComponent = () => {
+
     const [account,setAccount] = useState(localStorage.getItem("data"));
     const loggedIn = isLoggedIn();
     const navigate = useNavigate();
@@ -12,15 +13,9 @@ const BodyComponent = () => {
         localStorage.clear();
         window.location.reload();
     }
-    let name = '';
+    let accounts = null;
     if (account) {
-        const parsedAccount = JSON.parse(account);
-        name = parsedAccount.name;
-    }
-    let img = '';
-    if (account) {
-        const parsedAccount = JSON.parse(account);
-        img = parsedAccount.img;
+        accounts = JSON.parse(account);
     }
 
     return (
@@ -362,24 +357,28 @@ const BodyComponent = () => {
                                                                                   role="button" id="user_menu"
                                                                                   data-bs-toggle="dropdown"
                                                                                   aria-expanded="false">
-                                            <div className="avatar__image"><img src={img} alt="user"/>
+                                            <div className="avatar__image"><img src={accounts.img} alt="user"/>
                                             </div>
-                                            <span className="ps-2 d-none d-sm-block">{name}</span></a>
+                                            <span className="ps-2 d-none d-sm-block">{accounts.name}</span></a>
                                             <ul className="dropdown-menu dropdown-menu-md dropdown-menu-end"
                                                 aria-labelledby="user_menu">
                                                 <li>
                                                     <div className="py-2 px-3 avatar avatar--lg">
-                                                        <div className="avatar__image"><img src={img}
+                                                        <div className="avatar__image"><img src={accounts.img}
                                                                                             alt="user"/></div>
-                                                        <div className="avatar__content"><span className="avatar__title">{name}</span>
+                                                        <div className="avatar__content"><span className="avatar__title">{accounts.name}</span>
                                                             <span className="avatar__subtitle">Artist</span></div>
                                                     </div>
                                                 </li>
                                                 <li className="dropdown-divider"></li>
-                                                <li><a className="dropdown-item d-flex align-items-center"
-                                                       href="profile.html"><i
-                                                    className="ri-user-3-line fs-5"></i> <span
-                                                    className="ps-2">Profile</span></a></li>
+                                                <li>
+                                                    <Link to={"/updateProfile/" + accounts.id}>
+                                                        <div className="dropdown-item d-flex align-items-center">
+                                                            <i className="ri-user-3-line fs-5"></i>
+                                                            <span className="ps-2">Profile</span>
+                                                        </div>
+                                                    </Link>
+                                                </li>
                                                 <li><a className="dropdown-item d-flex align-items-center"
                                                        href="favorites.html"><i
                                                     className="ri-heart-line fs-5"></i> <span

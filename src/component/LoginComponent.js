@@ -48,7 +48,7 @@ const LoginComponent = ({setShowNavbar}) => {
                     window.location.reload()
                 }).catch(error => {
                     console.log(1)
-                    toast.error('Ôi,hỏng!', {
+                    toast.error('Đăng nhập thất bại', {
                         position: "top-center",
                         autoClose: 2000,
                         hideProgressBar: false,
@@ -88,7 +88,7 @@ const LoginComponent = ({setShowNavbar}) => {
                                                                              className="form-label fw-medium">Password</label>
                                                     <Field type="password" id="password" className="form-control"
                                                            name={'password'} validate={validatePassword}/> <span
-                                                        style={{color: "red"}}><ErrorMessage name="email"
+                                                        style={{color: "red"}}><ErrorMessage name="password"
                                                                                              component="div"
                                                                                              className="error-message"/>  </span>
                                                 </div>
