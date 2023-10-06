@@ -1,8 +1,0 @@
-.music-player {
-    width: 100px; /* Điều chỉnh kích thước theo ý muốn */
-    margin: 100px; /* Để căn giữa trình phát âm nhạc */
-    background-color: #f0f0f0; /* Màu nền */
-    padding: 100px; /* Khoảng cách giữa trình phát âm nhạc và các phần khác */
-    border-radius: 5px; /* Góc bo tròn */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng đổ */
-}

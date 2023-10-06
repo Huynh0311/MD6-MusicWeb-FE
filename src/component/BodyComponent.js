@@ -1,9 +1,26 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import {Link, useNavigate} from "react-router-dom";
 import SongList from "./player/SongList";
 import TopSong from "./player/TopSong";
 
 
 const BodyComponent = () => {
+
+    const [account,setAccount] = useState(localStorage.getItem("data"));
+    const loggedIn = isLoggedIn();
+    const navigate = useNavigate();
+    function isLoggedIn() {
+        return account ? true : false;
+    }
+    const logOut =()=>{
+        localStorage.clear();
+        window.location.reload();
+    }
+    let accounts = null;
+    if (account) {
+        accounts = JSON.parse(account);
+    }
+
     return (
         <div>
             <div id="wrapper">
@@ -337,49 +354,57 @@ const BodyComponent = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="dropdown ms-3 ms-sm-4"><a href="javascript:void(0);"
-                                                                              className="avatar header-text"
-                                                                              role="button" id="user_menu"
-                                                                              data-bs-toggle="dropdown"
-                                                                              aria-expanded="false">
-                                        <div className="avatar__image"><img src="images/users/thumb.jpg" alt="user"/>
+                                    {loggedIn ? (
+                                        <div className="dropdown ms-3 ms-sm-4"><a href="javascript:void(0);"
+                                                                                  className="avatar header-text"
+                                                                                  role="button" id="user_menu"
+                                                                                  data-bs-toggle="dropdown"
+                                                                                  aria-expanded="false">
+                                            <div className="avatar__image"><img src={accounts.img} alt="user"/>
+                                            </div>
+                                            <span className="ps-2 d-none d-sm-block">{accounts.name}</span></a>
+                                            <ul className="dropdown-menu dropdown-menu-md dropdown-menu-end"
+                                                aria-labelledby="user_menu">
+                                                <li>
+                                                    <div className="py-2 px-3 avatar avatar--lg">
+                                                        <div className="avatar__image"><img src={accounts.img}
+                                                                                            alt="user"/></div>
+                                                        <div className="avatar__content"><span className="avatar__title">{accounts.name}</span>
+                                                            <span className="avatar__subtitle">Artist</span></div>
+                                                    </div>
+                                                </li>
+                                                <li className="dropdown-divider"></li>
+                                                <li>
+                                                    <Link to={"/updateProfile/" + accounts.id}>
+                                                        <div className="dropdown-item d-flex align-items-center">
+                                                            <i className="ri-user-3-line fs-5"></i>
+                                                            <span className="ps-2">Profile</span>
+                                                        </div>
+                                                    </Link>
+                                                </li>
+                                                <li><a className="dropdown-item d-flex align-items-center"
+                                                       href="favorites.html"><i
+                                                    className="ri-heart-line fs-5"></i> <span
+                                                    className="ps-2">Favorites</span></a></li>
+                                                <li><a className="dropdown-item d-flex align-items-center"
+                                                       href="settings.html"><i
+                                                    className="ri-settings-line fs-5"></i> <span
+                                                    className="ps-2">Settings</span></a></li>
+                                                <li><a className="dropdown-item d-flex align-items-center" href="plan.html"><i
+                                                    className="ri-money-dollar-circle-line fs-5"></i> <span
+                                                    className="ps-2">Plan</span></a>
+                                                </li>
+                                                <li className="dropdown-divider"></li>
+                                                <li><button
+                                                    className="dropdown-item d-flex align-items-center external text-danger" onClick={() => logOut()}><i className="ri-logout-circle-line fs-5"></i> <span
+                                                    className="ps-2">Logout</span></button>
+                                                </li>
+                                            </ul>
                                         </div>
-                                        <span className="ps-2 d-none d-sm-block">Androws</span></a>
-                                        <ul className="dropdown-menu dropdown-menu-md dropdown-menu-end"
-                                            aria-labelledby="user_menu">
-                                            <li>
-                                                <div className="py-2 px-3 avatar avatar--lg">
-                                                    <div className="avatar__image"><img src="images/users/thumb.jpg"
-                                                                                        alt="user"/></div>
-                                                    <div className="avatar__content"><span className="avatar__title">Androws Kinny</span>
-                                                        <span className="avatar__subtitle">Artist</span></div>
-                                                </div>
-                                            </li>
-                                            <li className="dropdown-divider"></li>
-                                            <li><a className="dropdown-item d-flex align-items-center"
-                                                   href="profile.html"><i
-                                                className="ri-user-3-line fs-5"></i> <span
-                                                className="ps-2">Profile</span></a></li>
-                                            <li><a className="dropdown-item d-flex align-items-center"
-                                                   href="favorites.html"><i
-                                                className="ri-heart-line fs-5"></i> <span
-                                                className="ps-2">Favorites</span></a></li>
-                                            <li><a className="dropdown-item d-flex align-items-center"
-                                                   href="settings.html"><i
-                                                className="ri-settings-line fs-5"></i> <span
-                                                className="ps-2">Settings</span></a></li>
-                                            <li><a className="dropdown-item d-flex align-items-center" href="plan.html"><i
-                                                className="ri-money-dollar-circle-line fs-5"></i> <span
-                                                className="ps-2">Plan</span></a>
-                                            </li>
-                                            <li className="dropdown-divider"></li>
-                                            <li><a
-                                                className="dropdown-item d-flex align-items-center external text-danger"
-                                                href="index.html"><i className="ri-logout-circle-line fs-5"></i> <span
-                                                className="ps-2">Logout</span></a>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                    ) : (
+                                        <Link to={'/login'}><button className="btn btn-primary">Đăng nhập</button></Link>
+                                    )}
+
                                 </div>
                             </div>
                         </div>
@@ -397,8 +422,7 @@ const BodyComponent = () => {
                             <div className="swiper-carousel swiper-carousel-button"
                                  style={{display: 'flex', flexWrap: 'nowrap'}}>
                                 <SongList/>
-                                {/*<div className="swiper-button-prev btn-default rounded-pill"></div>*/}
-                                {/*<div className="swiper-button-next btn-default rounded-pill"></div>*/}
+
                             </div>
                         </div>
                         <div className="row">
