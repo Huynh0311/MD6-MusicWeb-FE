@@ -16,7 +16,7 @@ const DetailSong = () => {
 
     // const {id} = useParams();
     //Lấy tạm
-    const id = 89;
+    const id = 144;
 
 
     useEffect( () => {
