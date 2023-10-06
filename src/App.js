@@ -14,7 +14,7 @@ function App() {
             <Routes>
                 <Route path={'/'} element={<BodyComponent/>}></Route>
 
-                <Route path={"/detailSong/:id"} element={<DetailSong/>}/>
+                <Route path={"song/detailSong/:id"} element={<DetailSong/>}/>
             </Routes>
         </div>
     );
