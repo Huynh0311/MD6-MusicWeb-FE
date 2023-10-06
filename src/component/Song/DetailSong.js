@@ -508,9 +508,9 @@ const DetailSong = () => {
                     <div className="hero" style={{backgroundImage: "url(../../images/banner/song.jpg)"}}></div>
                     <div className="under-hero container">
                         <div className="section">
-                            <div className="row" data-song-id="8" data-song-name="Sadness inside"
+                            <div className="row" data-song-id={currentSong.id} data-song-name="Sadness inside"
                                  data-song-artist="Karen Jennings"
-                                 data-song-album="Sadness" data-song-url="audio/ringtone-8.mp3"
+                                 data-song-album="Sadness" data-song-url={currentSong.pathSong}
                                  data-song-cover="images/cover/small/8.jpg">
                                 <div className="col-xl-3 col-md-4">
 
@@ -522,7 +522,7 @@ const DetailSong = () => {
                                 <div className="col-1 d-none d-xl-block"></div>
                                 <div className="col-md-8 mt-5 mt-md-0">
                                     <div className="d-flex flex-wrap mb-2"><span
-                                        className="text-dark fs-4 fw-semi-bold pe-2">Electric wave</span>
+                                        className="text-dark fs-4 fw-semi-bold pe-2">{currentSong.nameSong}</span>
                                         <div className="dropstart d-inline-flex ms-auto"><a className="dropdown-link"
                                                                                             href="javascript:void(0);"
                                                                                             role="button"
@@ -557,7 +557,9 @@ const DetailSong = () => {
                                     </ul>
                                     <div className="mb-4"><p className="mb-2">Upload by: <span
                                         className="text-dark fw-medium">{currentSong.accountName}</span></p>
-                                        <p className="mb-2">Singer: <span className="text-dark fw-medium">{currentSong.singerName}</span>
+                                        <p className="mb-2">Singer: <span className="text-dark fw-medium">
+                                           {currentSong && currentSong.singerName && currentSong.singerName.join(', ')}
+                                        </span>
                                         </p>
                                     </div>
                                     <ul className="info-list mb-5">
@@ -565,7 +567,7 @@ const DetailSong = () => {
                                             <div className="d-flex align-items-center">
                                                 <button type="button" id="play_all"
                                                         className="btn btn-icon btn-primary rounded-pill"
-                                                        data-play-id="8"><i className="ri-play-fill icon-play"></i> <i
+                                                        data-play-id={currentSong.id}><i className="ri-play-fill icon-play"></i> <i
                                                     className="ri-pause-fill icon-pause"></i></button>
                                                 <span className="ps-2 fw-semi-bold">348</span></div>
                                         </li>
@@ -587,25 +589,8 @@ const DetailSong = () => {
                                             className="ps-2 fw-medium">4.5</span></span></li>
                                     </ul>
                                     <div className="mt-2"><span
-                                        className="d-block text-dark fs-6 fw-semi-bold mb-3">Lyrics</span>
-                                        <p>This one's for you Mrs Van De Kamp!</p>
-                                        <p>My love for you is like the most brave aubergine,<br/>Your face reminds me of
-                                            repugnant
-                                            goats,<br/>Together, we are like bread rolls and olive oil.</p>
-                                        <p>Oh darling Nigel,<br/>My brave aubergine,<br/>My repugnant onion,<br/>The
-                                            perfect companion
-                                            to my bread rolls soul.</p>
-                                        <p>Poppies are red,<br/>Kingfishers are blue,<br/>I like drinking tequila,<br/>But
-                                            not as much
-                                            as I love crashing with you!</p>
-                                        <p>Oh darling Nigel,<br/>Your cheeks are like clean rakes on a summer day,<br/>You're
-                                            like the
-                                            most super barman to ever walk Hull.</p>
-                                        <p>Your repugnant goat face,<br/>Your olive oil soul,<br/>Your clean
-                                            cheeks,<br/>Your super
-                                            barman being...</p>
-                                        <p>How could I look at another when our brave aubergine love is so strong?</p>
-                                        <p>I love you Mrs Van De Kamp!</p></div>
+                                        className="d-block text-dark fs-6 fw-semi-bold mb-3">Mô tả</span>
+                                        {currentSong.description}</div>
                                 </div>
                             </div>
                         </div>
