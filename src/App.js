@@ -2,6 +2,7 @@ import './App.css';
 import {Route, Routes} from "react-router-dom";
 import BodyComponent from "./component/BodyComponent";
 import NavbarComponent from "./component/navbarComponent";
+import SongList from "./component/SongList";
 import Loader from "./component/Loader";
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
             <Loader/>
             <Routes>
                 <Route path="/" element={<BodyComponent/>}/>
+                <Route path="/SongList" element={<SongList/>}/>
             </Routes>
         </div>
     );
