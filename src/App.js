@@ -7,15 +7,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import {ToastContainer} from "react-toastify";
 import UpdatePassword from "./component/Account/updatePassword";
 
-import CreateSong from "./component/song/createSong/createSong";
-import DetailSong from "./component/song/DetailSong/DetailSong";
+import CreateSong from "./component/Song/createSong/createSong";
+import DetailSong from "./component/Song/DetailSong/DetailSong";
 import RegisterComponent from "./component/RegisterComponent";
 import NavbarComponent from "./component/navbarComponent";
 import LoginComponent from "./component/LoginComponent";
-import 'react-toastify/dist/ReactToastify.css';
 
 
-import DetailSong from "./component/Song/DetailSong";
+
 
 function App() {
     const [showNavbar, setShowNavbar] = useState(true);

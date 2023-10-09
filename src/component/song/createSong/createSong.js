@@ -94,7 +94,7 @@ const CreateSong = () => {
                 setIsLoading(false);
                 console.log(response.data);
                 let obj = response.data;
-                navigate(`/detailSong/${obj.id}`)
+                navigate(`/song/detailSong/${obj.id}`)
             } catch (error) {
                 console.log(error)
             }
@@ -401,9 +401,9 @@ const CreateSong = () => {
                             </div>
                         </header>
                         <main id="page_content">
-                            <div className="hero" style={{backgroundImage: "url(images/banner/song.jpg)"}}></div>
+                            <div className="hero" style={{backgroundImage: "url(../images/banner/song.jpg)"}}></div>
                             <div className="under-hero container">
-                                <div className="section" style={{marginTop: "-150px"}}>
+                                <div className="section">
                                     <div className="row">
                                         <div className="col-xl-7 col-md-10 mx-auto">
                                             <div className="card">
@@ -434,7 +434,8 @@ const CreateSong = () => {
                                                                      style={{
                                                                          width: "400px",
                                                                          height: "400px",
-                                                                         marginBottom: "20px"
+                                                                         marginBottom: "20px",
+                                                                         marginLeft: "100px"
                                                                      }}/>
                                                                 <div style={{display: "flex"}}>
                                                                     <span style={{marginRight: "5px"}}>*</span>

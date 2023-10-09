@@ -1,19 +1,31 @@
 import axios from "../utils/axiousCustomize";
 
 const addSongSV = (form) => {
-    return axios.post("songs/add",form);
+    return axios.post("songs/add", form);
 }
 
-const getAllGenres =() =>{
+const getAllGenres = () => {
     return axios.get("/genres");
 }
 
 
-const getSongByID=(id) => {
+const getSongByID = (id) => {
     return axios.get(`songs/find/${id}`);
 }
-export {addSongSV,
+
+const playSong = (id) => {
+    return axios.post(`songs/play/${id}`)
+}
+
+const getAllSongByGenresIDAPI = (id) => {
+    return axios.get(`songs/getByGenresID/${id}`)
+}
+export {
+    addSongSV,
     getAllGenres,
-    getSongByID}
+    getSongByID,
+    playSong,
+    getAllSongByGenresIDAPI
+}
 
 
