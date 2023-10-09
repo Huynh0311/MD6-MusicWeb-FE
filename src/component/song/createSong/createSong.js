@@ -59,6 +59,16 @@ const CreateSong = () => {
         }
     }
 
+    function insertLineBreaks(text) {
+        // Tách chuỗi thành các dòng bằng dấu xuống dòng
+        const lines = text.split(/\r\n|\r|\n/);
+
+        // Chèn thẻ <br> vào cuối mỗi dòng
+        const result = lines.map(line => line + '<br>').join('');
+
+        return result;
+    }
+
     const handleInputCreateSong = (e) => {
         let {id, value} = e.target;
         switch (id) {
@@ -66,7 +76,9 @@ const CreateSong = () => {
                 setNameSong(value);
                 break;
             case "description":
-                setDescription(value);
+                let renewValue = insertLineBreaks(value);
+                console.log(renewValue);
+                setDescription(renewValue);
                 break;
             case "genres_id":
                 setGenres(value);
@@ -94,7 +106,7 @@ const CreateSong = () => {
                 setIsLoading(false);
                 console.log(response.data);
                 let obj = response.data;
-                navigate(`/detailSong/${obj.id}`)
+                navigate(`/song/detailSong/${obj.id}`)
             } catch (error) {
                 console.log(error)
             }
@@ -401,9 +413,9 @@ const CreateSong = () => {
                             </div>
                         </header>
                         <main id="page_content">
-                            <div className="hero" style={{backgroundImage: "url(images/banner/song.jpg)"}}></div>
+                            <div className="hero" style={{backgroundImage: "url(../images/banner/song.jpg)"}}></div>
                             <div className="under-hero container">
-                                <div className="section" style={{marginTop: "-150px"}}>
+                                <div className="section">
                                     <div className="row">
                                         <div className="col-xl-7 col-md-10 mx-auto">
                                             <div className="card">
@@ -434,45 +446,64 @@ const CreateSong = () => {
                                                                      style={{
                                                                          width: "400px",
                                                                          height: "400px",
-                                                                         marginBottom: "20px"
+                                                                         marginBottom: "20px",
+                                                                         marginLeft: "100px"
                                                                      }}/>
-                                                                <div style={{display: "flex"}}>
-                                                                    <span style={{marginRight: "5px"}}>*</span>
-                                                                    <input type={"file"} className="form-control"
-                                                                           id="image" onChange={(event) => {
-                                                                        setImageUpload(event.target.files[0]);
-                                                                        previewSelectedImage(event.target.files[0])
-                                                                    }}/>
+
+                                                                <div>
+                                                                    <label style={{margin: "5px 10px"}}>Select the song's picture:</label>
+                                                                    <div style={{display: "flex"}}>
+                                                                        <span style={{marginRight: "5px"}}>*</span>
+                                                                        <input type={"file"} className="form-control"
+                                                                               id="image" onChange={(event) => {
+                                                                            setImageUpload(event.target.files[0]);
+                                                                            previewSelectedImage(event.target.files[0])
+                                                                        }}/>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                            <div className="col-12 mb-4 requiredInput">
-                                                                <span>*</span>
-                                                                <Field type="text" name="nameSong" id="nameSong"
-                                                                       className="form-control"
-                                                                       placeholder="Song name"
-                                                                       onInput={handleInputCreateSong} required/>
+                                                            <div className="col-12 mb-4">
+                                                                <label style={{margin: "5px 10px"}}>Enter song
+                                                                    name:</label>
+                                                                <div className="requiredInput">
+                                                                    <span>*</span>
+                                                                    <Field type="text" name="nameSong" id="nameSong"
+                                                                           className="form-control"
+                                                                           placeholder="Song name"
+                                                                           onInput={handleInputCreateSong} required/>
 
+                                                                </div>
                                                             </div>
                                                             <span style={{color: "red"}}><ErrorMessage
                                                                 name={'nameSong'}/></span>
 
-                                                            <div className="col-12 mb-4 requiredInput">
-                                                                <span>*</span>
-                                                                <input type="file" id="audio" className="form-control"
-                                                                       onChange={(event) => {
-                                                                           setAudioUpload(event.target.files[0])
-                                                                       }}/>
+                                                            <div className="col-12 mb-4">
+                                                                <label style={{margin: "5px 10px"}}>Select the song's
+                                                                    file:</label>
+                                                                <div className="requiredInput">
+                                                                    <span>*</span>
+                                                                    <input type="file" id="audio"
+                                                                           className="form-control"
+                                                                           onChange={(event) => {
+                                                                               setAudioUpload(event.target.files[0])
+                                                                           }}/>
+                                                                </div>
                                                             </div>
-                                                            <div className="col-sm-6 mb-4 requiredInput">
-                                                                <span>*</span>
-                                                                <Field type="text" id="singer" name="singer"
-                                                                       className="form-control"
-                                                                       placeholder="Singer"
-                                                                       onInput={handleInputCreateSong}
-                                                                       style={{width: "200%"}}/>
+                                                            <div className="col-sm-6 mb-4">
+                                                                <label style={{margin: "5px 10px"}}>Enter singer name:</label>
+                                                                <div className="requiredInput">
+                                                                    <span>*</span>
+                                                                    <Field type="text" id="singer" name="singer"
+                                                                           className="form-control"
+                                                                           placeholder="Singer"
+                                                                           onInput={handleInputCreateSong}
+                                                                           style={{width: "200%"}}/>
+                                                                </div>
                                                             </div>
                                                             <span style={{color: "red"}}><ErrorMessage name={'singer'}/></span>
-                                                            <div className="col-12 mb-4 requiredInput">
+                                                            <div className="col-12 mb-4">
+                                                                <label style={{margin: "5px 10px"}}>Enter the song's genres:</label>
+                                                                <div className="requiredInput">
                                                                 <span>*</span>
                                                                 <select id="genres_id" className="form-select"
                                                                         onChange={handleInputCreateSong}
@@ -484,9 +515,11 @@ const CreateSong = () => {
                                                                         )
                                                                     })}
                                                                 </select>
+                                                                </div>
                                                             </div>
 
-                                                            <div className="col-12 mb-4 requiredInput">
+                                                            <div className="col-12 mb-4">
+                                                                <label style={{margin: "5px 10px"}}>Enter the song's description:</label>
                                                                 <textarea id="description"
                                                                           name="description"
                                                                           cols="30"

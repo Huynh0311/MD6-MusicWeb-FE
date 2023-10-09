@@ -1,5 +1,7 @@
 import axios from "axios";
-let token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJrYWxhMjAiLCJpYXQiOjE2OTY0NzQyMjUsImV4cCI6ODgwOTY0NzQyMjV9.bCR6EugxLd-clADuety6zSsi65pueNQculMnABFYzkk';
+let account = JSON.parse(localStorage.getItem("data"));
+let token = account.token;
+console.log(token)
 const instance = axios.create({
     baseURL: 'http://localhost:8080/',
 });

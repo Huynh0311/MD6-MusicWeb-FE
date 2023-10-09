@@ -1,13 +1,13 @@
 import React from 'react';
 import {Link} from "react-router-dom";
-
+import {useNavigate} from "react-router-dom";
 const NavbarComponent = () => {
+    const navigate = useNavigate();
     return (
         <div>
             <aside id="sidebar">
-                <div className="sidebar-head d-flex align-items-center justify-content-between"><a href="index.html"
-                                                                                                   className="brand external"><img
-                    src="images/logos/logo.svg" alt="Listen app"/> </a><a href="javascript:void(0);" role="button"
+                <div className="sidebar-head d-flex align-items-center justify-content-between"><a className="brand external" onClick={()=>navigate("/home")}><img
+                    src="/images/logos/logo.svg" alt="Listen app"/> </a><a href="javascript:void(0);" role="button"
                                                                           className="sidebar-toggler"
                                                                           aria-label="Sidebar toggler">
                     <div className="d-none d-lg-block"><i className="ri-menu-3-line sidebar-menu-1"></i> <i
@@ -83,8 +83,8 @@ const NavbarComponent = () => {
                         </ul>
                     </nav>
                 </div>
-                <div className="sidebar-foot"><a href="add-music.html" className="btn btn-primary d-flex">
-                    <div className="btn__wrap"><i className="ri-music-fill"></i> <span>Add Music</span></div>
+                <div className="sidebar-foot"><a href={"/song/create"} className="btn btn-primary d-flex">
+                    <div className="btn__wrap"><i className="ri-music-fill"></i> <span onClick={()=>navigate("/song/create")}>Add Music</span></div>
                 </a></div>
             </aside>
         </div>
