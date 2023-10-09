@@ -701,7 +701,7 @@ const DetailSong = () => {
                                     </ul>
                                     <div className="mt-2"><span
                                         className="d-block text-dark fs-6 fw-semi-bold mb-3">Mô tả</span>
-                                        {currentSong.description}</div>
+                                       <p dangerouslySetInnerHTML={{__html:currentSong.description}}></p> </div>
                                 </div>
                             </div>
                         </div>
@@ -1153,7 +1153,7 @@ const DetailSong = () => {
                         <div className="cover d-flex align-items-center">
                             <div className="cover__image"><img data-amplitude-song-info="cover_art_url"
                                                                src="images/cover/small/1.jpg"
-                                                               alt="" style={{marginTop: "15px"}}/></div>
+                                                               alt="" style={{height:"100%"}}/></div>
                             <div className="cover__content ps-3 d-none d-sm-block"><a href="song-details.html"
                                                                                       className="cover__title text-truncate"
                                                                                       data-amplitude-song-info="name"></a>
