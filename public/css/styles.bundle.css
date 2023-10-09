@@ -1998,7 +1998,7 @@ body[data-sidebar-toggle=true] #sidebar {
     -webkit-transition: all .35s ease-in-out;
     transition: all .35s ease-in-out;
     color: #151719;
-    display: none
+    /*display: none*/
 }
 
 #player.show {

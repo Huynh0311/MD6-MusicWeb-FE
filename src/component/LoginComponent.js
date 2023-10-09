@@ -44,7 +44,7 @@ const LoginComponent = ({setShowNavbar}) => {
                     console.log(res.data)
                     const data = JSON.stringify(res.data);
                     localStorage.setItem("data", data);
-                    navigate("/home")
+                    navigate("/")
                     window.location.reload()
                 }).catch(error => {
                     console.log(1)
@@ -67,7 +67,7 @@ const LoginComponent = ({setShowNavbar}) => {
                                 <div className="row">
                                     <div className="col-xl-5 col-lg-7 col-md-9 col-sm-11 mx-auto">
                                         <div className="card">
-                                           <span style={{display:"flex"}}><Link to={'/home'} style={{display:"flex", margin: "30px 0 0 30px"}}>
+                                           <span style={{display:"flex"}}><Link to={'/'} style={{display:"flex", margin: "30px 0 0 30px"}}>
                                               <i className="ri-home-4-line"></i>
                                                <p>Back to home</p>
                                            </Link></span>

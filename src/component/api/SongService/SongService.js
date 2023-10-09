@@ -1,7 +1,7 @@
 import axios from "../utils/axiousCustomize";
 
 const addSongSV = (form) => {
-    return axios.post("songs/add",form)
+    return axios.post("/songs/add",form)
 }
 
 const getAllGenres =() =>{
