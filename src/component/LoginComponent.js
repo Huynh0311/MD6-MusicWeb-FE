@@ -48,7 +48,7 @@ const LoginComponent = ({setShowNavbar}) => {
                     window.location.reload()
                 }).catch(error => {
                     console.log(1)
-                    toast.error('Ôi,hỏng!', {
+                    toast.error('Đăng nhập thất bại', {
                         position: "top-center",
                         autoClose: 2000,
                         hideProgressBar: false,
@@ -79,16 +79,16 @@ const LoginComponent = ({setShowNavbar}) => {
                                                 <div className="mb-3"><label htmlFor="email"
                                                                              className="form-label fw-medium">Email</label>
                                                     <Field type="text" id="email" name={'email'}
-                                                           className="form-control" validate={validateEmail}/> <span
+                                                           className="form-control" validate={validateEmail}/><span
                                                         style={{color: "red"}}><ErrorMessage name="email"
                                                                                              component="div"
-                                                                                             className="error-message"/>  </span>
+                                                                                             className="error-message"/></span>
                                                 </div>
                                                 <div className="mb-2"><label htmlFor="password"
                                                                              className="form-label fw-medium">Password</label>
                                                     <Field type="password" id="password" className="form-control"
                                                            name={'password'} validate={validatePassword}/> <span
-                                                        style={{color: "red"}}><ErrorMessage name="email"
+                                                        style={{color: "red"}}><ErrorMessage name="password"
                                                                                              component="div"
                                                                                              className="error-message"/>  </span>
                                                 </div>
