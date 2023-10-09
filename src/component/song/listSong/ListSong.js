@@ -49,8 +49,8 @@ const ListSong = () => {
                     <div className="under-hero container">
                         <div className="section">
                             <div className="row">
-                                <div className="col-xl-10 col-md-10 mx-auto">
-                                    <div className="card custom-pink-background text-white">
+                                <div className="col-xl-12 col-md-10 mx-auto">
+
                                         <div className="card-header pb-0 bg-pink text-white">
 
                                             <div className="container">
@@ -60,27 +60,27 @@ const ListSong = () => {
                                                 </div>
                                                 <div className="card-body">
                                                     <div className="divbtn">
-                                                        <button className="btn btn-success">Add Music</button>
+                                                        <button className="btn btn-primary">Add Music</button>
                                                     </div>
                                                     <table className="table table-bordered">
                                                         <thead className="bg-dark text-white">
-                                                        <tr>
+                                                        <tr className="tr-title-position">
                                                             <td>Song Image</td>
-                                                            <td>Song Name</td>
-                                                            <td>Description</td>
+                                                            <td className="namesong-width">Song Name</td>
+                                                            <td className="descrip-width">Description</td>
                                                             <td>Action</td>
                                                         </tr>
                                                         </thead>
                                                         <tbody>
                                                         {   songdata &&
                                                         songdata.map(item=>(
-                                                            <tr key={item.id}>
-                                                                <td>{item.imgSong}</td>
-                                                                <td> {item.nameSong}</td>
-                                                                <td>{item.description}</td>
-                                                                <td><a className="btn btn-success">Edit</a>
-                                                                    <a onClick={() => { RemoveFunction(item.id) }} className="btn btn-danger">Remove</a>
-                                                                    <a  className="btn btn-primary">Details</a>
+                                                            <tr key={item.id} className="tr-data-position">
+                                                                <td className="img-fixed-position"><img src={item.imgSong} width={250} alt="image"/></td>
+                                                                <td className="namesong-position"> {item.nameSong}</td>
+                                                                <td className="descrip-position descrip-height">{item.description}</td>
+                                                                <td><a className="btn btn-success custom-button">Edit</a>
+                                                                    <a onClick={() => { RemoveFunction(item.id) }} className="btn btn-danger custom-button">Remove</a>
+                                                                    <a  className="btn btn-info custom-button">Details</a>
                                                                 </td>
                                                             </tr>
                                                         ))
@@ -91,7 +91,7 @@ const ListSong = () => {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+
                             </div>
                         </div>
                     </div>

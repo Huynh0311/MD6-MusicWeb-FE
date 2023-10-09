@@ -6,3 +6,38 @@
     background-color: orange;
 }
 
+.btn{
+    margin: 2px;;
+}
+.divbtn{
+    float: left;
+}
+
+.img-fixed-position{
+   width: 50px;
+}
+
+.namesong-width{
+    width: 320px;
+}
+
+td.descrip-width{
+    width: 500px;
+}
+
+td.descrip-height{
+    height: 3px;
+    overflow: visible;
+}
+
+.custom-button{
+    width: 80px;
+}
+
+.tr-title-position{
+    text-align: center;
+}
+
+.tr-data-position{
+    position: inherit;
+}
