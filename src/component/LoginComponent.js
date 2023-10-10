@@ -34,12 +34,15 @@ const LoginComponent = ({setShowNavbar}) => {
                 const data = JSON.stringify(re.data);
                 localStorage.setItem("data",data)
                 navigate('/home')
+                window.location.reload()
             }).catch(er=>{
                axios.post('http://localhost:8080/api/auth/register', er.response.data)
                     .then(response => {
                         const data = JSON.stringify(response.data);
                         localStorage.setItem("data",data)
                         navigate('/home');
+                        window.location.reload()
+
                     })
                     .catch(error => {
                         toast.error('Oops, something went wrong!', {
