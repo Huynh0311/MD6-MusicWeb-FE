@@ -28,7 +28,7 @@ function App() {
                 <Route path={"/updateProfile/:id"} element={<UpdateAccount/>}/>
                 <Route path={"/updatePassword/:id"} element={<UpdatePassword/>}/>
                 <Route path="/song/create" element={<CreateSong/>}/>
-                <Route path={"song/detailSong/:id"} element={<DetailSong/>}/>
+                <Route path={"/desong/detailSong/:id"} element={<DetailSong/>}/>
                 <Route path="/register" element={<RegisterComponent setShowNavbar={setShowNavbar}/>}/>
                 <Route path="/login" element={<LoginComponent setShowNavbar={setShowNavbar}/>}/>
 
