@@ -1,10 +1,13 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {toast} from "react-toastify";
+import {signInWithPopup} from 'firebase/auth';
+import {auth, provider} from "./Config";
 
 const LoginComponent = ({setShowNavbar}) => {
+    const [value,setValue] = useState('')
     const navigate = useNavigate();
     useEffect(() => {
         setShowNavbar(false);
@@ -12,6 +15,51 @@ const LoginComponent = ({setShowNavbar}) => {
             setShowNavbar(true);
         };
     }, [setShowNavbar]);
+
+    const signInWithGoogle = () => {
+        signInWithPopup(auth, provider).then((data) =>{
+            localStorage.setItem("token",data.user.accessToken)
+            console.log(data)
+            setValue(data.user.email)
+            const values = {
+                email : data.user.email,
+                name : data.user.displayName,
+                password : '',
+                img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsHMSx7S49I_ofB1uNpAHigDJdXGLTcKFQWA&usqp=CAU",
+                role: {
+                    id: 1
+                }
+            };
+            axios.post('http://localhost:8080/api/auth/check',values).then(re => {
+                const data = JSON.stringify(re.data);
+                localStorage.setItem("data",data)
+                navigate('/home')
+            }).catch(er=>{
+               axios.post('http://localhost:8080/api/auth/register', er.response.data)
+                    .then(response => {
+                        const data = JSON.stringify(response.data);
+                        localStorage.setItem("data",data)
+                        navigate('/home');
+                    })
+                    .catch(error => {
+                        toast.error('Oops, something went wrong!', {
+                            position: "top-center",
+                            autoClose: 2000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            theme: "light",
+                        });
+                    })
+            })
+        })
+    };
+    useEffect(() => {
+       setValue(localStorage.getItem('email'))
+    }, []);
+
     const validatePassword = (value) => {
         let errorMessage = '';
         if (!value) {
@@ -48,7 +96,7 @@ const LoginComponent = ({setShowNavbar}) => {
                     window.location.reload()
                 }).catch(error => {
                     console.log(1)
-                    toast.error('Ôi,hỏng!', {
+                    toast.error('Oops, something went wrong!', {
                         position: "top-center",
                         autoClose: 2000,
                         hideProgressBar: false,
@@ -99,12 +147,12 @@ const LoginComponent = ({setShowNavbar}) => {
                                                 <div className="mb-4">
                                                     <div className="auth__or mx-auto fw-medium"></div>
                                                 </div>
-                                                <div className="mb-5"><a href="javascript:void(0);"
+                                                <div className="mb-5"><button onClick={signInWithGoogle}
                                                                          className="btn btn-default w-100">
                                                     <div className="btn__wrap"><i className="ri-google-fill"></i><span
                                                         className="ms-2">Login with Google</span>
                                                     </div>
-                                                </a></div>
+                                                </button></div>
                                                 <p>Not registered yet?<br/><Link to={'/register'}
                                                                                  className="fw-medium external">Register</Link>
                                                 </p>
