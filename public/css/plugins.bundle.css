@@ -1054,6 +1054,14 @@ progress {
         flex-direction: column;
         color: red;
     }
+
+    .text-label{
+        margin-left: 90px;
+        width: 100%;
+        display: flex;
+        justify-content: start;
+    }
+
     .inputEditPassword{
         display: flex;
         justify-content: center;

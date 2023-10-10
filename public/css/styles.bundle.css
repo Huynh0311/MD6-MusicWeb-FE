@@ -124,7 +124,8 @@ a, button, input {
     flex-wrap: wrap;
     -webkit-box-align: center;
     -ms-flex-align: center;
-    align-items: center
+    align-items: center;
+    justify-content: center;
 }
 
 .avatar .avatar__image {

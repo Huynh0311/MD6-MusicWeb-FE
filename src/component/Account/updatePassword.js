@@ -140,7 +140,7 @@ const UpdatePassword = () => {
                                                         <div className="avatar avatar--xl">
                                                             <div className="avatar__image">
                                                                 <img src={account.img} id="previewImage"
-                                                                     style={{width: "150px", height: "150px"}}/>
+                                                                     style={{width: "250px", height: "250px"}}/>
                                                             </div>
                                                         </div>
                                                         <div className="ps-3 cursor">

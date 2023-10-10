@@ -189,64 +189,78 @@ const UpdateAccount = () => {
                                         <div className="plan bg-light">
                                             <div className="plan__data">
                                                 <div className="px-4 pt-2 pe-xl-0 pt-sm-0 mt-4 mb-3 my-sm-0 w-100">
-                                                    <div className="d-flex align-items-center mb-4">
-                                                        <div className="avatar avatar--xl">
-                                                            <div className="avatar__image">
-                                                                <img src={account.img} id="previewImage"
-                                                                     style={{width: "150px", height: "150px"}}/>
+                                                    <div className="align-items-center mb-4">
+                                                        <div className="row">
+                                                            <div className="col-4 avatar avatar--xl">
+                                                                <div className="avatar__image">
+                                                                    <img src={account.img} id="previewImage"
+                                                                         style={{width: "300px", height: "300px"}}/>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div className="ps-3 cursor">
-                                                            <input type="file" className="btn btn-outline-primary"
-                                                                   onChange={uploadImg}
-                                                            />
+                                                            <div className="col-8">
+                                                                <div className="col-sm-12 cursor mb-3 ps-2" style={{marginLeft: "36px"}}>
+                                                                    <label htmlFor="image" style={{color: "red", fontSize:"15px", marginRight: "15px"}}
+                                                                           className="form-label fw-medium">
+                                                                        Chọn ảnh
+                                                                    </label>
+                                                                    <input type="file"
+                                                                           className="btn btn-outline-primary"
+                                                                           onChange={uploadImg}
+                                                                    />
+                                                                </div>
+                                                                <div className="col-sm-12 inputEdit mb-3">
+                                                                    <div className="text-lable">
+                                                                    <label htmlFor="name"
+                                                                           className="form-label fw-medium">Tên</label>
+                                                                    </div>
+                                                                    <Field type="text" id="name" name={"name"}
+                                                                           className="form-control"
+                                                                           onInput={ChangeInputAccountEdit}
+                                                                           value={account.name}/>
+                                                                    <span style={{color: "red"}}><ErrorMessage
+                                                                        name={'name'}></ErrorMessage></span>
+                                                                </div>
+                                                                <div className="col-sm-12 inputEdit mb-3">
+                                                                    <div className="text-lable">
+                                                                    <label htmlFor="l_name"
+                                                                           className="form-label fw-medium">Email</label>
+                                                                    </div>
+                                                                    <Field type="email" id="l_name" name={"email"}
+                                                                           className="form-control"
+                                                                           onInput={ChangeInputAccountEdit}
+                                                                           value={account.email}/>
+                                                                    <span style={{color: "red"}}><ErrorMessage
+                                                                        name={'email'}></ErrorMessage></span>
+                                                                </div>
+                                                                <div className="col-sm-12 inputEdit mb-3">
+                                                                    <div className="text-lable">
+                                                                    <label htmlFor="d_name"
+                                                                           className="form-label fw-medium">Số điện thoại</label>
+                                                                    </div>
+                                                                    <Field type={"text"} id="d_name" name={"phone"}
+                                                                           className="form-control"
+                                                                           onInput={ChangeInputAccountEdit}
+                                                                           value={account.phone}/>
+                                                                    <span style={{color: "red"}}><ErrorMessage
+                                                                        name={'phone'}></ErrorMessage></span>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
 
                                                     <div className="row g-4">
-                                                        <div className="col-sm-12 inputEdit">
-                                                            <label htmlFor="name"
-                                                                   className="form-label fw-medium">Name</label>
-                                                            <Field type="text" id="name" name={"name"}
-                                                                   className="form-control"
-                                                                   onInput={ChangeInputAccountEdit}
-                                                                   value={account.name}/>
-                                                            <span style={{color: "red"}}><ErrorMessage
-                                                                name={'name'}></ErrorMessage></span>
-                                                        </div>
-                                                        <div className="col-sm-12 inputEdit">
-                                                            <label htmlFor="l_name"
-                                                                   className="form-label fw-medium">Email</label>
-                                                            <Field type="email" id="l_name" name={"email"}
-                                                                   className="form-control"
-                                                                   onInput={ChangeInputAccountEdit}
-                                                                   value={account.email}/>
-                                                            <span style={{color: "red"}}><ErrorMessage
-                                                                name={'email'}></ErrorMessage></span>
-                                                        </div>
-                                                        <div className="col-sm-12 inputEdit">
-                                                            <label htmlFor="d_name"
-                                                                   className="form-label fw-medium">Phone</label>
-                                                            <Field type={"text"} id="d_name" name={"phone"}
-                                                                   className="form-control"
-                                                                   onInput={ChangeInputAccountEdit}
-                                                                   value={account.phone}/>
-                                                            <span style={{color: "red"}}><ErrorMessage
-                                                                name={'phone'}></ErrorMessage></span>
-                                                        </div>
-                                                        <div className="col-12" style={{display: 'flex', justifyContent: 'center'}}>
+                                                        <div className="col-4"></div>
+                                                        <div className="col-8"
+                                                             style={{display: 'flex', justifyContent: 'space-evenly'}}>
                                                             <button type="submit" className="btn btn-primary">
-                                                                Update Profile
+                                                                Cập nhật thông tin
                                                             </button>
                                                             <Link to={"/updatePassword/" + id}>
-                                                                <p className="btn btn-info"
-                                                                   style={{margin: "0 204px 0 50px"}}>
-                                                                    Update Password
-                                                                </p>
+
                                                             </Link>
                                                             <Link to={"/"}>
                                                                 <p className="btn btn-secondary">
-                                                                    Cancel
+                                                                    Trở về trang chủ
                                                                 </p>
                                                             </Link>
                                                         </div>
