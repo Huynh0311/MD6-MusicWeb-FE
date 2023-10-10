@@ -85,7 +85,7 @@ const UpdateAccount = () => {
                 setAccount(acc);
             })
             .catch((error) => {
-                alert("error");
+                console.log("error");
             });
     };
 
@@ -98,70 +98,6 @@ const UpdateAccount = () => {
         <div>
 
             <div id="wrapper">
-                <header id="header">
-                    <div className="container">
-                        <div className="header-container">
-                            <div className="d-flex align-items-center"><a href="javascript:void(0);" role="button"
-                                                                          className="header-text sidebar-toggler d-lg-none me-3"
-                                                                          aria-label="Sidebar toggler"><i
-                                className="ri-menu-3-line"></i></a>
-                                <form action="#" id="search_form" className="me-3"><label htmlFor="search_input"><i
-                                    className="ri-search-2-line"></i></label> <input type="text"
-                                                                                     placeholder="Type anything to get result..."
-                                                                                     id="search_input"
-                                                                                     className="form-control form-control-sm"/>
-                                </form>
-                                <div className="d-flex align-items-center">
-                                    <div className="dropdown ms-3 ms-sm-4">
-                                        <a href="javascript:void(0);" className="avatar header-text"
-                                           role="button" id="user_menu"
-                                           data-bs-toggle="dropdown"
-                                           aria-expanded="false">
-                                            <div className="avatar__image">
-                                                <img src="images/users/thumb.jpg" alt="user"/>
-                                            </div>
-                                            <span className="ps-2 d-none d-sm-block">Androws</span>
-                                        </a>
-                                        <ul className="dropdown-menu dropdown-menu-md dropdown-menu-end"
-                                            aria-labelledby="user_menu">
-                                            <li>
-                                                <div className="py-2 px-3 avatar avatar--lg">
-                                                    <div className="avatar__image"><img src="images/users/thumb.jpg"
-                                                                                        alt="user"/></div>
-                                                    <div className="avatar__content"><span className="avatar__title">Androws Kinny</span>
-                                                        <span className="avatar__subtitle">Artist</span></div>
-                                                </div>
-                                            </li>
-                                            <li className="dropdown-divider"></li>
-                                            <li><a className="dropdown-item d-flex align-items-center"
-                                                   href="profile.html"><i
-                                                className="ri-user-3-line fs-5"></i> <span
-                                                className="ps-2">Profile</span></a></li>
-                                            <li><a className="dropdown-item d-flex align-items-center"
-                                                   href="favorites.html"><i
-                                                className="ri-heart-line fs-5"></i> <span
-                                                className="ps-2">Favorites</span></a></li>
-                                            <li><a className="dropdown-item d-flex align-items-center"
-                                                   href="settings.html"><i
-                                                className="ri-settings-line fs-5"></i> <span
-                                                className="ps-2">Settings</span></a></li>
-                                            <li><a className="dropdown-item d-flex align-items-center" href="plan.html"><i
-                                                className="ri-money-dollar-circle-line fs-5"></i> <span
-                                                className="ps-2">Plan</span></a>
-                                            </li>
-                                            <li className="dropdown-divider"></li>
-                                            <li><a
-                                                className="dropdown-item d-flex align-items-center external text-danger"
-                                                href="index.html"><i className="ri-logout-circle-line fs-5"></i> <span
-                                                className="ps-2">Logout</span></a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </header>
                 <main id="page_content">
                     {!_.isEmpty(account) &&
                         <Formik
@@ -175,10 +111,28 @@ const UpdateAccount = () => {
 
                                 const data = {...values, img: account.img}
                                 axiosConfig.updateAccount(id, data).then((response) => {
-                                    alert("thanh cong")
+                                    toast.success('Cập nhật thành công', {
+                                        position: "top-center",
+                                        autoClose: 1000,
+                                        hideProgressBar: false,
+                                        closeOnClick: true,
+                                        pauseOnHover: true,
+                                        draggable: true,
+                                        progress: undefined,
+                                        theme: "light",
+                                    });
                                     // navigate("/");
                                 }).catch((error) => {
-                                    alert("error");
+                                    toast.error('Cập nhật thất bại', {
+                                        position: "top-center",
+                                        autoClose: 1000,
+                                        hideProgressBar: false,
+                                        closeOnClick: true,
+                                        pauseOnHover: true,
+                                        draggable: true,
+                                        progress: undefined,
+                                        theme: "light",
+                                    });
                                 })
                             }}>
                             <Form>

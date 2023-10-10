@@ -1050,9 +1050,10 @@ progress {
     .inputEdit{
         display: flex;
         justify-content: center;
-        align-items: center;
+        align-items: start;
         flex-direction: column;
         color: red;
+        margin-left: 46px;
     }
 
     .text-label{

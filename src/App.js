@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {Route, Routes} from "react-router-dom";
-import BodyComponent from "./component/BodyComponent";
+import HomeComponent from "./component/HomeComponent";
 import Loader from "./component/Loader";
 import UpdateAccount from "./component/Account/updateAccount";
 import 'react-toastify/dist/ReactToastify.css';
@@ -14,6 +14,7 @@ import LoginComponent from "./component/LoginComponent";
 import 'react-toastify/dist/ReactToastify.css';
 import Page from "./component/page";
 import Component404 from "./component/Component404";
+import SearchComponent from "./component/SearchComponent";
 
 
 function App() {
@@ -23,9 +24,10 @@ function App() {
         <div className="App">
             {showNavbar && <NavbarComponent/>}
             <Loader/>
+            <SearchComponent/>
             <Routes>
                 <Route path="/" element={<Page/>}>
-                    <Route path={"/"} element={<BodyComponent/>}/>
+                    <Route path={"/"} element={<HomeComponent/>}/>
                     <Route path={"/updateProfile/:id"} element={<UpdateAccount/>}/>
                     <Route path={"/updatePassword/:id"} element={<UpdatePassword/>}/>
                     <Route path="/song/create" element={<CreateSong/>}/>
