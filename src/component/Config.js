@@ -1,6 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { getAuth,GoogleAuthProvider} from "firebase/auth";
 
+
+
 const firebaseConfig = {
     apiKey: "AIzaSyDvwhv54IDrcenRNamkdZlYOfNsyKk4fvs",
     authDomain: "music-app-ef484.firebaseapp.com",
@@ -11,7 +13,7 @@ const firebaseConfig = {
     measurementId: "G-W4JLLH4MNG"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+const App = initializeApp(firebaseConfig);
+const auth = getAuth(App);
 const provider = new GoogleAuthProvider();
 export {auth,provider}

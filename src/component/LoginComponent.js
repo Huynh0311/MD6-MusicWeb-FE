@@ -99,7 +99,7 @@ const LoginComponent = ({setShowNavbar}) => {
                     window.location.reload()
                 }).catch(error => {
                     console.log(1)
-                    toast.error('Oops, something went wrong!', {
+                    toast.error('Ôi,hỏng!', {
                         position: "top-center",
                         autoClose: 2000,
                         hideProgressBar: false,
@@ -150,12 +150,12 @@ const LoginComponent = ({setShowNavbar}) => {
                                                 <div className="mb-4">
                                                     <div className="auth__or mx-auto fw-medium"></div>
                                                 </div>
-                                                <div className="mb-5"><button onClick={signInWithGoogle}
+                                                <div className="mb-5"><a href="javascript:void(0);"
                                                                          className="btn btn-default w-100">
                                                     <div className="btn__wrap"><i className="ri-google-fill"></i><span
                                                         className="ms-2">Login with Google</span>
                                                     </div>
-                                                </button></div>
+                                                </a></div>
                                                 <p>Not registered yet?<br/><Link to={'/register'}
                                                                                  className="fw-medium external">Register</Link>
                                                 </p>
