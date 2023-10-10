@@ -2,13 +2,13 @@ import React, {useState} from "react";
 import {Route, Routes} from "react-router-dom";
 import BodyComponent from "./component/BodyComponent";
 import Loader from "./component/Loader";
-import UpdateAccount from "./component/Account/updateAccount";
+import UpdateAccount from "./component/account/updateAccount";
 import 'react-toastify/dist/ReactToastify.css';
 import {ToastContainer} from "react-toastify";
-import UpdatePassword from "./component/Account/updatePassword";
+import UpdatePassword from "./component/account/updatePassword";
 
-import CreateSong from "./component/Song/createSong/createSong";
-import DetailSong from "./component/Song/DetailSong/DetailSong";
+import CreateSong from "./component/song/createSong/createSong";
+import DetailSong from "./component/song/detailSong/DetailSong";
 import RegisterComponent from "./component/RegisterComponent";
 import NavbarComponent from "./component/navbarComponent";
 import LoginComponent from "./component/LoginComponent";

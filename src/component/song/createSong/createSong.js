@@ -6,14 +6,14 @@ import "./create.css"
 import {useNavigate} from "react-router-dom";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as Yup from "yup";
-import {addSongSV, getAllGenres} from "../../api/SongService/SongService";
+import {addSongSV, getAllGenres} from "../../api/songService/SongService";
 
 
 const validateSchema = Yup.object().shape({
     nameSong: Yup.string()
-        .min(5, 'Song name must be at least 5 characters long')
-        .max(50, 'Song name must be maximum 50 characters long')
-        .required('Song name cannot be null'),
+        .min(5, 'song name must be at least 5 characters long')
+        .max(50, 'song name must be maximum 50 characters long')
+        .required('song name cannot be null'),
     singer: Yup.string()
         .min(3, 'Artists name must be at least 3 characters long')
         .max(150, 'Artists name must be maximum 150 characters long')
@@ -617,7 +617,7 @@ const CreateSong = () => {
                             {/*        </div>*/}
                             {/*        <div className="dropstart d-none d-md-block">*/}
                             {/*            <button className="btn btn-icon" data-bs-toggle="dropdown"*/}
-                            {/*                    aria-label="Song options"*/}
+                            {/*                    aria-label="song options"*/}
                             {/*                    aria-expanded="false"><i className="ri-more-2-fill fs-5"></i></button>*/}
                             {/*            <ul className="dropdown-menu dropdown-menu-sm" id="player_options">*/}
                             {/*                <li><a className="dropdown-item" href="javascript:void(0);" role="button"*/}

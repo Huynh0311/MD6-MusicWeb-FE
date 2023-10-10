@@ -343,10 +343,10 @@ var Player = function () {
                 $(this).hasClass(e) ? (Amplitude.pause(), h()) : -1 === n ? (i.push(t), 1 === i.length ? o() : (a.append(u(t)), Amplitude.playSongAtIndex(i.length - 1))) : Amplitude.playSongAtIndex(n), Utils.setLocalItem("songs", i)
             })), t.on("click", "[data-queue-id]", (function () {
                 var e = s(this);
-                -1 === i.findIndex((t => t.id === e.id)) ? (i.push(e), 1 === i.length ? o() : a.append(u(e))) : Utils.showMessage("Song already in Queue"), Utils.setLocalItem("songs", i)
+                -1 === i.findIndex((t => t.id === e.id)) ? (i.push(e), 1 === i.length ? o() : a.append(u(e))) : Utils.showMessage("song already in Queue"), Utils.setLocalItem("songs", i)
             })), t.on("click", "[data-next-id]", (function () {
                 var e = s(this), t = Amplitude.getActiveIndex(), n = i.findIndex((t => t.id === e.id));
-                i && !i.length ? (i.push(e), o()) : -1 === n ? (i.splice(t + 1, 0, e), a.find(".list__item").eq(t).after(u(e))) : Utils.showMessage("Song already in Queue"), Utils.setLocalItem("songs", i)
+                i && !i.length ? (i.push(e), o()) : -1 === n ? (i.splice(t + 1, 0, e), a.find(".list__item").eq(t).after(u(e))) : Utils.showMessage("song already in Queue"), Utils.setLocalItem("songs", i)
             })), t.on("click", "[data-collection-play-id]", (function () {
                 var e = $(this).attr("data-collection-play-id"),
                     t = $("[data-collection-song-id=" + e + "]").find("[data-song-id]"), n = [], r = 0;
