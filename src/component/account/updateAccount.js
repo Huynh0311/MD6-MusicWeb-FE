@@ -166,9 +166,7 @@ const UpdateAccount = () => {
                     {!_.isEmpty(account) &&
                         <Formik
                             initialValues={{
-                                name: account.name,
-                                email: account.email,
-                                phone: account.phone,
+                               account
                             }}
                             validationSchema={validateSchema}
                             onSubmit={(values) => {
