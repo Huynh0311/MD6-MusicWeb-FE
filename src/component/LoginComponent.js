@@ -4,17 +4,11 @@ import axios from "axios";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {toast} from "react-toastify";
 import {signInWithPopup} from 'firebase/auth';
-import {auth, provider} from "./Config";
+import {auth, provider} from "../firebase/firebase";
 
-const LoginComponent = ({setShowNavbar}) => {
+const LoginComponent = () => {
     const [value,setValue] = useState('')
     const navigate = useNavigate();
-    useEffect(() => {
-        setShowNavbar(false);
-        return () => {
-            setShowNavbar(true);
-        };
-    }, [setShowNavbar]);
 
     const signInWithGoogle = () => {
         signInWithPopup(auth, provider).then((data) =>{
@@ -25,29 +19,29 @@ const LoginComponent = ({setShowNavbar}) => {
                 email : data.user.email,
                 name : data.user.displayName,
                 password : '',
-                img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsHMSx7S49I_ofB1uNpAHigDJdXGLTcKFQWA&usqp=CAU",
+                img: "https://nhadepso.com/wp-content/uploads/2023/03/cap-nhat-50-hinh-anh-dai-dien-facebook-mac-dinh-dep-doc-la_1.jpg",
                 role: {
                     id: 1
                 }
             };
             axios.post('http://localhost:8080/api/auth/check',values).then(re => {
+                console.log(re.data)
                 const data = JSON.stringify(re.data);
                 localStorage.setItem("data",data)
-                navigate('/home')
-                window.location.reload()
+                navigate('/')
             }).catch(er=>{
                axios.post('http://localhost:8080/api/auth/register', er.response.data)
                     .then(response => {
                         const data = JSON.stringify(response.data);
                         localStorage.setItem("data",data)
-                        navigate('/home');
+                        navigate('/');
                         window.location.reload()
 
                     })
                     .catch(error => {
-                        toast.error('Oops, something went wrong!', {
+                        toast.error('Đăng nhập thất bại', {
                             position: "top-center",
-                            autoClose: 2000,
+                            autoClose: 1000,
                             hideProgressBar: false,
                             closeOnClick: true,
                             pauseOnHover: true,
@@ -95,13 +89,13 @@ const LoginComponent = ({setShowNavbar}) => {
                     console.log(res.data)
                     const data = JSON.stringify(res.data);
                     localStorage.setItem("data", data);
-                    navigate("/home")
+                    navigate("/")
                     window.location.reload()
                 }).catch(error => {
                     console.log(1)
-                    toast.error('Ôi,hỏng!', {
+                    toast.error('Đăng nhập thất bại!', {
                         position: "top-center",
-                        autoClose: 2000,
+                        autoClose: 1000,
                         hideProgressBar: false,
                         closeOnClick: true,
                         pauseOnHover: true,
@@ -120,13 +114,11 @@ const LoginComponent = ({setShowNavbar}) => {
                                         <div className="card">
                                            <span style={{display:"flex"}}><Link to={'/home'} style={{display:"flex", margin: "30px 0 0 30px"}}>
                                               <i className="ri-home-4-line"></i>
-                                               <p>Back to home</p>
+                                               <p>Trang chủ</p>
                                            </Link></span>
-                                            <div className="card-body p-sm-5"><h4>Login to <span
-                                                className="text-primary">Listen</span></h4>
-                                                <p className="fs-6">Welcome back! login with your data that you entered
-                                                    during
-                                                    registration</p>
+                                            <div className="card-body p-sm-5"><h4>Đăng nhập để<span
+                                                className="text-primary"> Nghe</span></h4>
+                                                <p className="fs-6">Chào mừng trở lại! đăng nhập với dữ liệu mà bạn đã nhập trong quá trình đăng ký</p>
                                                 <div className="mb-3"><label htmlFor="email"
                                                                              className="form-label fw-medium">Email</label>
                                                     <Field type="text" id="email" name={'email'}
@@ -136,7 +128,7 @@ const LoginComponent = ({setShowNavbar}) => {
                                                                                              className="error-message"/>  </span>
                                                 </div>
                                                 <div className="mb-2"><label htmlFor="password"
-                                                                             className="form-label fw-medium">Password</label>
+                                                                             className="form-label fw-medium">Mật khẩu</label>
                                                     <Field type="password" id="password" className="form-control"
                                                            name={'password'} validate={validatePassword}/> <span
                                                         style={{color: "red"}}><ErrorMessage name="email"
@@ -144,20 +136,20 @@ const LoginComponent = ({setShowNavbar}) => {
                                                                                              className="error-message"/>  </span>
                                                 </div>
                                                 <div className="mb-5">
-                                                    <button type="submit" className="btn btn-primary w-100">Save
+                                                    <button type="submit" className="btn btn-primary w-100">Đăng nhập
                                                     </button>
                                                 </div>
                                                 <div className="mb-4">
                                                     <div className="auth__or mx-auto fw-medium"></div>
                                                 </div>
-                                                <div className="mb-5"><a href="javascript:void(0);"
+                                                <div className="mb-5"><button onClick={signInWithGoogle}
                                                                          className="btn btn-default w-100">
                                                     <div className="btn__wrap"><i className="ri-google-fill"></i><span
-                                                        className="ms-2">Login with Google</span>
+                                                        className="ms-2">Đăng nhập bằng tài khoản Google</span>
                                                     </div>
-                                                </a></div>
-                                                <p>Not registered yet?<br/><Link to={'/register'}
-                                                                                 className="fw-medium external">Register</Link>
+                                                </button></div>
+                                                <p>Bạn chưa có tài khoản?<br/><Link to={'/register'}
+                                                                                 className="fw-medium external">Đăng kí</Link>
                                                 </p>
                                             </div>
                                         </div>

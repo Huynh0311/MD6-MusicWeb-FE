@@ -1,8 +1,8 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {useParams} from "react-router-dom";
-import {getAllSongByGenresIDAPI, getSongByID, playSong} from "../../api/SongService/SongService";
+import {getAllSongByGenresIDAPI, getSongByID, playSong} from "../../api/songService/SongService";
 import {getSongLikeQuantityAPI, isLikedAPI, likeClickAPI} from "../../api/LikesService/LikesService";
-import {getAllCommentBySongID, getAllCommentBySongIdAPI, sendCommentAPI} from "../../api/CommentService/CommentService";
+import {getAllCommentBySongID, getAllCommentBySongIdAPI, sendCommentAPI} from "../../api/commentService/CommentService";
 
 const DetailSong = () => {
     const [account, setAccount] = useState(JSON.parse(localStorage.getItem("data")));

@@ -6,14 +6,14 @@ import "./create.css"
 import {useNavigate} from "react-router-dom";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as Yup from "yup";
-import {addSongSV, getAllGenres} from "../../api/SongService/SongService";
+import {addSongSV, getAllGenres} from "../../api/songService/SongService";
 
 
 const validateSchema = Yup.object().shape({
     nameSong: Yup.string()
-        .min(5, 'Song name must be at least 5 characters long')
-        .max(50, 'Song name must be maximum 50 characters long')
-        .required('Song name cannot be null'),
+        .min(5, 'song name must be at least 5 characters long')
+        .max(50, 'song name must be maximum 50 characters long')
+        .required('song name cannot be null'),
     singer: Yup.string()
         .min(3, 'Artists name must be at least 3 characters long')
         .max(150, 'Artists name must be maximum 150 characters long')
@@ -32,6 +32,8 @@ const CreateSong = () => {
     const [previewImage, setPreviewImage] = useState(null);
     const [defaultImg, setDefaultImg] = useState('https://www.billboard.com/wp-content/uploads/media/streaming-illustration-v-2019-billboard-1548.jpg');
     const [isLoading, setIsLoading] = useState(false);
+    const [account, setAccount] = useState(JSON.parse(localStorage.getItem("data")));
+    console.log(account)
     const uploadAudio = async (imgFile) => {
         if (audioUpload == null) return;
         const audioRef = ref(storage, `audios/${audioUpload.name + v4()}`);
@@ -451,9 +453,9 @@ const CreateSong = () => {
                                                                      }}/>
 
                                                                 <div>
-                                                                    <label style={{margin: "5px 10px"}}>Select the song's picture:</label>
+                                                                    <label style={{margin: "5px 10px"}}>Select the song's picture(*)</label>
                                                                     <div style={{display: "flex"}}>
-                                                                        <span style={{marginRight: "5px"}}>*</span>
+                                                                        {/*<span style={{marginRight: "5px"}}>*</span>*/}
                                                                         <input type={"file"} className="form-control"
                                                                                id="image" onChange={(event) => {
                                                                             setImageUpload(event.target.files[0]);
@@ -464,9 +466,9 @@ const CreateSong = () => {
                                                             </div>
                                                             <div className="col-12 mb-4">
                                                                 <label style={{margin: "5px 10px"}}>Enter song
-                                                                    name:</label>
+                                                                    name(*)</label>
                                                                 <div className="requiredInput">
-                                                                    <span>*</span>
+                                                                    {/*<span>*</span>*/}
                                                                     <Field type="text" name="nameSong" id="nameSong"
                                                                            className="form-control"
                                                                            placeholder="Song name"
@@ -479,9 +481,9 @@ const CreateSong = () => {
 
                                                             <div className="col-12 mb-4">
                                                                 <label style={{margin: "5px 10px"}}>Select the song's
-                                                                    file:</label>
+                                                                    file(*)</label>
                                                                 <div className="requiredInput">
-                                                                    <span>*</span>
+                                                                    {/*<span>*</span>*/}
                                                                     <input type="file" id="audio"
                                                                            className="form-control"
                                                                            onChange={(event) => {
@@ -490,9 +492,9 @@ const CreateSong = () => {
                                                                 </div>
                                                             </div>
                                                             <div className="col-sm-6 mb-4">
-                                                                <label style={{margin: "5px 10px"}}>Enter singer name:</label>
+                                                                <label style={{margin: "5px 10px"}}>Enter singer name(*)</label>
                                                                 <div className="requiredInput">
-                                                                    <span>*</span>
+                                                                    {/*<span>*</span>*/}
                                                                     <Field type="text" id="singer" name="singer"
                                                                            className="form-control"
                                                                            placeholder="Singer"
@@ -502,9 +504,9 @@ const CreateSong = () => {
                                                             </div>
                                                             <span style={{color: "red"}}><ErrorMessage name={'singer'}/></span>
                                                             <div className="col-12 mb-4">
-                                                                <label style={{margin: "5px 10px"}}>Enter the song's genres:</label>
+                                                                <label style={{margin: "5px 10px"}}>Enter the song's genres(*)</label>
                                                                 <div className="requiredInput">
-                                                                <span>*</span>
+                                                                {/*<span>*</span>*/}
                                                                 <select id="genres_id" className="form-select"
                                                                         onChange={handleInputCreateSong}
                                                                         aria-label="Select category">
@@ -519,7 +521,7 @@ const CreateSong = () => {
                                                             </div>
 
                                                             <div className="col-12 mb-4">
-                                                                <label style={{margin: "5px 10px"}}>Enter the song's description:</label>
+                                                                <label style={{margin: "5px 10px"}}>Enter the song's description(*)</label>
                                                                 <textarea id="description"
                                                                           name="description"
                                                                           cols="30"
@@ -615,7 +617,7 @@ const CreateSong = () => {
                             {/*        </div>*/}
                             {/*        <div className="dropstart d-none d-md-block">*/}
                             {/*            <button className="btn btn-icon" data-bs-toggle="dropdown"*/}
-                            {/*                    aria-label="Song options"*/}
+                            {/*                    aria-label="song options"*/}
                             {/*                    aria-expanded="false"><i className="ri-more-2-fill fs-5"></i></button>*/}
                             {/*            <ul className="dropdown-menu dropdown-menu-sm" id="player_options">*/}
                             {/*                <li><a className="dropdown-item" href="javascript:void(0);" role="button"*/}

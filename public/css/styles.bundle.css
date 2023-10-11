@@ -2835,7 +2835,7 @@ body[data-sidebar-toggle=true] #sidebar {
 }
 
 .auth .auth__or:after {
-    content: "or";
+    content: "hoặc";
     display: inline-block;
     padding: 0 .5rem;
     text-transform: uppercase;
