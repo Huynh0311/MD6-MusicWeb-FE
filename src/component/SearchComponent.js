@@ -11,6 +11,7 @@ const SearchComponent = () => {
     const logOut =()=> {
         localStorage.clear();
         navigate("/");
+        window.location.reload()
     }
     let accounts = null;
     if (account) {

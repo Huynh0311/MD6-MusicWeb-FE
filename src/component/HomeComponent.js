@@ -6,6 +6,9 @@ import MusicPlayer from "./player/MusicPlayer";
 
 
 const HomeComponent = () => {
+
+
+
     return (
         <div>
             <div id="wrapper">

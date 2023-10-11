@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Link, useNavigate, useParams} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import _ from 'lodash';
 import accountService from "../api/AccountService/AccountService";
 import {storage} from "../../firebase/Firebase";
@@ -25,7 +25,6 @@ const validateSchema = Yup.object().shape({
 
 const UpdateAccount = () => {
     const [id, setId] = useState(JSON.parse(localStorage.getItem("data")).id);
-    const navigate = useNavigate();
     const [account, setAccount] = useState({});
 
     const uploadImg = (even) => {
@@ -84,12 +83,17 @@ const UpdateAccount = () => {
                     {!_.isEmpty(account) &&
                         <Formik
                             initialValues={{
-                               account
+                                name: account.name,
+                                email: account.email,
+                                phone: account.phone,
                             }}
                             validationSchema={validateSchema}
                             onSubmit={(values) => {
+                                console.log(1)
+                                console.log(values)
 
                                 const data = {...values, img: account.img}
+                                console.log(values)
                                 accountService.updateAccount(id, data).then((response) => {
                                     toast.success('Cập nhật thành công');
                                     // navigate("/");
@@ -171,9 +175,6 @@ const UpdateAccount = () => {
                                                             <button type="submit" className="btn btn-primary">
                                                                 Cập nhật thông tin
                                                             </button>
-                                                            <Link to={"/updatePassword/" + id}>
-
-                                                            </Link>
                                                             <Link to={"/"}>
                                                                 <p className="btn btn-secondary">
                                                                     Trở về trang chủ

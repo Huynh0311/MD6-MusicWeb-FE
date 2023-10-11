@@ -76,6 +76,7 @@ const RegisterComponent = () => {
             }}
                     validationSchema={validateSchema}
                     onSubmit={(values) => {
+                        console.log(values)
                         axios.post('http://localhost:8080/api/auth/register', values, {
                             headers: {
                                 'Accept': 'application/json',
@@ -91,7 +92,6 @@ const RegisterComponent = () => {
                             }else {
                                 toast.error("Đăng kí thất bại");
                             }
-
                         })
                     }}>
                 <Form>
