@@ -47,7 +47,7 @@ const DetailSong = () => {
     }, [])
 
     const checkLike = () => {
-        if (like.account && like.song) {
+        if (like.account.name!=null && like.song.nameSong!=null) {
             isLikedAPI(like).then(res => {
                 setIsLiked(res.data)
             })
@@ -99,7 +99,7 @@ const DetailSong = () => {
             year: date.getFullYear()
         }
         if ((songDateCreateObj.day) < 10) songDateCreateObj.day = '0' + songDateCreateObj.day;
-        setSongCreateDate(songDateCreateObj)
+        setSongCreateDate(songDateCreateObj);
     }
 
     const played = async () => {
@@ -107,10 +107,10 @@ const DetailSong = () => {
         setPlay(res.data)
     }
 
-    if (currentSong.nameSong == null || currentSong.singerName == null) {
+    if (currentSong.nameSong == null || currentSong.nameSinger == null) {
     } else {
         document.querySelector('[data-amplitude-song-info="name"]').textContent = currentSong.nameSong;
-        document.querySelector('[data-amplitude-song-info="artist"]').textContent = currentSong.singerName;
+        document.querySelector('[data-amplitude-song-info="artist"]').textContent = currentSong.nameSinger;
         document.querySelector('[data-amplitude-song-info="cover_art_url"]').setAttribute("src", currentSong.imgSong)
     }
 
@@ -130,6 +130,7 @@ const DetailSong = () => {
         sendCommentAPI(commentData).then(res => {
             getAllCommentBySongID(id)
         })
+        setComment('');
     }
 
 
@@ -139,7 +140,6 @@ const DetailSong = () => {
         })
     }
 
-
     return (
         <div>
             <div id="wrapper">
@@ -148,14 +148,14 @@ const DetailSong = () => {
                     <div className="under-hero container">
                         <div className="section">
                             <div className="row" data-song-id={currentSong.id} data-song-name={currentSong.nameSong}
-                                 data-song-artist="Karen Jennings"
+                                 data-song-artist={currentSong.nameSinger}
                                  data-song-album="Sadness" data-song-url={currentSong.pathSong}
                                  data-song-cover="images/cover/small/8.jpg">
                                 <div className="col-xl-3 col-md-4">
 
                                     <div className="cover cover--round">
                                         <div className="cover__image"><img src={currentSong.imgSong}
-                                                                           alt="Treasure face"/></div>
+                                                                           alt="Treasure face" style={{marginLeft:"30px",marginTop:"10px"}}/></div>
                                     </div>
 
                                 </div>
@@ -190,15 +190,15 @@ const DetailSong = () => {
                                         </div>
                                     </div>
                                     <ul className="info-list info-list--dotted mb-3">
-                                        <li>{currentSong.genres.name}</li>
-                                        <li>{
+                                        <li>Thể loại: {currentSong.genres.name}</li>
+                                        <li>Đăng ngày: {
                                             songCreateDate.day + '-' + songCreateDate.month + '-' + songCreateDate.year}
                                         </li>
                                     </ul>
-                                    <div className="mb-4"><p className="mb-2">Upload by: <span
+                                    <div className="mb-4"><p className="mb-2">Người đăng: <span
                                         className="text-dark fw-medium">{currentSong.accountName}</span></p>
-                                        <p className="mb-2">Singer: <span className="text-dark fw-medium">
-                                           {currentSong && currentSong.singerName && currentSong.singerName.join(', ')}
+                                        <p className="mb-2">Ca sỹ: <span className="text-dark fw-medium">
+                                           {currentSong && currentSong.nameSinger}
                                         </span>
                                         </p>
                                     </div>
@@ -298,7 +298,7 @@ const DetailSong = () => {
                                                                 </div>
                                                             </div>
                                                             <div className="cover__image"><img src={rs.imgSong}
-                                                                                               alt="I love you mummy" style={{width:"100%",height:"200px"}}/>
+                                                                                               alt="I love you mummy" style={{width:"180px",height:"180px"}}/>
                                                                 <button type="button"
                                                                         className="btn btn-play btn-default btn-icon rounded-pill"
                                                                         data-play-id={rs.id}><i className="ri-play-fill icon-play"/> <i
@@ -307,291 +307,13 @@ const DetailSong = () => {
                                                             <div className="cover__foot"><a href="song-details.html"
                                                                                             className="cover__title text-truncate">{rs.nameSong}</a>
                                                                 <p className="cover__subtitle text-truncate"><a
-                                                                    href="artist-details.html">{rs.singerName.join(', ')}</a></p></div>
+                                                                    href="artist-details.html">{rs.nameSinger}</a></p></div>
                                                         </div>
 
 
                                                 </div>
                                             )
                                         })}
-
-
-                                        {/*<div className="swiper-slide">*/}
-                                        {/*    <div className="cover cover--round" data-song-id="2"*/}
-                                        {/*         data-song-name="Shack your butty"*/}
-                                        {/*         data-song-artist="Gerrina Linda" data-song-album="Hot shot"*/}
-                                        {/*         data-song-url="audio/ringtone-2.mp3"*/}
-                                        {/*         data-song-cover="images/cover/small/2.jpg">*/}
-                                        {/*        <div className="cover__head">*/}
-                                        {/*            <ul className="cover__label d-flex">*/}
-                                        {/*                <li><span className="badge rounded-pill bg-info"><i*/}
-                                        {/*                    className="ri-vip-crown-fill"></i></span></li>*/}
-                                        {/*            </ul>*/}
-                                        {/*            <div className="cover__options dropstart d-inline-flex ms-auto"><a*/}
-                                        {/*                className="dropdown-link" href="javascript:void(0);"*/}
-                                        {/*                role="button"*/}
-                                        {/*                data-bs-toggle="dropdown" aria-label="Cover options"*/}
-                                        {/*                aria-expanded="false"><i className="ri-more-2-fill"></i></a>*/}
-                                        {/*                <ul className="dropdown-menu dropdown-menu-sm">*/}
-                                        {/*                    <li><a className="dropdown-item" href="javascript:void(0);"*/}
-                                        {/*                           role="button"*/}
-                                        {/*                           data-favorite-id="2">Favorite</a></li>*/}
-                                        {/*                    <li><a className="dropdown-item" href="javascript:void(0);"*/}
-                                        {/*                           role="button"*/}
-                                        {/*                           data-playlist-id="2">Add to playlist</a></li>*/}
-                                        {/*                    <li><a className="dropdown-item" href="javascript:void(0);"*/}
-                                        {/*                           role="button"*/}
-                                        {/*                           data-queue-id="2">Add to queue</a></li>*/}
-                                        {/*                    <li><a className="dropdown-item" href="javascript:void(0);"*/}
-                                        {/*                           role="button"*/}
-                                        {/*                           data-next-id="2">Next to play</a></li>*/}
-                                        {/*                    <li><a className="dropdown-item" href="javascript:void(0);"*/}
-                                        {/*                           role="button">Share</a>*/}
-                                        {/*                    </li>*/}
-                                        {/*                    <li className="dropdown-divider"></li>*/}
-                                        {/*                    <li><a className="dropdown-item" href="javascript:void(0);"*/}
-                                        {/*                           role="button"*/}
-                                        {/*                           data-play-id="2">Play</a></li>*/}
-                                        {/*                </ul>*/}
-                                        {/*            </div>*/}
-                                        {/*        </div>*/}
-                                        {/*        <div className="cover__image"><img src="images/cover/large/2.jpg"*/}
-                                        {/*                                           alt="Shack your butty"/>*/}
-                                        {/*            <button type="button"*/}
-                                        {/*                    className="btn btn-play btn-default btn-icon rounded-pill"*/}
-                                        {/*                    data-play-id="2"><i className="ri-play-fill icon-play"></i>*/}
-                                        {/*                <i*/}
-                                        {/*                    className="ri-pause-fill icon-pause"></i></button>*/}
-                                        {/*        </div>*/}
-                                        {/*        <div className="cover__foot"><a href="song-details.html"*/}
-                                        {/*                                        className="cover__title text-truncate">Shack*/}
-                                        {/*            your butty</a>*/}
-                                        {/*            <p className="cover__subtitle text-truncate"><a*/}
-                                        {/*                href="artist-details.html">Gerrina*/}
-                                        {/*                Linda</a></p></div>*/}
-                                        {/*    </div>*/}
-                                        {/*</div>*/}
-                                        {/*<div className="swiper-slide">*/}
-                                        {/*    <div className="cover cover--round" data-song-id="3"*/}
-                                        {/*         data-song-name="Do it your way(Female)"*/}
-                                        {/*         data-song-artist="Zunira Willy & Nutty Nina" data-song-album="Own way"*/}
-                                        {/*         data-song-url="audio/ringtone-3.mp3"*/}
-                                        {/*         data-song-cover="images/cover/small/3.jpg">*/}
-                                        {/*        <div className="cover__head">*/}
-                                        {/*            <div className="cover__options dropstart d-inline-flex ms-auto"><a*/}
-                                        {/*                className="dropdown-link" href="javascript:void(0);"*/}
-                                        {/*                role="button"*/}
-                                        {/*                data-bs-toggle="dropdown" aria-label="Cover options"*/}
-                                        {/*                aria-expanded="false"><i className="ri-more-2-fill"></i></a>*/}
-                                        {/*                <ul className="dropdown-menu dropdown-menu-sm">*/}
-                                        {/*                    <li><a className="dropdown-item" href="javascript:void(0);"*/}
-                                        {/*                           role="button"*/}
-                                        {/*                           data-favorite-id="3">Favorite</a></li>*/}
-                                        {/*                    <li><a className="dropdown-item" href="javascript:void(0);"*/}
-                                        {/*                           role="button"*/}
-                                        {/*                           data-playlist-id="3">Add to playlist</a></li>*/}
-                                        {/*                    <li><a className="dropdown-item" href="javascript:void(0);"*/}
-                                        {/*                           role="button"*/}
-                                        {/*                           data-queue-id="3">Add to queue</a></li>*/}
-                                        {/*                    <li><a className="dropdown-item" href="javascript:void(0);"*/}
-                                        {/*                           role="button"*/}
-                                        {/*                           data-next-id="3">Next to play</a></li>*/}
-                                        {/*                    <li><a className="dropdown-item" href="javascript:void(0);"*/}
-                                        {/*                           role="button">Share</a>*/}
-                                        {/*                    </li>*/}
-                                        {/*                    <li className="dropdown-divider"></li>*/}
-                                        {/*                    <li><a className="dropdown-item" href="javascript:void(0);"*/}
-                                        {/*                           role="button"*/}
-                                        {/*                           data-play-id="3">Play</a></li>*/}
-                                        {/*                </ul>*/}
-                                        {/*            </div>*/}
-                                        {/*        </div>*/}
-                                        {/*        <div className="cover__image"><img src="images/cover/large/3.jpg"*/}
-                                        {/*                                           alt="Do it your way(Female)"/>*/}
-                                        {/*            <button type="button"*/}
-                                        {/*                    className="btn btn-play btn-default btn-icon rounded-pill"*/}
-                                        {/*                    data-play-id="3"><i className="ri-play-fill icon-play"></i>*/}
-                                        {/*                <i*/}
-                                        {/*                    className="ri-pause-fill icon-pause"/></button>*/}
-                                        {/*        </div>*/}
-                                        {/*        <div className="cover__foot"><a href="song-details.html"*/}
-                                        {/*                                        className="cover__title text-truncate">Do*/}
-                                        {/*            it your*/}
-                                        {/*            way(Female)</a>*/}
-                                        {/*            <p className="cover__subtitle text-truncate"><a*/}
-                                        {/*                href="artist-details.html">Zunira*/}
-                                        {/*                Willy</a>, <a href="artist-details.html">Nutty Nina</a></p>*/}
-                                        {/*        </div>*/}
-                                        {/*    </div>*/}
-                                        {/*</div>*/}
-                                        {/*<div className="swiper-slide">*/}
-                                        {/*    <div className="cover cover--round" data-song-id="4"*/}
-                                        {/*         data-song-name="Say yes"*/}
-                                        {/*         data-song-artist="Johnny Marro" data-song-album="Say yes"*/}
-                                        {/*         data-song-url="audio/ringtone-4.mp3"*/}
-                                        {/*         data-song-cover="images/cover/small/4.jpg">*/}
-                                        {/*        <div className="cover__head">*/}
-                                        {/*            <ul className="cover__label d-flex">*/}
-                                        {/*                <li><span className="badge rounded-pill bg-danger"><i*/}
-                                        {/*                    className="ri-heart-fill"></i></span>*/}
-                                        {/*                </li>*/}
-                                        {/*                <li><span className="badge rounded-pill bg-info"><i*/}
-                                        {/*                    className="ri-vip-crown-fill"></i></span></li>*/}
-                                        {/*            </ul>*/}
-                                        {/*            <div className="cover__options dropstart d-inline-flex ms-auto"><a*/}
-                                        {/*                className="dropdown-link" href="javascript:void(0);"*/}
-                                        {/*                role="button"*/}
-                                        {/*                data-bs-toggle="dropdown" aria-label="Cover options"*/}
-                                        {/*                aria-expanded="false"><i className="ri-more-2-fill"></i></a>*/}
-                                        {/*                <ul className="dropdown-menu dropdown-menu-sm">*/}
-                                        {/*                    <li><a className="dropdown-item" href="javascript:void(0);"*/}
-                                        {/*                           role="button"*/}
-                                        {/*                           data-favorite-id="4">Favorite</a></li>*/}
-                                        {/*                    <li><a className="dropdown-item" href="javascript:void(0);"*/}
-                                        {/*                           role="button"*/}
-                                        {/*                           data-playlist-id="4">Add to playlist</a></li>*/}
-                                        {/*                    <li><a className="dropdown-item" href="javascript:void(0);"*/}
-                                        {/*                           role="button"*/}
-                                        {/*                           data-queue-id="4">Add to queue</a></li>*/}
-                                        {/*                    <li><a className="dropdown-item" href="javascript:void(0);"*/}
-                                        {/*                           role="button"*/}
-                                        {/*                           data-next-id="4">Next to play</a></li>*/}
-                                        {/*                    <li><a className="dropdown-item" href="javascript:void(0);"*/}
-                                        {/*                           role="button">Share</a>*/}
-                                        {/*                    </li>*/}
-                                        {/*                    <li className="dropdown-divider"></li>*/}
-                                        {/*                    <li><a className="dropdown-item" href="javascript:void(0);"*/}
-                                        {/*                           role="button"*/}
-                                        {/*                           data-play-id="4">Play</a></li>*/}
-                                        {/*                </ul>*/}
-                                        {/*            </div>*/}
-                                        {/*        </div>*/}
-                                        {/*        <div className="cover__image"><img src="images/cover/large/4.jpg"*/}
-                                        {/*                                           alt="Say yes"/>*/}
-                                        {/*            <button type="button"*/}
-                                        {/*                    className="btn btn-play btn-default btn-icon rounded-pill"*/}
-                                        {/*                    data-play-id="4"><i className="ri-play-fill icon-play"/> <i*/}
-                                        {/*                className="ri-pause-fill icon-pause"/></button>*/}
-                                        {/*        </div>*/}
-                                        {/*        <div className="cover__foot"><a href="song-details.html"*/}
-                                        {/*                                        className="cover__title text-truncate">Say*/}
-                                        {/*            yes</a>*/}
-                                        {/*            <p className="cover__subtitle text-truncate"><a*/}
-                                        {/*                href="artist-details.html">Johnny*/}
-                                        {/*                Marro</a></p></div>*/}
-                                        {/*    </div>*/}
-                                        {/*</div>*/}
-                                        {/*<div className="swiper-slide">*/}
-                                        {/*    <div className="cover cover--round" data-song-id="5"*/}
-                                        {/*         data-song-name="Where is your letter"*/}
-                                        {/*         data-song-artist="Jina Moore & Lenisa Gory" data-song-album="Letter"*/}
-                                        {/*         data-song-url="audio/ringtone-5.mp3"*/}
-                                        {/*         data-song-cover="images/cover/small/5.jpg">*/}
-                                        {/*        <div className="cover__head">*/}
-                                        {/*            <ul className="cover__label d-flex">*/}
-                                        {/*                <li><span className="badge rounded-pill bg-info"><i*/}
-                                        {/*                    className="ri-vip-crown-fill"></i></span></li>*/}
-                                        {/*            </ul>*/}
-                                        {/*            <div className="cover__options dropstart d-inline-flex ms-auto"><a*/}
-                                        {/*                className="dropdown-link" href="javascript:void(0);"*/}
-                                        {/*                role="button"*/}
-                                        {/*                data-bs-toggle="dropdown" aria-label="Cover options"*/}
-                                        {/*                aria-expanded="false"><i className="ri-more-2-fill"></i></a>*/}
-                                        {/*                <ul className="dropdown-menu dropdown-menu-sm">*/}
-                                        {/*                    <li><a className="dropdown-item" href="javascript:void(0);"*/}
-                                        {/*                           role="button"*/}
-                                        {/*                           data-favorite-id="5">Favorite</a></li>*/}
-                                        {/*                    <li><a className="dropdown-item" href="javascript:void(0);"*/}
-                                        {/*                           role="button"*/}
-                                        {/*                           data-playlist-id="5">Add to playlist</a></li>*/}
-                                        {/*                    <li><a className="dropdown-item" href="javascript:void(0);"*/}
-                                        {/*                           role="button"*/}
-                                        {/*                           data-queue-id="5">Add to queue</a></li>*/}
-                                        {/*                    <li><a className="dropdown-item" href="javascript:void(0);"*/}
-                                        {/*                           role="button"*/}
-                                        {/*                           data-next-id="5">Next to play</a></li>*/}
-                                        {/*                    <li><a className="dropdown-item" href="javascript:void(0);"*/}
-                                        {/*                           role="button">Share</a>*/}
-                                        {/*                    </li>*/}
-                                        {/*                    <li className="dropdown-divider"></li>*/}
-                                        {/*                    <li><a className="dropdown-item" href="javascript:void(0);"*/}
-                                        {/*                           role="button"*/}
-                                        {/*                           data-play-id="5">Play</a></li>*/}
-                                        {/*                </ul>*/}
-                                        {/*            </div>*/}
-                                        {/*        </div>*/}
-                                        {/*        <div className="cover__image"><img src="images/cover/large/5.jpg"*/}
-                                        {/*                                           alt="Where is your letter"/>*/}
-                                        {/*            <button type="button"*/}
-                                        {/*                    className="btn btn-play btn-default btn-icon rounded-pill"*/}
-                                        {/*                    data-play-id="5"><i className="ri-play-fill icon-play"/> <i*/}
-                                        {/*                className="ri-pause-fill icon-pause"/></button>*/}
-                                        {/*        </div>*/}
-                                        {/*        <div className="cover__foot"><a href="song-details.html"*/}
-                                        {/*                                        className="cover__title text-truncate">Where*/}
-                                        {/*            is your*/}
-                                        {/*            letter</a>*/}
-                                        {/*            <p className="cover__subtitle text-truncate"><a*/}
-                                        {/*                href="artist-details.html">Jina*/}
-                                        {/*                Moore</a>, <a href="artist-details.html">Lenisa Gory</a></p>*/}
-                                        {/*        </div>*/}
-                                        {/*    </div>*/}
-                                        {/*</div>*/}
-                                        {/*<div className="swiper-slide">*/}
-                                        {/*    <div className="cover cover--round" data-song-id="6"*/}
-                                        {/*         data-song-name="Hey not me"*/}
-                                        {/*         data-song-artist="Rasomi Pelina" data-song-album="Find soul"*/}
-                                        {/*         data-song-url="audio/ringtone-6.mp3"*/}
-                                        {/*         data-song-cover="images/cover/small/6.jpg">*/}
-                                        {/*        <div className="cover__head">*/}
-                                        {/*            <ul className="cover__label d-flex">*/}
-                                        {/*                <li><span className="badge rounded-pill bg-info"><i*/}
-                                        {/*                    className="ri-vip-crown-fill"></i></span></li>*/}
-                                        {/*            </ul>*/}
-                                        {/*            <div className="cover__options dropstart d-inline-flex ms-auto"><a*/}
-                                        {/*                className="dropdown-link" href="javascript:void(0);"*/}
-                                        {/*                role="button"*/}
-                                        {/*                data-bs-toggle="dropdown" aria-label="Cover options"*/}
-                                        {/*                aria-expanded="false"><i className="ri-more-2-fill"></i></a>*/}
-                                        {/*                <ul className="dropdown-menu dropdown-menu-sm">*/}
-                                        {/*                    <li><a className="dropdown-item" href="javascript:void(0);"*/}
-                                        {/*                           role="button"*/}
-                                        {/*                           data-favorite-id="6">Favorite</a></li>*/}
-                                        {/*                    <li><a className="dropdown-item" href="javascript:void(0);"*/}
-                                        {/*                           role="button"*/}
-                                        {/*                           data-playlist-id="6">Add to playlist</a></li>*/}
-                                        {/*                    <li><a className="dropdown-item" href="javascript:void(0);"*/}
-                                        {/*                           role="button"*/}
-                                        {/*                           data-queue-id="6">Add to queue</a></li>*/}
-                                        {/*                    <li><a className="dropdown-item" href="javascript:void(0);"*/}
-                                        {/*                           role="button"*/}
-                                        {/*                           data-next-id="6">Next to play</a></li>*/}
-                                        {/*                    <li><a className="dropdown-item" href="javascript:void(0);"*/}
-                                        {/*                           role="button">Share</a>*/}
-                                        {/*                    </li>*/}
-                                        {/*                    <li className="dropdown-divider"></li>*/}
-                                        {/*                    <li><a className="dropdown-item" href="javascript:void(0);"*/}
-                                        {/*                           role="button"*/}
-                                        {/*                           data-play-id="6">Play</a></li>*/}
-                                        {/*                </ul>*/}
-                                        {/*            </div>*/}
-                                        {/*        </div>*/}
-                                        {/*        <div className="cover__image"><img src="images/cover/large/6.jpg"*/}
-                                        {/*                                           alt="Hey not me"/>*/}
-                                        {/*            <button type="button"*/}
-                                        {/*                    className="btn btn-play btn-default btn-icon rounded-pill"*/}
-                                        {/*                    data-play-id="6"><i className="ri-play-fill icon-play"></i>*/}
-                                        {/*                <i*/}
-                                        {/*                    className="ri-pause-fill icon-pause"></i></button>*/}
-                                        {/*        </div>*/}
-                                        {/*        <div className="cover__foot"><a href="song-details.html"*/}
-                                        {/*                                        className="cover__title text-truncate">Hey*/}
-                                        {/*            not me</a>*/}
-                                        {/*            <p className="cover__subtitle text-truncate"><a*/}
-                                        {/*                href="artist-details.html">Rasomi*/}
-                                        {/*                Pelina</a></p></div>*/}
-                                        {/*    </div>*/}
-                                        {/*</div>*/}
                                     </div>
                                 </div>
                                 <div className="swiper-button-prev btn-default rounded-pill"></div>
@@ -599,34 +321,15 @@ const DetailSong = () => {
                             </div>
                         </div>
                         <div className="section">
-                            <div className="section__head"><h3 className="mb-0">Comments</h3></div>
+                            <div className="section__head"><h3 className="mb-0">Bình luận:</h3></div>
                             <div className="row">
                                 <div className="col-xl-8">
                                     <form action="#" className="row mb-5" >
-                                        {/*<div className="col-12 mb-3 d-flex align-items-center"><span*/}
-                                        {/*    className="form-label mb-0">Ratings:</span>*/}
-                                        {/*    <div className="ps-2"><select className="form-select" style={{*/}
-                                        {/*        minWidth: "100px",*/}
-                                        {/*        ariaLabel: "Select ratings"*/}
-                                        {/*    }}>*/}
-                                        {/*        <option value="1">1</option>*/}
-                                        {/*        <option value="2">2</option>*/}
-                                        {/*        <option value="3">3</option>*/}
-                                        {/*        <option value="4">4</option>*/}
-                                        {/*        <option value="5">5</option>*/}
-                                        {/*    </select></div>*/}
-                                        {/*</div>*/}
-                                        {/*<div className="col-6 mb-3"><input type="text" className="form-control"*/}
-                                        {/*                                   placeholder="Full name"/>*/}
-                                        {/*</div>*/}
-                                        {/*<div className="col-6 mb-3"><input type="text" className="form-control"*/}
-                                        {/*                                   placeholder="Email ID"/>*/}
-                                        {/*</div>*/}
                                         <div className="col-12 mb-4"><textarea name="comment" id="comment" cols="30"
                                                                                rows="4"
                                                                                className="form-control"
                                                                                value={comment}
-                                                                               placeholder="Write your comment"
+                                                                               placeholder="Hãy để lại bình luận cho bài hát"
                                                                                onChange={handleInputComment}></textarea>
                                         </div>
                                         <div className="col-12">
@@ -667,21 +370,6 @@ const DetailSong = () => {
                             </div>
                         </div>
                     </div>
-                    {/*<footer id="footer">*/}
-                    {/*    <div className="container">*/}
-                    {/*        <div className="text-center mb-4"><a href="mailto:info@listenapp.com"*/}
-                    {/*                                             className="display-5 email">info@listenapp.com</a>*/}
-                    {/*        </div>*/}
-                    {/*        <div className="app-btn-group pt-2"><a href="#" className="btn btn-lg btn-primary">*/}
-                    {/*            <div className="btn__wrap"><i className="ri-google-play-fill"></i> <span*/}
-                    {/*                className="ms-2">Google Play</span>*/}
-                    {/*            </div>*/}
-                    {/*        </a><a href="#" className="btn btn-lg btn-primary">*/}
-                    {/*            <div className="btn__wrap"><i className="ri-app-store-fill"></i> <span className="ms-2">App Store</span>*/}
-                    {/*            </div>*/}
-                    {/*        </a></div>*/}
-                    {/*    </div>*/}
-                    {/*</footer>*/}
                 </main>
             </div>
             <div id="player">
@@ -700,8 +388,7 @@ const DetailSong = () => {
                             <div className="cover__content ps-3 d-none d-sm-block"><a href="song-details.html"
                                                                                       className="cover__title text-truncate"
                                                                                       data-amplitude-song-info="name"></a>
-                                <a
-                                    href="artist-details.html" className="cover__subtitle text-truncate"
+                                <a href="artist-details.html" className="cover__subtitle text-truncate"
                                     data-amplitude-song-info="artist"></a></div>
                         </div>
                         <div className="player-control">
