@@ -12,7 +12,7 @@ import DetailSong from "./component/song/detailSong/DetailSong";
 import RegisterComponent from "./component/RegisterComponent";
 import NavbarComponent from "./component/navbarComponent";
 import LoginComponent from "./component/LoginComponent";
-
+import ListSong from "./component/song/listSong/ListSong";
 
 
 
@@ -21,7 +21,7 @@ function App() {
 
     return (
         <div className="App">
-            {showNavbar && <NavbarComponent/>}
+           <NavbarComponent/>
             <Loader/>
             <Routes>
                 <Route path="/" element={<BodyComponent/>}/>
@@ -29,8 +29,9 @@ function App() {
                 <Route path={"/updatePassword/:id"} element={<UpdatePassword/>}/>
                 <Route path="/song/create" element={<CreateSong/>}/>
                 <Route path={"/song/detailSong/:id"} element={<DetailSong/>}/>
-                <Route path="/register" element={<RegisterComponent setShowNavbar={setShowNavbar}/>}/>
-                <Route path="/login" element={<LoginComponent setShowNavbar={setShowNavbar}/>}/>
+                <Route path="/register" element={<RegisterComponent/>}/>
+                <Route path="/login" element={<LoginComponent/>}/>
+                <Route path='/song/all' element={<ListSong />}></Route>
             </Routes>
             <ToastContainer
                 position="top-center"
@@ -43,7 +44,7 @@ function App() {
                 draggable
                 pauseOnHover
                 theme="light"
-            />
+             />
         </div>
     );
 }
