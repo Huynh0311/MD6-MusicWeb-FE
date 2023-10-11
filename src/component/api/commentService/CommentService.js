@@ -3,7 +3,7 @@ const sendCommentAPI = (commentInfoObj) => {
     return axios.post("comments/add", commentInfoObj);
 }
 const getAllCommentBySongIdAPI = (id) => {
-    return axios.get(`comments/${id}`);
+    return axios.get(`comments/getAll/${id}`);
 }
 
 export {
