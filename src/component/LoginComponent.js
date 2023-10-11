@@ -79,10 +79,10 @@ const LoginComponent = ({setShowNavbar}) => {
                                                 <div className="mb-3"><label htmlFor="email"
                                                                              className="form-label fw-medium">Email</label>
                                                     <Field type="text" id="email" name={'email'}
-                                                           className="form-control" validate={validateEmail}/> <span
+                                                           className="form-control" validate={validateEmail}/><span
                                                         style={{color: "red"}}><ErrorMessage name="email"
                                                                                              component="div"
-                                                                                             className="error-message"/>  </span>
+                                                                                             className="error-message"/></span>
                                                 </div>
                                                 <div className="mb-2"><label htmlFor="password"
                                                                              className="form-label fw-medium">Password</label>

@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {Link, useNavigate, useParams} from "react-router-dom";
 import _ from 'lodash';
-import axiosConfig from "../api/AccountService/AccountService";
-import {storage} from "../../firebase/firebase";
+import accountService from "../api/AccountService/AccountService";
+import {storage} from "../../firebase/Firebase";
 import {ref, uploadBytes, getDownloadURL} from "firebase/storage";
 import {v4} from "uuid";
 import {ErrorMessage, Field, Form, Formik} from "formik";
@@ -24,22 +24,13 @@ const validateSchema = Yup.object().shape({
 
 
 const UpdateAccount = () => {
-    const {id} = useParams();
+    const [id, setId] = useState(JSON.parse(localStorage.getItem("data")).id);
     const navigate = useNavigate();
     const [account, setAccount] = useState({});
 
     const uploadImg = (even) => {
         if (!even.target.files[0].name.match(/\.(jpg|jpeg|png|gif)$/)) {
-            toast.error('Thêm ảnh thất bại!', {
-                position: "top-center",
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
+            toast.error('Thêm ảnh thất bại!');
         } else {
             if (even.target.files[0] == null) return;
             const imageRef = ref(storage, `images/${even.target.files[0].name + v4()}`);
@@ -47,16 +38,7 @@ const UpdateAccount = () => {
                 getDownloadURL(snapshot.ref).then((url) => {
                     setAccount({...account, img: url});
                     previewSelectedImage(even.target.files[0]);
-                    toast.success('Upload ảnh thành công', {
-                        position: "top-center",
-                        autoClose: 2000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "light",
-                    });
+                    toast.success('Upload ảnh thành công');
                 });
             });
         }
@@ -80,12 +62,12 @@ const UpdateAccount = () => {
     }, [id]);
 
     const findById = () => {
-        axiosConfig.findById(id)
+        accountService.findById(id)
             .then((acc) => {
-                setAccount(acc);
+                setAccount(acc.data);
             })
             .catch((error) => {
-                console.log("error");
+                toast.error('Lỗi không có dữ liệu');
             });
     };
 
@@ -110,29 +92,11 @@ const UpdateAccount = () => {
                             onSubmit={(values) => {
 
                                 const data = {...values, img: account.img}
-                                axiosConfig.updateAccount(id, data).then((response) => {
-                                    toast.success('Cập nhật thành công', {
-                                        position: "top-center",
-                                        autoClose: 1000,
-                                        hideProgressBar: false,
-                                        closeOnClick: true,
-                                        pauseOnHover: true,
-                                        draggable: true,
-                                        progress: undefined,
-                                        theme: "light",
-                                    });
+                                accountService.updateAccount(id, data).then((response) => {
+                                    toast.success('Cập nhật thành công');
                                     // navigate("/");
                                 }).catch((error) => {
-                                    toast.error('Cập nhật thất bại', {
-                                        position: "top-center",
-                                        autoClose: 1000,
-                                        hideProgressBar: false,
-                                        closeOnClick: true,
-                                        pauseOnHover: true,
-                                        draggable: true,
-                                        progress: undefined,
-                                        theme: "light",
-                                    });
+                                    toast.error('Cập nhật thất bại');
                                 })
                             }}>
                             <Form>

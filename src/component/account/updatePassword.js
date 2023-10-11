@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {Link, useNavigate, useParams} from "react-router-dom";
-import axiosConfig from "../api/AccountService/AccountService";
+import {Link, useNavigate} from "react-router-dom";
+import accountService from "../api/AccountService/AccountService";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as Yup from "yup";
 import {toast} from "react-toastify";
@@ -16,7 +16,7 @@ const validateSchema = Yup.object().shape({
 
 
 const UpdatePassword = () => {
-    const {id} = useParams();
+    const [id, setId] = useState(JSON.parse(localStorage.getItem("data")).id);
     const navigate = useNavigate();
     const [account, setAccount] = useState({});
 
@@ -27,15 +27,15 @@ const UpdatePassword = () => {
 
     useEffect(() => {
         findById();
-    }, []);
+    }, [id]);
 
     const findById = () => {
-        axiosConfig.findById(id)
+        accountService.findById(id)
             .then((acc) => {
-                setAccount(acc);
+                setAccount(acc.data);
             })
             .catch((error) => {
-                console.log("error");
+                toast.error('Lỗi không lấy đuợc dữ liệu');
             });
     };
 
@@ -50,28 +50,10 @@ const UpdatePassword = () => {
                             }}
                             validationSchema={validateSchema}
                             onSubmit={(values) => {
-                                axiosConfig.updatePassword(account).then((response) => {
-                                    toast.success('Sửa mật khẩu thành công', {
-                                        position: "top-center",
-                                        autoClose: 2000,
-                                        hideProgressBar: false,
-                                        closeOnClick: true,
-                                        pauseOnHover: true,
-                                        draggable: true,
-                                        progress: undefined,
-                                        theme: "light",
-                                    });
+                                accountService.updatePassword(account).then((response) => {
+                                    toast.success('Sửa mật khẩu thành công');
                                 }).catch((error) => {
-                                    toast.error('Cập nhật thất bại', {
-                                        position: "top-center",
-                                        autoClose: 1000,
-                                        hideProgressBar: false,
-                                        closeOnClick: true,
-                                        pauseOnHover: true,
-                                        draggable: true,
-                                        progress: undefined,
-                                        theme: "light",
-                                    });
+                                    toast.error('Cập nhật thất bại');
                                 })
                             }}>
                             <Form>

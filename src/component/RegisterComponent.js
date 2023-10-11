@@ -88,27 +88,15 @@ const RegisterComponent = ({setShowNavbar}) => {
                             }
                         }).then(() => {
                             navigate('/login');
-                            toast.success('Đăng kí thành công', {
-                                position: "top-center",
-                                autoClose: 3000,
-                                hideProgressBar: false,
-                                closeOnClick: true,
-                                pauseOnHover: true,
-                                draggable: true,
-                                progress: undefined,
-                                theme: "light",
-                            });
+                            toast.success('Đăng kí thành công');
                         }).catch(error => {
-                            toast.error('Đăng kí thất bại!', {
-                                position: "top-center",
-                                autoClose: 2000,
-                                hideProgressBar: false,
-                                closeOnClick: true,
-                                pauseOnHover: true,
-                                draggable: true,
-                                progress: undefined,
-                                theme: "light",
-                            });
+                            console.log(error)
+                            if(error.response.status === 409){
+                                toast.error(error.response.data);
+                            }else {
+                                toast.error("Đăng kí thất bại");
+                            }
+
                         })
                     }}>
                 <Form>

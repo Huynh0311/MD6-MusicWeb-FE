@@ -54,7 +54,7 @@ const SearchComponent = () => {
                                             </li>
                                             <li className="dropdown-divider"></li>
                                             <li>
-                                                <Link to={"/updateProfile/" + accounts.id}>
+                                                <Link to={"/updateProfile/"}>
                                                     <div className="dropdown-item d-flex align-items-center">
                                                         <i className="ri-user-3-line fs-5"></i>
                                                         <span className="ps-2">Thông tin cá nhân</span>
@@ -62,7 +62,7 @@ const SearchComponent = () => {
                                                 </Link>
                                             </li>
                                             <li>
-                                                <Link to={"/updatePassword/" + accounts.id}>
+                                                <Link to={"/updatePassword/"}>
                                                     <div className="dropdown-item d-flex align-items-center">
                                                         <i className="ri-lock-2-line fs-5"></i>
                                                         <span className="ps-2">Cập nhật mật khẩu</span>
