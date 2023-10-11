@@ -1,11 +1,13 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {getAllSongByGenresIDAPI, getSongByID, playSong} from "../../api/songService/SongService";
 import {getSongLikeQuantityAPI, isLikedAPI, likeClickAPI} from "../../api/LikesService/LikesService";
 import {getAllCommentBySongID, getAllCommentBySongIdAPI, sendCommentAPI} from "../../api/commentService/CommentService";
 
 const DetailSong = () => {
+    const navigate = useNavigate();
     const [account, setAccount] = useState(JSON.parse(localStorage.getItem("data")));
+    console.log(account)
     const [currentSong, setCurrentSong] = useState({
         genres: {}
     });
@@ -82,13 +84,17 @@ const DetailSong = () => {
     }
 
     const likeClick = () => {
-        if (like.account != null && like.song != null) {
-            likeClickAPI(like).then(res => {
-                setIsLiked(res.data)
-                getLikeQuantity();
-            })
-        } else {
-            console.log("Không có dữ liệu hợp lệ để gửi yêu cầu.");
+        if(account!==null) {
+            if (like.account != null && like.song != null) {
+                likeClickAPI(like).then(res => {
+                    setIsLiked(res.data)
+                    getLikeQuantity();
+                })
+            } else {
+                console.log("Không có dữ liệu hợp lệ để gửi yêu cầu.");
+            }
+        }else {
+            navigate("/login")
         }
     }
     const getSongCreatedDate = (songCreateDate) => {
@@ -127,10 +133,16 @@ const DetailSong = () => {
             song: like.song,
             content: comment
         }
-        sendCommentAPI(commentData).then(res => {
-            getAllCommentBySongID(id)
-        })
-        setComment('');
+        if(account==null){
+            // toast.error('Bạn cần đăng nhập trước khi bình luận!');
+           navigate("/login")
+        }else{
+            sendCommentAPI(commentData).then(res => {
+                getAllCommentBySongID(id)
+            })
+            setComment('');
+        }
+
     }
 
 
@@ -143,6 +155,8 @@ const DetailSong = () => {
     return (
         <div>
             <div id="wrapper">
+                {console.log(currentSong)}
+
                 <aside id="sidebar">
                     <div className="sidebar-head d-flex align-items-center justify-content-between"><a href="index.html"
                                                                                                        className="brand external"><img
@@ -288,8 +302,11 @@ const DetailSong = () => {
                                                                                    className="list__cover"><img
                                                         src="images/cover/large/8.jpg" alt="Jennings"/></a>
                                                         <div className="list__content"><a href="artist-details.html"
-                                                                                          className="list__title text-truncate">{currentSong.nameSinger}</a></div>
+                                                                                          className="list__title text-truncate">
+                                                            {currentSong.nameSinger}
+                                                        </a></div>
                                                     </div>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -653,6 +670,9 @@ const DetailSong = () => {
                                         className="text-dark fw-medium">{currentSong.accountName}</span></p>
                                         <p className="mb-2">Ca sỹ: <span className="text-dark fw-medium">
                                            {currentSong && currentSong.nameSinger}
+                                            {currentSong.auth==true &&
+                                            <i className="fa-sharp fa-solid fa-circle-check" style={{color: "#005eff",marginLeft:"5px"}}></i>
+                                            }
                                         </span>
                                         </p>
                                     </div>
@@ -671,8 +691,9 @@ const DetailSong = () => {
                                                                 className="text-dark d-flex align-items-center"
                                                                 aria-label="Favorite" data-favorite-id="1">
 
-                                                <i className="ri-heart-line heart-empty text-danger"
-                                                   onClick={likeClick}></i>
+                                                {/*<i className="ri-heart-line heart-empty text-danger"*/}
+                                                {/*   onClick={likeClick}></i>*/}
+                                                <i className="fa-sharp fa-solid fa-heart" style={{color: "#ff0000", fontSize: "24px"}} onClick={likeClick}></i>
                                                 <i className="ri-heart-fill heart-fill"></i> <span
                                                 className="ps-2 fw-medium">{
                                                 likedQuantity != null ? likedQuantity : ''

@@ -40,15 +40,11 @@ const BodyComponent = () => {
                                 <div id="search_results" className="search pb-3">
                                     <div className="search__head">
                                         <div className="search__head__filter">
-                                            <button type="button"
-                                                    className="btn btn-sm btn-light-primary active">Trending
-                                            </button>
-                                            <button type="button" className="btn btn-sm btn-light-primary">Artists
-                                            </button>
-                                            <button type="button" className="btn btn-sm btn-light-primary">Songs
-                                            </button>
-                                            <button type="button" className="btn btn-sm btn-light-primary">Albums
-                                            </button>
+                                            <button type="button" className="btn btn-sm btn-light-primary active">Trending</button>
+                                            <button type="button" className="btn btn-sm btn-light-primary">Artists</button>
+                                            <button type="button" className="btn btn-sm btn-light-primary" id="songFindBtn">Songs</button>
+
+                                            <button type="button" className="btn btn-sm btn-light-primary">Albums</button>
                                         </div>
                                     </div>
                                     <div className="search__body" data-scroll="true">

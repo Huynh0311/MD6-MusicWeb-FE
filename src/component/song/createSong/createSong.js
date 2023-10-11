@@ -42,8 +42,6 @@ const CreateSong = () => {
 
         try {
             await uploadBytes(audioRef, audioUpload);
-            console.log('audioRef')
-            console.log(audioRef)
             const audioUrl = await getDownloadURL(audioRef);
             addSong(audioUrl, imgFile);
         } catch (error) {
@@ -91,7 +89,6 @@ const CreateSong = () => {
             try {
                 const response = await addSongSV(song)
                 setIsLoading(false);
-                console.log(response.data);
                 let obj = response.data;
                 navigate(`/song/detailSong/${obj.id}`)
             } catch (error) {
@@ -125,7 +122,6 @@ const CreateSong = () => {
     return (
 
         <div id="wrapper">
-            {console.log(song)}
             <Formik
                 initialValues={{
                     nameSong: '',
@@ -140,7 +136,6 @@ const CreateSong = () => {
                 }}>
                 <Form>
                     <div>
-                        {console.log(song)}
                         <header id="header">
                             <div className="container">
                                 <div className="header-container">
