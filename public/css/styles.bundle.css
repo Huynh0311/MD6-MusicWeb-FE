@@ -1721,7 +1721,7 @@ body[data-search-results=true] .search {
 }
 
 #sidebar .sidebar-body .navbar .nav-link {
-    padding: .625rem 1.5rem;
+    padding: 1rem 1.5rem;
     color: #323334;
     position: relative;
     white-space: nowrap

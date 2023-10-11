@@ -172,10 +172,10 @@ const CreateSong = () => {
                                                                 <img src={previewImage || defaultImg} alt="Preview"
                                                                      id="previewImage"
                                                                      style={{
-                                                                         width: "400px",
-                                                                         height: "400px",
+                                                                         width: "300px",
+                                                                         height: "300px",
                                                                          marginBottom: "20px",
-                                                                         marginLeft: "100px"
+                                                                         marginLeft: "26%"
                                                                      }}/>
 
                                                                 <div>
