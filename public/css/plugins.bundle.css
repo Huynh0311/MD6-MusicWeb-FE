@@ -1047,7 +1047,7 @@ progress {
         width: 100%
     }
 
-    .inputEdit{
+    .inputEdit {
         display: flex;
         justify-content: center;
         align-items: start;
@@ -1056,14 +1056,14 @@ progress {
         margin-left: 46px;
     }
 
-    .text-label{
+    .text-label {
         margin-left: 90px;
         width: 100%;
         display: flex;
         justify-content: start;
     }
 
-    .inputEditPassword{
+    .inputEditPassword {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -1071,11 +1071,11 @@ progress {
         color: red;
     }
 
-    .inputEditPassword input{
+    .inputEditPassword input {
         width: 420px;
     }
 
-    .inputEdit input{
+    .inputEdit input {
         width: 625px;
     }
 
@@ -9718,7 +9718,11 @@ textarea.form-control-lg {
     }
 
     .p-sm-5 {
-        padding: 3rem !important
+        padding: 3rem 3rem 5rem 3rem !important
+    }
+
+    .mgt-2 {
+        padding: 2rem 3rem 5rem 3rem !important
     }
 
     .px-sm-0 {

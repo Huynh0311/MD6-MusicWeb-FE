@@ -11,15 +11,10 @@ const validateSchema = Yup.object().shape({
         .oneOf([Yup.ref('password'), null], 'Mật khẩu xác nhận phải trùng khớp với mật khẩu')
         .required('Xác nhận mật khẩu không được để trống'),
 });
-const RegisterComponent = ({setShowNavbar}) => {
+const RegisterComponent = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
-    useEffect(() => {
-        setShowNavbar(false);
-        return () => {
-            setShowNavbar(true);
-        };
-    }, [setShowNavbar]);
+
     const validatePassword = (value) => {
         let errorMessage = '';
         if (!value) {
@@ -104,13 +99,11 @@ const RegisterComponent = ({setShowNavbar}) => {
                         <div className="auth py-5">
                             <div className="container">
                                 <div className="row">
-                                    <div className="col-xl-5 col-lg-7 col-md-9 col-sm-11 mx-auto">
+                                    <div className="col-xl-5 col-lg-7 col-md-9 col-sm-11 modal-login">
                                         <div className="card">
-                                            <div className="card-body p-sm-5"><h4>Register with <span
-                                                className="text-primary">Listen</span></h4>
-                                                <p className="fs-6">It's time to join with Listen and gain full awesome
-                                                    music
-                                                    experience.</p>
+                                            <div className="card-body p-sm-5"><h4>Đăng kí <span
+                                                className="text-primary"></span></h4>
+                                                <p className="fs-6">Đã đến lúc tham gia Nghe và có được trải nghiệm âm nhạc tuyệt vời.</p>
                                                 <div className="mb-3"><label htmlFor="email"
                                                                              className="form-label fw-medium">Email</label>
                                                     <Field type="text" id="email" className="form-control"
@@ -120,7 +113,7 @@ const RegisterComponent = ({setShowNavbar}) => {
                                                                                                className="error-message"/>  </span>
                                                 </div>
                                                 <div className="mb-3"><label htmlFor="c_password"
-                                                                             className="form-label fw-medium">Name
+                                                                             className="form-label fw-medium">Tên người dùng
                                                 </label> <Field type="text" id="name"
                                                                 name={'name'}
                                                                 className="form-control" validate={validateName}/></div>
@@ -129,7 +122,7 @@ const RegisterComponent = ({setShowNavbar}) => {
                                                                                            className="error-message"/>  </span>
                                                 <div className="mb-2">
                                                     <label htmlFor="password" className="form-label fw-medium">
-                                                        Password
+                                                        Mật khẩu
                                                     </label>
                                                     <Field type="password" id="password" name="password"
                                                            className="form-control" validate={validatePassword}/>
@@ -138,8 +131,8 @@ const RegisterComponent = ({setShowNavbar}) => {
                                                                                                className="error-message"/></span>
                                                 </div>
                                                 <div className="mb-2"><label htmlFor="password"
-                                                                             className="form-label fw-medium">Confirm
-                                                    Password</label>
+                                                                             className="form-label fw-medium">Xác nhận mật khẩu
+                                                    </label>
                                                     <Field type="password" id="confirmPassword" name="confirmPassword"
                                                            className="form-control"/>
                                                 </div>
@@ -147,22 +140,18 @@ const RegisterComponent = ({setShowNavbar}) => {
                                                                                            component="div"
                                                                                            className="error-message"></ErrorMessage> </span>
                                                 <div className="mb-3"><label htmlFor="phone"
-                                                                             className="form-label fw-medium">Phone
-                                                </label> <Field type="text" id="phone" name={'phone'}
+                                                                             className="form-label fw-medium">Số điện thoại                                                </label> <Field type="text" id="phone" name={'phone'}
                                                                 className="form-control" validate={validatePhone}/>
                                                     <span style={{color: "red"}}><ErrorMessage name="phone"
                                                                                                component="div"
                                                                                                className="error-message"/> </span>
                                                 </div>
                                                 <div className="mb-5">
-                                                    <button id="btn-form" className="btn btn-primary w-100">Save
+                                                    <button id="btn-form" className="btn btn-primary w-100">Đăng kí
                                                     </button>
                                                 </div>
-                                                <div className="mb-4">
-                                                    <div className="auth__or mx-auto fw-medium"></div>
-                                                </div>
-                                                <p>Do you have an Account?<br/><Link to={'/login'}
-                                                                                     className="fw-medium external">Login</Link>
+                                                <p>Bạn đã có tài khoản?<br/><Link to={'/login'}
+                                                                                     className="fw-medium external">Đăng nhập</Link>
                                                 </p>
                                             </div>
                                         </div>

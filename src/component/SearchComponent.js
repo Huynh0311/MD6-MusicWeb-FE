@@ -10,7 +10,7 @@ const SearchComponent = () => {
     }
     const logOut =()=> {
         localStorage.clear();
-        window.location.reload();
+        navigate("/");
     }
     let accounts = null;
     if (account) {

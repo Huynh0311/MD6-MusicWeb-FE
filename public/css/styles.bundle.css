@@ -1995,7 +1995,7 @@ body[data-sidebar-toggle=true] #sidebar {
     bottom: 0;
     left: 0;
     z-index: 1000;
-    padding: 0 1.25rem 1rem;
+    padding: 0 1.25rem 0.5rem;
     -webkit-transition: all .35s ease-in-out;
     transition: all .35s ease-in-out;
     color: #151719;
@@ -2836,7 +2836,7 @@ body[data-sidebar-toggle=true] #sidebar {
 }
 
 .auth .auth__or:after {
-    content: "or";
+    content: "hoặc";
     display: inline-block;
     padding: 0 .5rem;
     text-transform: uppercase;
@@ -3503,3 +3503,7 @@ body[data-theme=dark] .plan .plan__col {
 }
 
 /*# sourceMappingURL=styles.bundle.css.map */
+.modal-login{
+    margin-left: 38%;
+    margin-top: 3%;
+}

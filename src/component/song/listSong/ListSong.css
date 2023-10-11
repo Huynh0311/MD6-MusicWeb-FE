@@ -1,0 +1,42 @@
+/*.card {*/
+/*    background-color: #fff1e3;*/
+/*}*/
+
+.card header{
+    background-color: orange;
+}
+
+.btn{
+    margin: 2px;;
+}
+.divbtn{
+    float: left;
+}
+
+.img-fixed-position{
+    width: 250px;
+    padding: 20px;
+}
+
+.namesong-width{
+    min-width: 200px;
+    max-width: 200px;
+}
+
+.descrip-width{
+    min-width: 550px;
+    max-width: 550px;
+}
+
+
+.custom-button{
+    width: 80px;
+}
+
+.tr-title-position{
+    text-align: center;
+}
+
+.tr-data-position{
+    position: inherit;
+}
