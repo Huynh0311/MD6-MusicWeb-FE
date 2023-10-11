@@ -12,7 +12,7 @@ import DetailSong from "./component/song/detailSong/DetailSong";
 import RegisterComponent from "./component/RegisterComponent";
 import NavbarComponent from "./component/navbarComponent";
 import LoginComponent from "./component/LoginComponent";
-
+import ListSong from "./component/song/listSong/ListSong";
 
 
 
@@ -29,9 +29,21 @@ function App() {
                 <Route path="/song/create" element={<CreateSong/>}/>
                 <Route path={"/song/detailSong/:id"} element={<DetailSong/>}/>
                 <Route path="/register" element={<RegisterComponent/>}/>
-                <Route path="/login" element={<LoginComponent/>}/>
+                <Route path="/login" element={<LoginComponent/>}/>       
+                <Route path='/song/all' element={<ListSong />}></Route>
             </Routes>
-            <ToastContainer />
+            <ToastContainer
+                position="top-center"
+                autoClose={2000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+             />
         </div>
     );
 }
