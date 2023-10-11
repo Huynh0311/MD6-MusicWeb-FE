@@ -4,7 +4,7 @@ import axios from "axios";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {toast} from "react-toastify";
 import {signInWithPopup} from 'firebase/auth';
-import {auth, provider} from "../firebase/firebase";
+import {auth, provider} from "../firebase/Firebase";
 
 const LoginComponent = () => {
     const [value,setValue] = useState('')
@@ -110,15 +110,15 @@ const LoginComponent = () => {
                         <div className="auth py-5">
                             <div className="container">
                                 <div className="row">
-                                    <div className="col-xl-5 col-lg-7 col-md-9 col-sm-11 mx-auto">
+                                    <div className="col-xl-5 col-lg-7 col-md-9 col-sm-11 modal-login">
                                         <div className="card">
-                                           <span style={{display:"flex"}}><Link to={'/home'} style={{display:"flex", margin: "30px 0 0 30px"}}>
+                                           <span style={{display:"flex"}}><Link to={'/'} style={{display:"flex", margin: "30px 0 0 30px"}}>
                                               <i className="ri-home-4-line"></i>
                                                <p>Trang chủ</p>
                                            </Link></span>
-                                            <div className="card-body p-sm-5"><h4>Đăng nhập để<span
-                                                className="text-primary"> Nghe</span></h4>
-                                                <p className="fs-6">Chào mừng trở lại! đăng nhập với dữ liệu mà bạn đã nhập trong quá trình đăng ký</p>
+                                            <div className="card-body p-sm-5 mgt-2"><h4>Đăng nhập<span
+                                                className="text-primary"></span></h4>
+                                                <p className="fs-6"></p>
                                                 <div className="mb-3"><label htmlFor="email"
                                                                              className="form-label fw-medium">Email</label>
                                                     <Field type="text" id="email" name={'email'}

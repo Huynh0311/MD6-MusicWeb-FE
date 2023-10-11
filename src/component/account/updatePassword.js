@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {Link, useNavigate, useParams} from "react-router-dom";
-import axiosConfig from "../api/AccountService/AccountService";
+import {Link, useNavigate} from "react-router-dom";
+import accountService from "../api/AccountService/AccountService";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as Yup from "yup";
 import {toast} from "react-toastify";
@@ -16,7 +16,7 @@ const validateSchema = Yup.object().shape({
 
 
 const UpdatePassword = () => {
-    const {id} = useParams();
+    const [id, setId] = useState(JSON.parse(localStorage.getItem("data")).id);
     const navigate = useNavigate();
     const [account, setAccount] = useState({});
 
@@ -27,85 +27,21 @@ const UpdatePassword = () => {
 
     useEffect(() => {
         findById();
-    }, []);
+    }, [id]);
 
     const findById = () => {
-        axiosConfig.findById(id)
+        accountService.findById(id)
             .then((acc) => {
-                setAccount(acc);
+                setAccount(acc.data);
             })
             .catch((error) => {
-                alert("error");
+                toast.error('Lỗi không lấy đuợc dữ liệu');
             });
     };
 
     return (
         <div>
             <div id="wrapper">
-                <header id="header">
-                    <div className="container">
-                        <div className="header-container">
-                            <div className="d-flex align-items-center"><a href="javascript:void(0);" role="button"
-                                                                          className="header-text sidebar-toggler d-lg-none me-3"
-                                                                          aria-label="Sidebar toggler"><i
-                                className="ri-menu-3-line"></i></a>
-                                <form action="#" id="search_form" className="me-3"><label htmlFor="search_input"><i
-                                    className="ri-search-2-line"></i></label> <input type="text"
-                                                                                     placeholder="Type anything to get result..."
-                                                                                     id="search_input"
-                                                                                     className="form-control form-control-sm"/>
-                                </form>
-                                <div className="d-flex align-items-center">
-                                    <div className="dropdown ms-3 ms-sm-4">
-                                        <a href="javascript:void(0);" className="avatar header-text"
-                                           role="button" id="user_menu"
-                                           data-bs-toggle="dropdown"
-                                           aria-expanded="false">
-                                            <div className="avatar__image">
-                                                <img src="images/users/thumb.jpg" alt="user"/>
-                                            </div>
-                                            <span className="ps-2 d-none d-sm-block">Androws</span>
-                                        </a>
-                                        <ul className="dropdown-menu dropdown-menu-md dropdown-menu-end"
-                                            aria-labelledby="user_menu">
-                                            <li>
-                                                <div className="py-2 px-3 avatar avatar--lg">
-                                                    <div className="avatar__image"><img src="images/users/thumb.jpg"
-                                                                                        alt="user"/></div>
-                                                    <div className="avatar__content"><span className="avatar__title">Androws Kinny</span>
-                                                        <span className="avatar__subtitle">Artist</span></div>
-                                                </div>
-                                            </li>
-                                            <li className="dropdown-divider"></li>
-                                            <li><a className="dropdown-item d-flex align-items-center"
-                                                   href="profile.html"><i
-                                                className="ri-user-3-line fs-5"></i> <span
-                                                className="ps-2">Profile</span></a></li>
-                                            <li><a className="dropdown-item d-flex align-items-center"
-                                                   href="favorites.html"><i
-                                                className="ri-heart-line fs-5"></i> <span
-                                                className="ps-2">Favorites</span></a></li>
-                                            <li><a className="dropdown-item d-flex align-items-center"
-                                                   href="settings.html"><i
-                                                className="ri-settings-line fs-5"></i> <span
-                                                className="ps-2">Settings</span></a></li>
-                                            <li><a className="dropdown-item d-flex align-items-center" href="plan.html"><i
-                                                className="ri-money-dollar-circle-line fs-5"></i> <span
-                                                className="ps-2">Plan</span></a>
-                                            </li>
-                                            <li className="dropdown-divider"></li>
-                                            <li><a
-                                                className="dropdown-item d-flex align-items-center external text-danger"
-                                                href="index.html"><i className="ri-logout-circle-line fs-5"></i> <span
-                                                className="ps-2">Logout</span></a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </header>
                 <main id="page_content">
                         <Formik
                             initialValues={{
@@ -114,19 +50,10 @@ const UpdatePassword = () => {
                             }}
                             validationSchema={validateSchema}
                             onSubmit={(values) => {
-                                axiosConfig.updatePassword(account).then((response) => {
-                                    toast.success('Sửa mật khẩu thành công', {
-                                        position: "top-center",
-                                        autoClose: 2000,
-                                        hideProgressBar: false,
-                                        closeOnClick: true,
-                                        pauseOnHover: true,
-                                        draggable: true,
-                                        progress: undefined,
-                                        theme: "light",
-                                    });
+                                accountService.updatePassword(account).then((response) => {
+                                    toast.success('Sửa mật khẩu thành công');
                                 }).catch((error) => {
-                                    alert("error");
+                                    toast.error('Cập nhật thất bại');
                                 })
                             }}>
                             <Form>
@@ -136,52 +63,52 @@ const UpdatePassword = () => {
                                         <div className="plan bg-light">
                                             <div className="plan__data">
                                                 <div className="px-4 pt-2 pe-xl-0 pt-sm-0 mt-4 mb-3 my-sm-0 w-100">
-                                                    <div className="d-flex align-items-center mb-4">
-                                                        <div className="avatar avatar--xl">
+                                                    <div className="row">
+                                                        <div className="col-4 avatar avatar--xl">
                                                             <div className="avatar__image">
                                                                 <img src={account.img} id="previewImage"
-                                                                     style={{width: "150px", height: "150px"}}/>
+                                                                     style={{width: "250px", height: "250px"}}/>
                                                             </div>
                                                         </div>
-                                                        <div className="ps-3 cursor">
-                                                            <input type="file" className="btn btn-outline-primary"
-                                                                   disabled
-                                                            />
+                                                        <div className="col-8">
+                                                            <div className="col-sm-12 cursor mb-3 ps-2" style={{marginLeft: "36px"}}>
+
+                                                            </div>
+                                                            <div className="col-sm-12 inputEdit mb-3">
+                                                                <div className="text-lable">
+                                                                    <label htmlFor="name"
+                                                                           className="form-label fw-medium">Mật khẩu mới</label>
+                                                                </div>
+                                                                <Field type="password" id="password" name={"password"}
+                                                                       className="form-control"
+                                                                       onInput={ChangeInputAccountEdit}
+                                                                />
+                                                                <span style={{color: "red"}}><ErrorMessage
+                                                                    name={'name'}></ErrorMessage></span>
+                                                            </div>
+                                                            <div className="col-sm-12 inputEdit mb-3">
+                                                                <div className="text-lable">
+                                                                    <label htmlFor="l_name"
+                                                                           className="form-label fw-medium">Nhập lại mật khẩu</label>
+                                                                </div>
+                                                                <Field type="password" id="confirmPassword" name={"confirmPassword"}
+                                                                       className="form-control"
+                                                                />
+                                                                <span style={{color: "red"}}><ErrorMessage
+                                                                    name={'email'}></ErrorMessage></span>
+                                                            </div>
+                                                            <div className="col-12" style={{display: 'flex', justifyContent: 'center'}}>
+                                                                <button type=" " className="btn btn-primary" style={{marginRight: "140px"}}>
+                                                                    Cập nhật mật khẩu
+                                                                </button>
+                                                                <Link to={"/"}>
+                                                                    <p className="btn btn-secondary">
+                                                                        Trở lại trang chủ
+                                                                    </p>
+                                                                </Link>
+                                                            </div>
                                                         </div>
                                                     </div>
-
-                                                    <div className="row g-4">
-                                                        <div className="col-sm-12 inputEditPassword">
-                                                            <label htmlFor="name"
-                                                                   className="form-label fw-medium">New Password</label>
-                                                            <Field type="password" id="password" name={"password"}
-                                                                   className="form-control"
-                                                                   onInput={ChangeInputAccountEdit}
-                                                                   />
-                                                            <span style={{color: "red"}}><ErrorMessage
-                                                                name={'password'}></ErrorMessage></span>
-                                                        </div>
-                                                        <div className="col-sm-12 inputEditPassword">
-                                                            <label htmlFor="l_name"
-                                                                   className="form-label fw-medium">Confirm Password</label>
-                                                            <Field type="password" id="confirmPassword" name={"confirmPassword"}
-                                                                   className="form-control"
-                                                                   />
-                                                            <span style={{color: "red"}}><ErrorMessage
-                                                                name={'confirmPassword'}></ErrorMessage></span>
-                                                        </div>
-                                                        <div className="col-12" style={{display: 'flex', justifyContent: 'center'}}>
-                                                            <button type=" " className="btn btn-primary" style={{marginRight: "140px"}}>
-                                                                Update
-                                                            </button>
-                                                            <Link to={"/updateProfile/" + id}>
-                                                                <p className="btn btn-secondary">
-                                                                    Cancel
-                                                                </p>
-                                                            </Link>
-                                                        </div>
-                                                    </div>
-
                                                 </div>
                                             </div>
                                         </div>
