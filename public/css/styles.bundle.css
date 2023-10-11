@@ -124,7 +124,8 @@ a, button, input {
     flex-wrap: wrap;
     -webkit-box-align: center;
     -ms-flex-align: center;
-    align-items: center
+    align-items: center;
+    justify-content: center;
 }
 
 .avatar .avatar__image {
@@ -1720,7 +1721,7 @@ body[data-search-results=true] .search {
 }
 
 #sidebar .sidebar-body .navbar .nav-link {
-    padding: .625rem 1.5rem;
+    padding: 1rem 1.5rem;
     color: #323334;
     position: relative;
     white-space: nowrap
@@ -1994,11 +1995,11 @@ body[data-sidebar-toggle=true] #sidebar {
     bottom: 0;
     left: 0;
     z-index: 1000;
-    padding: 0 1.25rem 1rem;
+    padding: 0 1.25rem 0.5rem;
     -webkit-transition: all .35s ease-in-out;
     transition: all .35s ease-in-out;
     color: #151719;
-    display: none
+    /*display: none*/
 }
 
 #player.show {
@@ -3502,3 +3503,7 @@ body[data-theme=dark] .plan .plan__col {
 }
 
 /*# sourceMappingURL=styles.bundle.css.map */
+.modal-login{
+    margin-left: 38%;
+    margin-top: 3%;
+}

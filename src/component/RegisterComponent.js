@@ -76,6 +76,7 @@ const RegisterComponent = () => {
             }}
                     validationSchema={validateSchema}
                     onSubmit={(values) => {
+                        console.log(values)
                         axios.post('http://localhost:8080/api/auth/register', values, {
                             headers: {
                                 'Accept': 'application/json',
@@ -83,27 +84,14 @@ const RegisterComponent = () => {
                             }
                         }).then(() => {
                             navigate('/login');
-                            toast.success('Đăng kí thành công', {
-                                position: "top-center",
-                                autoClose: 3000,
-                                hideProgressBar: false,
-                                closeOnClick: true,
-                                pauseOnHover: true,
-                                draggable: true,
-                                progress: undefined,
-                                theme: "light",
-                            });
+                            toast.success('Đăng kí thành công');
                         }).catch(error => {
-                            toast.error('Đăng kí thất bại!', {
-                                position: "top-center",
-                                autoClose: 2000,
-                                hideProgressBar: false,
-                                closeOnClick: true,
-                                pauseOnHover: true,
-                                draggable: true,
-                                progress: undefined,
-                                theme: "light",
-                            });
+                            console.log(error)
+                            if(error.response.status === 409){
+                                toast.error(error.response.data);
+                            }else {
+                                toast.error("Đăng kí thất bại");
+                            }
                         })
                     }}>
                 <Form>
@@ -111,10 +99,10 @@ const RegisterComponent = () => {
                         <div className="auth py-5">
                             <div className="container">
                                 <div className="row">
-                                    <div className="col-xl-5 col-lg-7 col-md-9 col-sm-11 mx-auto">
+                                    <div className="col-xl-5 col-lg-7 col-md-9 col-sm-11 modal-login">
                                         <div className="card">
-                                            <div className="card-body p-sm-5"><h4>Đăng kí và <span
-                                                className="text-primary">Nghe</span></h4>
+                                            <div className="card-body p-sm-5"><h4>Đăng kí <span
+                                                className="text-primary"></span></h4>
                                                 <p className="fs-6">Đã đến lúc tham gia Nghe và có được trải nghiệm âm nhạc tuyệt vời.</p>
                                                 <div className="mb-3"><label htmlFor="email"
                                                                              className="form-label fw-medium">Email</label>

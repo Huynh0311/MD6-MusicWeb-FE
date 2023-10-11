@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axiosInstance from '../api/service/axios-instance';
+import {Link} from "react-router-dom";
 
 class SongList extends Component {
     state = {
@@ -96,6 +97,7 @@ class SongList extends Component {
                                             </ul>
                                         </div>
                                     </div>
+
                                     <div className="cover__image">
                                         <img src={song.imgSong} alt={song.nameSong} />
                                         <button type="button"
@@ -105,14 +107,17 @@ class SongList extends Component {
                                             <i className="ri-pause-fill icon-pause"></i>
                                         </button>
                                     </div>
+
+                                <Link to={"/song/detailSong/" + song.id}>
                                     <div className="cover__foot">
-                                        <a href="song-details.html" className="cover__title text-truncate">
+                                        <p className="cover__title text-truncate">
                                             {song.nameSong}
-                                        </a>
+                                        </p>
                                         <p className="cover__subtitle text-truncate">
                                             <a href="artist-details.html"> {song.description}</a>
                                         </p>
                                     </div>
+                                </Link>
                                 </div>
                             </div>
                         </div>

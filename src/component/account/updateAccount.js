@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {Link, useNavigate, useParams} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import _ from 'lodash';
-import axiosConfig from "../api/AccountService/AccountService";
-import {storage} from "../../firebase/firebase";
+import accountService from "../api/AccountService/AccountService";
+import {storage} from "../../firebase/Firebase";
 import {ref, uploadBytes, getDownloadURL} from "firebase/storage";
 import {v4} from "uuid";
 import {ErrorMessage, Field, Form, Formik} from "formik";
@@ -24,22 +24,12 @@ const validateSchema = Yup.object().shape({
 
 
 const UpdateAccount = () => {
-    const {id} = useParams();
-    const navigate = useNavigate();
+    const [id, setId] = useState(JSON.parse(localStorage.getItem("data")).id);
     const [account, setAccount] = useState({});
 
     const uploadImg = (even) => {
         if (!even.target.files[0].name.match(/\.(jpg|jpeg|png|gif)$/)) {
-            toast.error('Thêm ảnh thất bại!', {
-                position: "top-center",
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
+            toast.error('Thêm ảnh thất bại!');
         } else {
             if (even.target.files[0] == null) return;
             const imageRef = ref(storage, `images/${even.target.files[0].name + v4()}`);
@@ -47,16 +37,7 @@ const UpdateAccount = () => {
                 getDownloadURL(snapshot.ref).then((url) => {
                     setAccount({...account, img: url});
                     previewSelectedImage(even.target.files[0]);
-                    toast.success('Upload ảnh thành công', {
-                        position: "top-center",
-                        autoClose: 2000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "light",
-                    });
+                    toast.success('Upload ảnh thành công');
                 });
             });
         }
@@ -80,12 +61,12 @@ const UpdateAccount = () => {
     }, [id]);
 
     const findById = () => {
-        axiosConfig.findById(id)
+        accountService.findById(id)
             .then((acc) => {
-                setAccount(acc);
+                setAccount(acc.data);
             })
             .catch((error) => {
-                alert("error");
+                toast.error('Lỗi không có dữ liệu');
             });
     };
 
@@ -98,85 +79,26 @@ const UpdateAccount = () => {
         <div>
 
             <div id="wrapper">
-                <header id="header">
-                    <div className="container">
-                        <div className="header-container">
-                            <div className="d-flex align-items-center"><a href="javascript:void(0);" role="button"
-                                                                          className="header-text sidebar-toggler d-lg-none me-3"
-                                                                          aria-label="Sidebar toggler"><i
-                                className="ri-menu-3-line"></i></a>
-                                <form action="#" id="search_form" className="me-3"><label htmlFor="search_input"><i
-                                    className="ri-search-2-line"></i></label> <input type="text"
-                                                                                     placeholder="Type anything to get result..."
-                                                                                     id="search_input"
-                                                                                     className="form-control form-control-sm"/>
-                                </form>
-                                <div className="d-flex align-items-center">
-                                    <div className="dropdown ms-3 ms-sm-4">
-                                        <a href="javascript:void(0);" className="avatar header-text"
-                                           role="button" id="user_menu"
-                                           data-bs-toggle="dropdown"
-                                           aria-expanded="false">
-                                            <div className="avatar__image">
-                                                <img src="images/users/thumb.jpg" alt="user"/>
-                                            </div>
-                                            <span className="ps-2 d-none d-sm-block">Androws</span>
-                                        </a>
-                                        <ul className="dropdown-menu dropdown-menu-md dropdown-menu-end"
-                                            aria-labelledby="user_menu">
-                                            <li>
-                                                <div className="py-2 px-3 avatar avatar--lg">
-                                                    <div className="avatar__image"><img src="images/users/thumb.jpg"
-                                                                                        alt="user"/></div>
-                                                    <div className="avatar__content"><span className="avatar__title">Androws Kinny</span>
-                                                        <span className="avatar__subtitle">Artist</span></div>
-                                                </div>
-                                            </li>
-                                            <li className="dropdown-divider"></li>
-                                            <li><a className="dropdown-item d-flex align-items-center"
-                                                   href="profile.html"><i
-                                                className="ri-user-3-line fs-5"></i> <span
-                                                className="ps-2">Profile</span></a></li>
-                                            <li><a className="dropdown-item d-flex align-items-center"
-                                                   href="favorites.html"><i
-                                                className="ri-heart-line fs-5"></i> <span
-                                                className="ps-2">Favorites</span></a></li>
-                                            <li><a className="dropdown-item d-flex align-items-center"
-                                                   href="settings.html"><i
-                                                className="ri-settings-line fs-5"></i> <span
-                                                className="ps-2">Settings</span></a></li>
-                                            <li><a className="dropdown-item d-flex align-items-center" href="plan.html"><i
-                                                className="ri-money-dollar-circle-line fs-5"></i> <span
-                                                className="ps-2">Plan</span></a>
-                                            </li>
-                                            <li className="dropdown-divider"></li>
-                                            <li><a
-                                                className="dropdown-item d-flex align-items-center external text-danger"
-                                                href="index.html"><i className="ri-logout-circle-line fs-5"></i> <span
-                                                className="ps-2">Logout</span></a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </header>
                 <main id="page_content">
                     {!_.isEmpty(account) &&
                         <Formik
                             initialValues={{
-                               account
+                                name: account.name,
+                                email: account.email,
+                                phone: account.phone,
                             }}
                             validationSchema={validateSchema}
                             onSubmit={(values) => {
+                                console.log(1)
+                                console.log(values)
 
                                 const data = {...values, img: account.img}
-                                axiosConfig.updateAccount(id, data).then((response) => {
-                                    alert("thanh cong")
+                                console.log(values)
+                                accountService.updateAccount(id, data).then((response) => {
+                                    toast.success('Cập nhật thành công');
                                     // navigate("/");
                                 }).catch((error) => {
-                                    alert("error");
+                                    toast.error('Cập nhật thất bại');
                                 })
                             }}>
                             <Form>
@@ -187,64 +109,75 @@ const UpdateAccount = () => {
                                         <div className="plan bg-light">
                                             <div className="plan__data">
                                                 <div className="px-4 pt-2 pe-xl-0 pt-sm-0 mt-4 mb-3 my-sm-0 w-100">
-                                                    <div className="d-flex align-items-center mb-4">
-                                                        <div className="avatar avatar--xl">
-                                                            <div className="avatar__image">
-                                                                <img src={account.img} id="previewImage"
-                                                                     style={{width: "150px", height: "150px"}}/>
+                                                    <div className="align-items-center mb-4">
+                                                        <div className="row">
+                                                            <div className="col-4 avatar avatar--xl">
+                                                                <div className="avatar__image">
+                                                                    <img src={account.img} id="previewImage"
+                                                                         style={{width: "300px", height: "300px"}}/>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div className="ps-3 cursor">
-                                                            <input type="file" className="btn btn-outline-primary"
-                                                                   onChange={uploadImg}
-                                                            />
+                                                            <div className="col-8">
+                                                                <div className="col-sm-12 cursor mb-3 ps-2" style={{marginLeft: "36px"}}>
+                                                                    <label htmlFor="image" style={{color: "red", fontSize:"15px", marginRight: "15px"}}
+                                                                           className="form-label fw-medium">
+                                                                        Chọn ảnh
+                                                                    </label>
+                                                                    <input type="file"
+                                                                           className="btn btn-outline-primary"
+                                                                           onChange={uploadImg}
+                                                                    />
+                                                                </div>
+                                                                <div className="col-sm-12 inputEdit mb-3">
+                                                                    <div className="text-lable">
+                                                                    <label htmlFor="name"
+                                                                           className="form-label fw-medium">Tên</label>
+                                                                    </div>
+                                                                    <Field type="text" id="name" name={"name"}
+                                                                           className="form-control"
+                                                                           onInput={ChangeInputAccountEdit}
+                                                                           value={account.name}/>
+                                                                    <span style={{color: "red"}}><ErrorMessage
+                                                                        name={'name'}></ErrorMessage></span>
+                                                                </div>
+                                                                <div className="col-sm-12 inputEdit mb-3">
+                                                                    <div className="text-lable">
+                                                                    <label htmlFor="l_name"
+                                                                           className="form-label fw-medium">Email</label>
+                                                                    </div>
+                                                                    <Field type="email" id="l_name" name={"email"}
+                                                                           className="form-control"
+                                                                           onInput={ChangeInputAccountEdit}
+                                                                           value={account.email}/>
+                                                                    <span style={{color: "red"}}><ErrorMessage
+                                                                        name={'email'}></ErrorMessage></span>
+                                                                </div>
+                                                                <div className="col-sm-12 inputEdit mb-3">
+                                                                    <div className="text-lable">
+                                                                    <label htmlFor="d_name"
+                                                                           className="form-label fw-medium">Số điện thoại</label>
+                                                                    </div>
+                                                                    <Field type={"text"} id="d_name" name={"phone"}
+                                                                           className="form-control"
+                                                                           onInput={ChangeInputAccountEdit}
+                                                                           value={account.phone}/>
+                                                                    <span style={{color: "red"}}><ErrorMessage
+                                                                        name={'phone'}></ErrorMessage></span>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
 
                                                     <div className="row g-4">
-                                                        <div className="col-sm-12 inputEdit">
-                                                            <label htmlFor="name"
-                                                                   className="form-label fw-medium">Name</label>
-                                                            <Field type="text" id="name" name={"name"}
-                                                                   className="form-control"
-                                                                   onInput={ChangeInputAccountEdit}
-                                                                   value={account.name}/>
-                                                            <span style={{color: "red"}}><ErrorMessage
-                                                                name={'name'}></ErrorMessage></span>
-                                                        </div>
-                                                        <div className="col-sm-12 inputEdit">
-                                                            <label htmlFor="l_name"
-                                                                   className="form-label fw-medium">Email</label>
-                                                            <Field type="email" id="l_name" name={"email"}
-                                                                   className="form-control"
-                                                                   onInput={ChangeInputAccountEdit}
-                                                                   value={account.email}/>
-                                                            <span style={{color: "red"}}><ErrorMessage
-                                                                name={'email'}></ErrorMessage></span>
-                                                        </div>
-                                                        <div className="col-sm-12 inputEdit">
-                                                            <label htmlFor="d_name"
-                                                                   className="form-label fw-medium">Phone</label>
-                                                            <Field type={"text"} id="d_name" name={"phone"}
-                                                                   className="form-control"
-                                                                   onInput={ChangeInputAccountEdit}
-                                                                   value={account.phone}/>
-                                                            <span style={{color: "red"}}><ErrorMessage
-                                                                name={'phone'}></ErrorMessage></span>
-                                                        </div>
-                                                        <div className="col-12" style={{display: 'flex', justifyContent: 'center'}}>
+                                                        <div className="col-4"></div>
+                                                        <div className="col-8"
+                                                             style={{display: 'flex', justifyContent: 'space-evenly'}}>
                                                             <button type="submit" className="btn btn-primary">
-                                                                Update Profile
+                                                                Cập nhật thông tin
                                                             </button>
-                                                            <Link to={"/updatePassword/" + id}>
-                                                                <p className="btn btn-info"
-                                                                   style={{margin: "0 204px 0 50px"}}>
-                                                                    Update Password
-                                                                </p>
-                                                            </Link>
                                                             <Link to={"/"}>
                                                                 <p className="btn btn-secondary">
-                                                                    Cancel
+                                                                    Trở về trang chủ
                                                                 </p>
                                                             </Link>
                                                         </div>

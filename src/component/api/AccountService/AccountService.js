@@ -1,54 +1,24 @@
-import axios from "axios";
+
+import instance from "../utils/AxiosCustomize";
 
 class AccountService {
     getAllAccount = () => {
-        return new Promise((resolve, reject) => {
-            axios.post("http://localhost:8080/apiAccount/all")
-                .then(response => {
-                    resolve(response.data);
-                })
-                .catch(function (err) {
-                    reject(err)
-                });
-        })
+       return instance.post("apiAccount/all");
     }
 
     findById = (id) => {
-        return new Promise((resolve, reject) => {
-            axios.post("http://localhost:8080/apiAccount/findById/" + id)
-                .then(response => {
-                    resolve(response.data);
-                })
-                .catch(function (err) {
-                    reject(err)
-                });
-        })
+        return instance.post("apiAccount/findById/" + id);
     }
 
     updateAccount = (id, account) => {
-        return new Promise((resolve, reject) => {
-            axios.post("http://localhost:8080/apiAccount/saveAccount/" + id, account)
-                .then(response => {
-                    resolve(response);
-                })
-                .catch(function (err) {
-                    reject(err)
-                });
-        })
+        return instance.post("http://localhost:8080/apiAccount/saveAccount/" + id, account)
+
     }
 
     updatePassword = (account) => {
-        return new Promise((resolve, reject) => {
-            axios.post("http://localhost:8080/apiAccount/save", account)
-                .then(response => {
-                    resolve(response);
-                })
-                .catch(function (err) {
-                    reject(err)
-                });
-        })
+        return instance.post("http://localhost:8080/apiAccount/save", account)
     }
 }
 
-let axiosConfig = new AccountService();
-export default axiosConfig;
+let accountService = new AccountService();
+export default accountService;
