@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {storage} from "./firebase"
+import {storage} from "../../../firebase/firebase"
 import {v4} from 'uuid';
 import {ref, uploadBytes, getDownloadURL} from "firebase/storage"
 import "./create.css"
@@ -7,14 +7,14 @@ import {useNavigate} from "react-router-dom";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as Yup from "yup";
 import {addSongSV, getAllGenres} from "../../api/songService/SongService";
-
+import {toast} from "react-toastify";
 
 const validateSchema = Yup.object().shape({
     nameSong: Yup.string()
         .min(5, 'song name must be at least 5 characters long')
         .max(50, 'song name must be maximum 50 characters long')
         .required('song name cannot be null'),
-    singer: Yup.string()
+    nameSinger: Yup.string()
         .min(3, 'Artists name must be at least 3 characters long')
         .max(150, 'Artists name must be maximum 150 characters long')
         .required('Artists name cannot be null'),
@@ -33,14 +33,18 @@ const CreateSong = () => {
     const [defaultImg, setDefaultImg] = useState('https://www.billboard.com/wp-content/uploads/media/streaming-illustration-v-2019-billboard-1548.jpg');
     const [isLoading, setIsLoading] = useState(false);
     const [account, setAccount] = useState(JSON.parse(localStorage.getItem("data")));
-    console.log(account)
+    const [song, setSong] = useState({
+        genres: {id: 1}
+    });
     const uploadAudio = async (imgFile) => {
         if (audioUpload == null) return;
         const audioRef = ref(storage, `audios/${audioUpload.name + v4()}`);
+
         try {
             await uploadBytes(audioRef, audioUpload);
+            console.log('audioRef')
+            console.log(audioRef)
             const audioUrl = await getDownloadURL(audioRef);
-
             addSong(audioUrl, imgFile);
         } catch (error) {
             console.error(error);
@@ -62,49 +66,30 @@ const CreateSong = () => {
     }
 
     function insertLineBreaks(text) {
-        // Tách chuỗi thành các dòng bằng dấu xuống dòng
-        const lines = text.split(/\r\n|\r|\n/);
-
-        // Chèn thẻ <br> vào cuối mỗi dòng
-        const result = lines.map(line => line + '<br>').join('');
-
-        return result;
+        const lines = text.replace(/\n/g, "<br/>");
+        return lines;
     }
 
     const handleInputCreateSong = (e) => {
         let {id, value} = e.target;
-        switch (id) {
-            case "nameSong":
-                setNameSong(value);
-                break;
-            case "description":
-                let renewValue = insertLineBreaks(value);
-                console.log(renewValue);
-                setDescription(renewValue);
-                break;
-            case "genres_id":
-                setGenres(value);
-                break;
-            case "singer":
-                setSinger(value);
-                break;
+        if (id == "description") {
+            let renewValue = insertLineBreaks(value);
+            setSong({...song, [id]: renewValue})
+        }
+        if (id == "genres_id") {
+            setSong({...song, genres: {id: value}});
+        } else {
+            setSong({...song, [id]: value})
         }
     }
 
 
     const addSong = async (audioUrl, imgUrl) => {
-        let form = new FormData();
         if (audioUrl && imgUrl) {
-            let singerListInput = singer.split(",");
-            setSinger(singerListInput);
-            form.append("pathImg", imgUrl);
-            form.append("nameSong", nameSong);
-            form.append("description", description);
-            form.append("genres_id", genres);
-            form.append("pathSong", audioUrl);
-            form.append("singer", singer);
+            song.imgSong = imgUrl;
+            song.pathSong = audioUrl;
             try {
-                const response = await addSongSV(form)
+                const response = await addSongSV(song)
                 setIsLoading(false);
                 console.log(response.data);
                 let obj = response.data;
@@ -140,10 +125,12 @@ const CreateSong = () => {
     return (
 
         <div id="wrapper">
+            {console.log(song)}
             <Formik
                 initialValues={{
                     nameSong: '',
-                    singer: '',
+                    nameSinger: '',
+
                 }}
                 validationSchema={validateSchema}
                 onSubmit={(values, {resetForm}) => {
@@ -153,6 +140,7 @@ const CreateSong = () => {
                 }}>
                 <Form>
                     <div>
+                        {console.log(song)}
                         <header id="header">
                             <div className="container">
                                 <div className="header-container">
@@ -453,82 +441,97 @@ const CreateSong = () => {
                                                                      }}/>
 
                                                                 <div>
-                                                                    <label style={{margin: "5px 10px"}}>Select the song's picture(*)</label>
+                                                                    <label style={{margin: "5px 10px"}}>Hãy chọn ảnh đại
+                                                                        diện của Bài hát(*)</label>
                                                                     <div style={{display: "flex"}}>
-                                                                        {/*<span style={{marginRight: "5px"}}>*</span>*/}
-                                                                        <input type={"file"} className="form-control"
+                                                                        <input type={"file"} style={{flex: "1"}}
+                                                                               accept={".jpg,.jpeg,.png,.gif"}
+                                                                               className="form-control"
                                                                                id="image" onChange={(event) => {
-                                                                            setImageUpload(event.target.files[0]);
-                                                                            previewSelectedImage(event.target.files[0])
+                                                                            if (!event.target.files[0].name.match(/\.(jpg|jpeg|png|gif)$/)) {
+                                                                                toast.error('Thêm ảnh thất bại!');
+                                                                                event.target.value = null;
+                                                                            } else {
+                                                                                setImageUpload(event.target.files[0]);
+                                                                                previewSelectedImage(event.target.files[0])
+                                                                                toast.success('Upload ảnh thành công');
+                                                                            }
                                                                         }}/>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                             <div className="col-12 mb-4">
-                                                                <label style={{margin: "5px 10px"}}>Enter song
-                                                                    name(*)</label>
+                                                                <label style={{margin: "5px 10px"}}>Hãy nhập tên Bài
+                                                                    hát(*)</label>
                                                                 <div className="requiredInput">
-                                                                    {/*<span>*</span>*/}
                                                                     <Field type="text" name="nameSong" id="nameSong"
                                                                            className="form-control"
-                                                                           placeholder="Song name"
+                                                                           placeholder="Tên bài hát"
                                                                            onInput={handleInputCreateSong} required/>
 
                                                                 </div>
                                                             </div>
-                                                            <span style={{color: "red"}}><ErrorMessage
+                                                            <span className="fomik-error" style={{color: "red"}}><ErrorMessage
                                                                 name={'nameSong'}/></span>
 
                                                             <div className="col-12 mb-4">
-                                                                <label style={{margin: "5px 10px"}}>Select the song's
-                                                                    file(*)</label>
+                                                                <label style={{margin: "5px 10px"}}>Hãy chọn file của Bài hát(*)</label>
                                                                 <div className="requiredInput">
-                                                                    {/*<span>*</span>*/}
                                                                     <input type="file" id="audio"
                                                                            className="form-control"
+                                                                           accept={".mp3,.mp4"}
                                                                            onChange={(event) => {
-                                                                               setAudioUpload(event.target.files[0])
+                                                                               if (!event.target.files[0].name.match(/\.(mp3|mp4)$/)) {
+                                                                                   toast.error('Thêm bài hát thất bại!');
+                                                                                   event.target.value = null;
+                                                                               } else {
+                                                                                   setAudioUpload(event.target.files[0])
+                                                                                   toast.success('Thêm bài hát thành công');
+                                                                               }
                                                                            }}/>
                                                                 </div>
                                                             </div>
                                                             <div className="col-sm-6 mb-4">
-                                                                <label style={{margin: "5px 10px"}}>Enter singer name(*)</label>
-                                                                <div className="requiredInput">
-                                                                    {/*<span>*</span>*/}
-                                                                    <Field type="text" id="singer" name="singer"
+                                                                <label style={{margin: "5px 10px"}}>Hãy nhập tên của Ca sỹ(*)</label>
+                                                                <div className="requiredInput requiredSinger">
+                                                                    <Field type="text" id="nameSinger" name="nameSinger"
                                                                            className="form-control"
-                                                                           placeholder="Singer"
+                                                                           placeholder="Ca sỹ thực hiện"
                                                                            onInput={handleInputCreateSong}
-                                                                           style={{width: "200%"}}/>
+                                                                           />
                                                                 </div>
                                                             </div>
-                                                            <span style={{color: "red"}}><ErrorMessage name={'singer'}/></span>
+                                                            <span className="fomik-error" style={{color: "red"}}><ErrorMessage name={'nameSinger'}/></span>
                                                             <div className="col-12 mb-4">
-                                                                <label style={{margin: "5px 10px"}}>Enter the song's genres(*)</label>
+                                                                <label style={{margin: "5px 10px"}}>Hãy chọn thể loại
+                                                                    Bài hát(*)</label>
                                                                 <div className="requiredInput">
-                                                                {/*<span>*</span>*/}
-                                                                <select id="genres_id" className="form-select"
-                                                                        onChange={handleInputCreateSong}
-                                                                        aria-label="Select category">
-                                                                    {genresList.map((g) => {
-                                                                        return (
-                                                                            <option key={g.id}
-                                                                                    value={g.id}>{g.name}</option>
-                                                                        )
-                                                                    })}
-                                                                </select>
+                                                                    <select id="genres_id" className="form-select"
+                                                                            onChange={handleInputCreateSong}
+                                                                            aria-label="Select category">
+                                                                        {genresList.map((g) => {
+                                                                            return (
+                                                                                <option key={g.id}
+                                                                                        value={g.id}>{g.name}</option>
+                                                                            )
+                                                                        })}
+                                                                    </select>
                                                                 </div>
                                                             </div>
 
                                                             <div className="col-12 mb-4">
-                                                                <label style={{margin: "5px 10px"}}>Enter the song's description(*)</label>
+                                                                <label style={{margin: "5px 10px"}}>Hãy nhập tiêu đề Bài hát</label>
                                                                 <textarea id="description"
                                                                           name="description"
                                                                           cols="30"
                                                                           rows="4"
-                                                                          className="form-control"
-                                                                          placeholder="Describle"
-                                                                          onChange={handleInputCreateSong}></textarea>
+                                                                          className="form-control requiredDescription"
+                                                                          placeholder="Tiêu đề"
+                                                                            style={{whiteSpace: "pre-wrap"}}
+                                                                          onChange={handleInputCreateSong}>
+                                                                </textarea>
+                                                                <span className="fomik-error" style={{color: "red"}}><ErrorMessage
+                                                                    name={'description'}/></span>
                                                             </div>
                                                         </div>
                                                     </div>

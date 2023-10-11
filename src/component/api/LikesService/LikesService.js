@@ -1,4 +1,4 @@
-import axios from "../utils/axiousCustomize";
+import axios from "../utils/AxiosCustomize";
 const isLikedAPI = (likeObj) => {
     return axios.post("likes/check", likeObj);
 }

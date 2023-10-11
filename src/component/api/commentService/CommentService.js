@@ -1,4 +1,4 @@
-import axios from "../utils/axiousCustomize";
+import axios from "../utils/AxiosCustomize";
 const sendCommentAPI = (commentInfoObj) => {
     return axios.post("comments/add", commentInfoObj);
 }

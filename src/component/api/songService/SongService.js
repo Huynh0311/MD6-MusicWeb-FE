@@ -1,4 +1,4 @@
-import axios from "../utils/axiousCustomize";
+import axios from "../utils/AxiosCustomize";
 
 const addSongSV = (form) => {
     return axios.post("songs/add", form);
