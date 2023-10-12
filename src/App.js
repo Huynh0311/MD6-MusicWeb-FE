@@ -18,11 +18,10 @@ import EditSong from "./component/song/editSong/EditSong";
 
 
 function App() {
-    const [showNavbar, setShowNavbar] = useState(true);
 
     return (
         <div className="App">
-            {showNavbar && <NavbarComponent/>}
+           <NavbarComponent/>
             <Loader/>
             <Routes>
                 <Route path="/" element={<BodyComponent/>}/>
@@ -30,12 +29,23 @@ function App() {
                 <Route path={"/updatePassword/:id"} element={<UpdatePassword/>}/>
                 <Route path="/song/create" element={<CreateSong/>}/>
                 <Route path={"/song/detailSong/:id"} element={<DetailSong/>}/>
-                <Route path="/register" element={<RegisterComponent setShowNavbar={setShowNavbar}/>}/>
-                <Route path="/login" element={<LoginComponent setShowNavbar={setShowNavbar}/>}/>
-                <Route path='/song/all' element={<ListSong setShowNavbar={setShowNavbar}/>}></Route>
-                <Route path={"/song/edit/:id"} element={<EditSong />}></Route>
+                <Route path="/register" element={<RegisterComponent/>} />
+                <Route path="/login" element={<LoginComponent/>} />
+                <Route path='/song/' element={<ListSong/>}></Route>
+                <Route path={"/song/edit/:songid"} element={<EditSong />}></Route>
             </Routes>
-            <ToastContainer />
+            <ToastContainer
+                position="top-center"
+                autoClose={2000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+             />
         </div>
     );
 }

@@ -21,6 +21,10 @@ const ListSong = () => {
         console.log(isOverflowed);
     }
 
+    const EditFunction = (id) => {
+        navigate("/song/edit/" +id);
+    }
+
     const RemoveFunction = (id) => {
         if (window.confirm('are you sure you want to delete this song?')) {
             fetch("http://localhost:8080/songs/delete/" + id, {
@@ -61,24 +65,24 @@ const ListSong = () => {
                             <div className="row">
                                 <div className="col-xl-12 col-md-10 mx-auto">
 
-                                    <div className="card-header pb-0 bg-pink text-white">
+                                    <div className="card-header pb-0 bg-pink text-white card-listsong">
 
                                         <div className="container">
 
                                             <div className="card-title text-center">
-                                                <h2>List Music</h2>
+                                                <h2>Danh sách bài hát</h2>
                                             </div>
                                             <div className="card-body">
                                                 <div className="divbtn">
-                                                    <button className="btn btn-primary">Add Music</button>
+                                                    <Link to='/song/create' className="btn btn-primary">Thêm bài hát</Link>
                                                 </div>
                                                 <table className="table table-bordered">
                                                     <thead className="bg-dark text-white">
                                                     <tr className="tr-title-position">
-                                                        <td>Song Image</td>
-                                                        <td className="namesong-width">Song Name</td>
-                                                        <td className="descrip-width">Description</td>
-                                                        <td>Action</td>
+                                                        <td>Ảnh bài hát</td>
+                                                        <td className="namesong-width">Tên bài hát</td>
+                                                        <td className="descrip-width">Miêu tả</td>
+                                                        <td>Hành động</td>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
@@ -95,7 +99,7 @@ const ListSong = () => {
                                                                 <td className=" descrip-width" style={{ height: '500px', overflowX: 'hidden'}}>{item.description}</td>
                                                             </OverflowDetector>
 
-                                                            <td><a className="btn btn-success custom-button">Edit</a>
+                                                            <td><a onClick={() => { EditFunction(item.id)}} className="btn btn-success custom-button">Edit</a>
                                                                 <a onClick={() => { RemoveFunction(item.id) }} className="btn btn-danger custom-button">Remove</a>
                                                                 <a  className="btn btn-info custom-button">Details</a>
                                                             </td>

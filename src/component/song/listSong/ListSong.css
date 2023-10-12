@@ -1,6 +1,6 @@
-.card {
-    background-color: #fff1e3;
-}
+/*.card-listsong {*/
+/*    background-color: #fff1e3;*/
+/*}*/
 
 .card header{
     background-color: orange;
@@ -24,13 +24,13 @@
 }
 
 .descrip-width{
-    min-width: 550px;
-    max-width: 550px;
+    min-width: 500px;
+    max-width: 500px;
 }
 
 
 .custom-button{
-    width: 80px;
+    width: 120px;
 }
 
 .tr-title-position{
