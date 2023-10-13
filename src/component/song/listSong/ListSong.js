@@ -21,8 +21,16 @@ const ListSong = () => {
         console.log(isOverflowed);
     }
 
+    const EditFunction = (id) => {
+        navigate("/song/edit/" +id);
+    }
+
+    const DetailFunction = (id) => {
+        navigate("/song/detailSong/" +id);
+    }
+
     const RemoveFunction = (id) => {
-        if (window.confirm('are you sure you want to delete this song?')) {
+        if (window.confirm('Bạn chắc chắn muốn xoá bài hát này?')) {
             fetch("http://localhost:8080/songs/delete/" + id, {
                 method: "GET"
             }).then((res) => {
@@ -61,43 +69,47 @@ const ListSong = () => {
                             <div className="row">
                                 <div className="col-xl-12 col-md-10 mx-auto">
 
-                                    <div className="card-header pb-0 bg-pink text-white">
+                                    <div className="card-header pb-0 bg-pink text-white card-listsong">
 
                                         <div className="container">
 
                                             <div className="card-title text-center">
-                                                <h2>List Music</h2>
+                                                <h2>Danh sách bài hát</h2>
                                             </div>
                                             <div className="card-body">
                                                 <div className="divbtn">
-                                                    <button className="btn btn-primary">Add Music</button>
+                                                    <Link to='/song/create' className="btn btn-primary">Thêm bài hát</Link>
                                                 </div>
                                                 <table className="table table-bordered">
                                                     <thead className="bg-dark text-white">
                                                     <tr className="tr-title-position">
-                                                        <td>Song Image</td>
-                                                        <td className="namesong-width">Song Name</td>
-                                                        <td className="descrip-width">Description</td>
-                                                        <td>Action</td>
+                                                        <td>STT</td>
+                                                        <td className="namesong-width">Tên bài hát</td>
+                                                        <td className="descrip-width">Miêu tả</td>
+                                                        <td>Hành động</td>
                                                     </tr>
                                                     </thead>
-                                                    <tbody>
+                                                    <tbody className="count-numb-rs">
                                                     {   songdata &&
                                                     songdata.map(item=>(
                                                         <tr key={item.id} className="tr-data-position">
-                                                            <td className="img-fixed-position"><img src={item.imgSong} width={250} alt="image" style={{padding:'10px'}}/></td>
-                                                            <td className="namesong-position namesong-width"> {item.nameSong}</td>
+                                                            {/*<td className="img-fixed-position"><img src={item.imgSong} width={250} alt="image" style={{padding:'10px'}}/></td>*/}
+                                                            <td  className="count-numb"></td>
+                                                            <td> {item.nameSong}</td>
 
                                                             <OverflowDetector
                                                                 onOverflowChange={handleOverflowChange}
-                                                                style={{ height: '150px', overflow: 'auto' }}
-                                                            >
-                                                                <td className=" descrip-width" style={{ height: '500px', overflowX: 'hidden'}}>{item.description}</td>
+                                                                style={{ maxHeight: '60px', overflow: 'auto' }}>
+                                                                <td className=" descrip-width" style={{ height: '200px', overflowX: 'hidden'}}>{item.description}</td>
                                                             </OverflowDetector>
 
-                                                            <td><a className="btn btn-success custom-button">Edit</a>
-                                                                <a onClick={() => { RemoveFunction(item.id) }} className="btn btn-danger custom-button">Remove</a>
-                                                                <a  className="btn btn-info custom-button">Details</a>
+                                                            <td><i onClick={() => { EditFunction(item.id)}} className="fa-regular fa-file-pen fa-2xl custom-button"
+                                                                   style={{color: '#052ed1'}}></i>
+
+                                                                <i onClick={() => { RemoveFunction(item.id) }} className="fa-sharp fa-solid fa-trash fa-2xl custom-button"
+                                                                   style={{color: '#196734'}}></i>
+
+                                                                    <i onClick={() => { DetailFunction(item.id) }} className="fa-duotone fa-circle-info fa-2xl custom-button"></i>
                                                             </td>
                                                         </tr>
                                                     ))

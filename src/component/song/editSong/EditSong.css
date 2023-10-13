@@ -1,0 +1,12 @@
+.requiredInput {
+    display: flex;
+    margin-top: 20px;
+}
+.requiredInput span{
+    margin-right: 5px;
+}
+
+.addcancelBtn .acceptBtn {
+    margin-right: 20px;
+    margin-left: -20px;
+}
