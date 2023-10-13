@@ -61,11 +61,6 @@ const ListSongFavorite = () => {
                                                    aria-label="Favorite" data-favorite-id="1"><i
                                                 className="ri-heart-line heart-empty"></i>
                                                 <i className="ri-heart-fill heart-fill"></i></a></li>
-                                            <li><div className="me-4 d-none d-xl-block"><span className="amplitude-current-minutes"></span>:<span
-                                                className="amplitude-current-seconds"></span> / <span
-                                                className="amplitude-duration-minutes"></span>:<span
-                                                className="amplitude-duration-seconds"></span>
-                                            </div></li>
                                             <li className="dropstart d-inline-flex"><a className="dropdown-link"
                                                                                        href="javascript:void(0);"
                                                                                        role="button"

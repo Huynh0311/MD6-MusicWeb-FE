@@ -69,11 +69,13 @@ const NavbarComponent = () => {
                                             </p>
                                         </Link>
                                     </li>
-                                    <li className="nav-item nav-item-color"><a href=""
-                                                                               className="nav-link d-flex align-items-center">
-                                        <i className="fa-solid fa-list-music" style={{fontSize: "20px"}}></i>
-                                        <span className="ps-3">List</span></a>
-                                    </li>
+                                    <Link to={"/song"}>
+                                        <li className="nav-item nav-item-color">
+                                            <p  className="nav-link d-flex align-items-center">
+                                                <i className="fa-solid fa-list-music" style={{fontSize: "20px"}}></i>
+                                                <span className="ps-3">Danh sách bài hát</span></p>
+                                        </li>
+                                    </Link>
                                 </>
                             ) : (
                                 <li className="nav-item nav-item-color">

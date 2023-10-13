@@ -11,6 +11,7 @@ import DetailSong from "./component/song/detailSong/DetailSong";
 import RegisterComponent from "./component/RegisterComponent";
 import LoginComponent from "./component/LoginComponent";
 import ListSong from "./component/song/listSong/ListSong";
+import EditSong from "./component/song/editSong/EditSong";
 
 import 'react-toastify/dist/ReactToastify.css';
 import Page from "./component/page";
@@ -22,6 +23,9 @@ function App() {
 
     return (
         <div className="App">
+            {/*<NavbarComponent/>*/}
+            {/*<Loader/>*/}
+            {/*<SearchComponent/>*/}
             <Routes>
                 <Route path="/" element={<Page/>}>
                     <Route path={"/"} element={<HomeComponent/>}/>
@@ -33,6 +37,8 @@ function App() {
                     <Route path="/login" element={<LoginComponent/>}/>
                     <Route path='/song/all' element={<ListSong/>}></Route>
                     <Route path={'/favorite'} element={<ListSongFavorite/>}></Route>
+                    <Route path='/song' element={<ListSong/>}></Route>
+                    <Route path={"/song/edit/:songid"} element={<EditSong />}></Route>
                 </Route>
                 <Route path={'*'} element={<Component404/>}></Route>
             </Routes>
