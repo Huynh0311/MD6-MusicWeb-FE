@@ -1,28 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import { Link, useNavigate, useParams} from "react-router-dom";
 import "./EditSong.css"
-import {Formik} from "formik";
-import * as Yup from "yup";
+
 import {toast} from "react-toastify";
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
-import {storage} from "../../../firebase/firebase";
+import {storage} from "../../../firebase/Firebase";
 import {v4} from "uuid";
+import {getAllGenres} from "../../api/songService/SongService";
 
-const validateSchema = Yup.object().shape({
-    nameSong: Yup.string()
-        .min(5, 'song name must be at least 5 characters long')
-        .max(50, 'song name must be maximum 50 characters long')
-        .required('song name cannot be null'),
-    singer: Yup.string()
-        .min(3, 'Artists name must be at least 3 characters long')
-        .max(150, 'Artists name must be maximum 150 characters long')
-        .required('Artists name cannot be null'),
-});
+
 
 const EditSong = () => {
     const { songid } = useParams();
-    console.log(songid);
-
 
     useEffect(() => {
         fetch("http://localhost:8080/songs/" + songid).then((res) => {
@@ -34,7 +23,7 @@ const EditSong = () => {
             name_songchange(resp.nameSong);
             path_songchange(resp.pathSong);
             singerchange(resp.nameSinger);
-            console.log(resp);
+            setGenres(resp.genres);
         }).catch((err) => {
             console.log(err.message);
         })
@@ -46,7 +35,8 @@ const EditSong = () => {
     const [nameSong, name_songchange] = useState("");
     const [pathSong, path_songchange] = useState("");
     const [nameSinger, singerchange] = useState("");
-
+    const [genres, setGenres] = useState({id:1});
+    const [genresList, setGenresList] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
     const navigate = useNavigate();
@@ -68,6 +58,7 @@ const EditSong = () => {
             const imageRef = ref(storage, `images/${even.target.files[0].name + v4()}`);
             uploadBytes(imageRef, even.target.files[0]).then((snapshot) => {
                 getDownloadURL(snapshot.ref).then((url) => {
+                    img_songchange(url)
                     previewSelectedImage(even.target.files[0]);
                     toast.success('Upload ảnh thành công', {
                         position: "top-center",
@@ -84,6 +75,14 @@ const EditSong = () => {
         }
     }
 
+    const showGenres = async () => {
+        const response = await getAllGenres()
+        setGenresList(response.data)
+    }
+    useEffect(() => {
+        showGenres();
+    }, [])
+
     const previewSelectedImage = (file) => {
         if (file) {
             const reader = new FileReader();
@@ -99,7 +98,7 @@ const EditSong = () => {
 
     const handlesubmit=(e)=>{
         e.preventDefault();
-        const songdata = {id, description, imgSong, nameSong, pathSong, nameSinger};
+        const songdata = {id, description, imgSong, nameSong, genres, pathSong, nameSinger};
 
         fetch("http://localhost:8080/songs/edit/"+ songid, {
             method:"POST",
@@ -114,6 +113,7 @@ const EditSong = () => {
     }
 
     return (
+
                         <main id="page_content">
                             <div className="hero" style={{backgroundImage: "url('https://firebasestorage.googleapis.com/v0/b/test-upload-image-4f5e4.appspot.com/o/song.jpg?alt=media&token=01b02d65-1ab1-48cc-9e7f-18c039ca71ce&_gl=1*cq3ko9*_ga*MTM5ODIyMjY1MS4xNjk2MzgyMTgz*_ga_CW55HF8NVT*MTY5Njk5ODA0NC4xNC4xLjE2OTY5OTgzMTIuNDguMC4w')"}}></div>
                             <div className="under-hero container">
@@ -130,8 +130,7 @@ const EditSong = () => {
                                                                         data-bs-target="#music_pane" type="button"
                                                                         role="tab"
                                                                         aria-controls="music_pane"
-                                                                        aria-selected="true">Edit
-                                                                    Music
+                                                                        aria-selected="true">Chỉnh sửa bài hát
                                                                 </button>
                                                             </li>
                                                         </ul>
@@ -145,7 +144,6 @@ const EditSong = () => {
 
                                                             <div className="col-12 mb-4">
                                                                 <div>
-
                                                                 <div>
                                                                     <img src={imgSong} id="previewImage"
                                                                          style={{
@@ -155,34 +153,28 @@ const EditSong = () => {
                                                                              marginLeft: "100px"
                                                                          }}/>
                                                                 </div>
-                                                                    <label style={{margin: "5px 10px"}}>Chọn ảnh đại diện của bài hát</label>
-                                                                <div className="ps-3 cursor">
+                                                                    <label style={{margin: "5px 10px"}}>Hãy chọn ảnh đại diện của Bài hát</label>
+                                                                <div className="">
                                                                     <input type="file" className="form-control" id="image"
                                                                            onChange={uploadImg}
                                                                     />
                                                                 </div>
                                                                 </div>
-                                                                {/* <div style={{display: "flex"}}>*/}
-                                                                {/*    <span style={{marginRight: "5px"}}></span>*/}
-                                                                {/*    <input value={imgSong} type={"file"} className="form-control"*/}
-                                                                {/*           id="image" onChange={e=>img_songchange(e.target.value)}  */}
-                                                                {/*    />*/}
-                                                                {/*</div>*/}
 
                                                             </div>
 
                                                             <div>
                                                             <div className="col-12 mb-4 ">
-                                                                <label style={{margin: "5px 10px"}}>Nhập tên bài hát</label>
+                                                                <label style={{margin: "5px 10px"}}>Hãy nhập tên Bài hát</label>
                                                                 <input required value={nameSong} type="text" name="nameSong" onChange={e=>name_songchange(e.target.value)} id="nameSong"
                                                                        className="form-control"
-                                                                       placeholder="Song name"/>
+                                                                       placeholder="Tên bài hát"/>
                                                             </div>
                                                             </div>
 
                                                             <div>
                                                             <div className="col-12 mb-4 ">
-                                                                <label style={{margin: "5px 10px"}}>Chọn bài hát</label>
+                                                                <label style={{margin: "5px 10px"}}>Hãy chọn file của Bài hát</label>
                                                                 <div>
                                                                 <input disabled="disabled" type="file" id="audio" className="form-control"
                                                                        onChange={(event) => {
@@ -192,26 +184,32 @@ const EditSong = () => {
                                                             </div>
 
                                                             <div className="col-sm-6 mb-4 ">
-                                                                <label style={{margin: "5px 10px"}}>Nhập tên ca sĩ</label>
-                                                                <input required value={nameSinger}
+                                                                <label style={{margin: "5px 10px"}}>Hãy nhập tên của Ca sỹ</label>
+                                                                <input value={nameSinger}
                                                                     type="text" id="singer" name="singer" onChange={e=>singerchange(e.target.value)}
                                                                        className="form-control"
-                                                                       placeholder="Singer"
-
+                                                                       placeholder="Tên ca sĩ"
                                                                        style={{width: "200%"}}/>
                                                             </div>
 
                                                             <div className="col-12 mb-4 ">
-                                                                <label style={{margin: "5px 10px"}}>Chọn thể loại bài hát</label>
+                                                                <label style={{margin: "5px 10px"}}>Hãy chọn thể loại Bài hát</label>
                                                                 <select id="genres_id" className="form-select"
-
+                                                                        value={genres.id} onChange={(e) => {
+                                                                    setGenres({ id: e.target.value });}}
                                                                         aria-label="Select category">
+                                                                    {genresList.map((g) => {
+                                                                        return (
+                                                                            <option key={g.id}
+                                                                                    value={g.id}>{g.name}</option>
+                                                                        )
+                                                                    })}
 
                                                                 </select>
                                                             </div>
 
                                                             <div className="col-12 mb-4 ">
-                                                                <label style={{margin: "5px 10px"}}>Nhập miêu tả về bài hát</label>
+                                                                <label style={{margin: "5px 10px"}}>Hãy nhập tiêu đề Bài hát</label>
                                                                 <textarea required id="description" value={description} onChange={e=>descriptionchange(e.target.value)}
                                                                           name="description"
                                                                           cols="30"
@@ -234,7 +232,7 @@ const EditSong = () => {
                                                                 <span className="visually-hidden">Loading...</span>
                                                             </div>
                                                         ) : (
-                                                            'Thêm bài hát'
+                                                            'Chỉnh sửa'
                                                         )}
                                                     </button>
                                                     <button className="btn btn-danger">Hủy bỏ</button>

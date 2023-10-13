@@ -13,14 +13,14 @@
     float: left;
 }
 
-.img-fixed-position{
-    width: 250px;
-    padding: 20px;
-}
+/*.img-fixed-position{*/
+/*    width: 250px;*/
+/*    padding: 20px;*/
+/*}*/
 
 .namesong-width{
-    min-width: 200px;
-    max-width: 200px;
+    min-width: 300px;
+    max-width: 300px;
 }
 
 .descrip-width{
@@ -30,7 +30,9 @@
 
 
 .custom-button{
-    width: 120px;
+    padding-top: 20px;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 .tr-title-position{
@@ -39,4 +41,15 @@
 
 .tr-data-position{
     position: inherit;
+    height: 60px;
+}
+
+.count-numb-rs{
+    text-align: center;
+    counter-reset: my-sec-counter;
+}
+
+.count-numb::before {
+    counter-increment: my-sec-counter;
+    content:  counter(my-sec-counter) " ";
 }

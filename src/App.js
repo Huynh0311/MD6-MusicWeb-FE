@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {Route, Routes} from "react-router-dom";
-import BodyComponent from "./component/BodyComponent";
+import HomeComponent from "./component/HomeComponent";
 import Loader from "./component/Loader";
 import UpdateAccount from "./component/account/updateAccount";
 import 'react-toastify/dist/ReactToastify.css';
@@ -15,6 +15,10 @@ import LoginComponent from "./component/LoginComponent";
 import ListSong from "./component/song/listSong/ListSong";
 import EditSong from "./component/song/editSong/EditSong";
 
+import 'react-toastify/dist/ReactToastify.css';
+import Page from "./component/page";
+import Component404 from "./component/Component404";
+import SearchComponent from "./component/SearchComponent";
 
 
 function App() {
@@ -23,16 +27,19 @@ function App() {
         <div className="App">
            <NavbarComponent/>
             <Loader/>
+            <SearchComponent/>
             <Routes>
-                <Route path="/" element={<BodyComponent/>}/>
-                <Route path={"/updateProfile/:id"} element={<UpdateAccount/>}/>
-                <Route path={"/updatePassword/:id"} element={<UpdatePassword/>}/>
-                <Route path="/song/create" element={<CreateSong/>}/>
-                <Route path={"/song/detailSong/:id"} element={<DetailSong/>}/>
-                <Route path="/register" element={<RegisterComponent/>} />
-                <Route path="/login" element={<LoginComponent/>} />
-                <Route path='/song/' element={<ListSong/>}></Route>
-                <Route path={"/song/edit/:songid"} element={<EditSong />}></Route>
+                <Route path="/" element={<Page/>}>
+                    <Route path={"/"} element={<HomeComponent/>}/>
+                    <Route path={"/updateProfile"} element={<UpdateAccount/>}/>
+                    <Route path={"/updatePassword"} element={<UpdatePassword/>}/>
+                    <Route path="/song/create" element={<CreateSong/>}/>
+                    <Route path={"/song/detailSong/:id"} element={<DetailSong/>}/>
+                    <Route path="/register" element={<RegisterComponent/>}/>
+                    <Route path="/login" element={<LoginComponent/>}/>
+                    <Route path='/song/' element={<ListSong/>}></Route>
+                    <Route path={"/song/edit/:songid"} element={<EditSong />}></Route>
+                </Route>
             </Routes>
             <ToastContainer
                 position="top-center"
@@ -45,7 +52,7 @@ function App() {
                 draggable
                 pauseOnHover
                 theme="light"
-             />
+            />
         </div>
     );
 }
