@@ -16,6 +16,7 @@ const validateSchema = Yup.object().shape({
         .required('Tên không được để trống'),
     email: Yup.string()
         .matches(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/, 'Email không phù hợp')
+        .max(50, 'Email không được quá 50 kí tự')
         .required('Email Không được để trống'),
     phone: Yup.string()
         .matches(/^\d{10}$/, 'Số điện thoại 10 kí tự và không chứa chữ')
@@ -89,21 +90,15 @@ const UpdateAccount = () => {
                             }}
                             validationSchema={validateSchema}
                             onSubmit={(values) => {
-                                console.log(1)
-                                console.log(values)
-
                                 const data = {...values, img: account.img}
-                                console.log(values)
                                 accountService.updateAccount(id, data).then((response) => {
                                     toast.success('Cập nhật thành công');
-                                    // navigate("/");
                                 }).catch((error) => {
                                     toast.error('Cập nhật thất bại');
                                 })
                             }}>
                             <Form>
-
-                                <div className="hero" style={{backgroundImage: "url(images/banner/event.jpg)"}}></div>
+                                <div className="hero" style={{backgroundImage: "url(../../images/banner/event.jpg)"}}></div>
                                 <div className="under-hero container">
                                     <div className="section">
                                         <div className="plan bg-light">
@@ -130,6 +125,18 @@ const UpdateAccount = () => {
                                                                 </div>
                                                                 <div className="col-sm-12 inputEdit mb-3">
                                                                     <div className="text-lable">
+                                                                        <label htmlFor="l_name"
+                                                                               className="form-label fw-medium">Email</label>
+                                                                    </div>
+                                                                    <Field type="email" id="l_name" name={"email"}
+                                                                           className="form-control"
+                                                                           onInput={ChangeInputAccountEdit}
+                                                                           value={account.email} readOnly />
+                                                                    <span style={{color: "red"}}><ErrorMessage
+                                                                        name={'email'}></ErrorMessage></span>
+                                                                </div>
+                                                                <div className="col-sm-12 inputEdit mb-3">
+                                                                    <div className="text-lable">
                                                                     <label htmlFor="name"
                                                                            className="form-label fw-medium">Tên</label>
                                                                     </div>
@@ -139,18 +146,6 @@ const UpdateAccount = () => {
                                                                            value={account.name}/>
                                                                     <span style={{color: "red"}}><ErrorMessage
                                                                         name={'name'}></ErrorMessage></span>
-                                                                </div>
-                                                                <div className="col-sm-12 inputEdit mb-3">
-                                                                    <div className="text-lable">
-                                                                    <label htmlFor="l_name"
-                                                                           className="form-label fw-medium">Email</label>
-                                                                    </div>
-                                                                    <Field type="email" id="l_name" name={"email"}
-                                                                           className="form-control"
-                                                                           onInput={ChangeInputAccountEdit}
-                                                                           value={account.email}/>
-                                                                    <span style={{color: "red"}}><ErrorMessage
-                                                                        name={'email'}></ErrorMessage></span>
                                                                 </div>
                                                                 <div className="col-sm-12 inputEdit mb-3">
                                                                     <div className="text-lable">

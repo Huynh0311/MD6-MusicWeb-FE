@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useNavigate, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {getAllSongByGenresIDAPI, getSongByID, playSong} from "../../api/songService/SongService";
 import {getSongLikeQuantityAPI, isLikedAPI, likeClickAPI} from "../../api/LikesService/LikesService";
 import {getAllCommentBySongID, getAllCommentBySongIdAPI, sendCommentAPI} from "../../api/commentService/CommentService";
@@ -48,7 +48,7 @@ const DetailSong = () => {
         getLikeQuantity();
         getAllCommentBySongID(id)
         getAllSongByGenres();
-    }, [])
+    }, [id])
 
     const checkLike = () => {
         if (like.account.name != null && like.song.nameSong != null) {
@@ -234,10 +234,16 @@ const DetailSong = () => {
                                     <ul className="info-list mb-5">
                                         <li>
                                             <div className="d-flex align-items-center">
-                                                <button type="button" id="play_all"
-                                                        className={isPlay ? "btn btn-icon btn-primary rounded-pill active" : "btn btn-icon btn-primary rounded-pill"}
-                                                        data-play-id={currentSong.id} onClick={setIsPlaying}>
-                                                    <i className={isPlay ? "ri-pause-fill icon-pause" : "ri-play-fill icon-play"}/>
+                                                {/*<button type="button" id="play_all"*/}
+                                                {/*        className={isPlay ? "btn btn-icon btn-primary rounded-pill active" : "btn btn-icon btn-primary rounded-pill"}*/}
+                                                {/*        data-play-id={currentSong.id} onClick={setIsPlaying}>*/}
+                                                {/*    <i className={isPlay ? "ri-pause-fill icon-pause" : "ri-play-fill icon-play"}/>*/}
+                                                {/*</button>*/}
+                                                <button type="button"
+                                                        className="btn btn-play btn-default btn-icon rounded-pill playing"
+                                                        data-play-id={currentSong.id}>
+                                                    <i className="ri-play-fill icon-play"></i>
+                                                    <i className="ri-pause-fill icon-pause"></i>
                                                 </button>
                                                 <span className="ps-2 fw-semi-bold">{play}</span></div>
                                         </li>
@@ -285,7 +291,6 @@ const DetailSong = () => {
                                         {relatedSongs.map((rs) => {
                                             return (
                                                 <div className="swiper-slide" key={rs.id}>
-
                                                     <div className="cover cover--round" data-song-id={rs.id}
                                                          data-song-name={rs.nameSong}
                                                          data-song-artist="Arebica Luna" data-song-album="Mummy"
@@ -346,10 +351,15 @@ const DetailSong = () => {
                                                                 className="ri-play-fill icon-play"/> <i
                                                                 className="ri-pause-fill icon-pause"/></button>
                                                         </div>
-                                                        <div className="cover__foot"><a href="song-details.html"
-                                                                                        className="cover__title text-truncate">{rs.nameSong}</a>
-                                                            <p className="cover__subtitle text-truncate"><a
-                                                                href="artist-details.html">{rs.nameSinger}</a></p></div>
+
+                                                        <div className="cover__foot" onClick={() => {navigate("/song/detailSong/" + rs.id)}}>
+                                                            <p className="cover__title text-truncate">
+                                                                {rs.nameSong}
+                                                            </p>
+                                                            <p className="cover__subtitle text-truncate">
+                                                                {rs.nameSinger}
+                                                            </p>
+                                                        </div>
                                                     </div>
 
 
@@ -385,10 +395,9 @@ const DetailSong = () => {
                                             <div className="avatar avatar--lg align-items-start" key={cm.id}>
                                                 <div className="avatar__image"><img src={cm.account.img} alt="user"/>
                                                 </div>
-                                                <div className="avatar__content"><span
-                                                    className="avatar__title mb-1">{cm.account.name}</span>
-                                                    <span
-                                                        className="avatar__subtitle mb-2">{cm.timeComment}</span>
+                                                <div className="avatar__content">
+                                                    <span className="avatar__title mb-1">{cm.account.name}</span>
+                                                    <span className="avatar__subtitle mb-2">{cm.timeComment}</span>
                                                     <div className="text-warning d-flex mb-1"><i
                                                         className="ri-star-s-fill"></i>
                                                         <i
@@ -414,97 +423,6 @@ const DetailSong = () => {
                     </div>
                 </main>
             </div>
-            {/*<div id="player">*/}
-            {/*    <div className="container">*/}
-            {/*        <div className="player-container">*/}
-            {/*            <div className="player-progress">*/}
-            {/*                <progress className="amplitude-buffered-progress player-progress__bar" value="0"></progress>*/}
-            {/*                <progress className="amplitude-song-played-progress player-progress__bar"></progress>*/}
-            {/*                <input type="range" className="amplitude-song-slider player-progress__slider"*/}
-            {/*                       aria-label="Progress slider"/>*/}
-            {/*            </div>*/}
-            {/*            <div className="cover d-flex align-items-center">*/}
-            {/*                <div className="cover__image"><img data-amplitude-song-info="cover_art_url"*/}
-            {/*                                                   src="images/cover/small/1.jpg"*/}
-            {/*                                                   alt="" style={{height:"100%"}}/></div>*/}
-            {/*                <div className="cover__content ps-3 d-none d-sm-block"><a href="song-details.html"*/}
-            {/*                                                                          className="cover__title text-truncate"*/}
-            {/*                                                                          data-amplitude-song-info="name"></a>*/}
-            {/*                    <a href="artist-details.html" className="cover__subtitle text-truncate"*/}
-            {/*                        data-amplitude-song-info="artist"></a></div>*/}
-            {/*            </div>*/}
-            {/*            <div className="player-control">*/}
-            {/*                <button type="button" className="amplitude-repeat btn btn-icon me-4 d-none d-md-block"*/}
-            {/*                        aria-label="Repeat">*/}
-            {/*                    <i className="ri-repeat-2-fill fs-5"></i></button>*/}
-            {/*                <button type="button" className="amplitude-prev btn btn-icon" aria-label="Backward"><i*/}
-            {/*                    className="ri-skip-back-mini-fill"></i></button>*/}
-            {/*                <button type="button" className="amplitude-play-pause btn btn-icon btn-default rounded-pill"*/}
-            {/*                        aria-label="Play pause"><i className="ri-play-fill icon-play"></i> <i*/}
-            {/*                    className="ri-pause-fill icon-pause"></i></button>*/}
-            {/*                <button type="button" className="amplitude-next btn btn-icon" aria-label="Forward"><i*/}
-            {/*                    className="ri-skip-forward-mini-fill"></i></button>*/}
-            {/*                <button type="button"*/}
-            {/*                        className="amplitude-shuffle amplitude-shuffle-off btn btn-icon ms-4 d-none d-md-block"*/}
-            {/*                        aria-label="Shuffle"><i className="ri-shuffle-fill fs-5"></i></button>*/}
-            {/*            </div>*/}
-            {/*            <div className="player-info">*/}
-            {/*                <div className="me-4 d-none d-xl-block"><span*/}
-            {/*                    className="amplitude-current-minutes"></span>:<span*/}
-            {/*                    className="amplitude-current-seconds"></span> / <span*/}
-            {/*                    className="amplitude-duration-minutes"></span>:<span*/}
-            {/*                    className="amplitude-duration-seconds"></span>*/}
-            {/*                </div>*/}
-            {/*                <div className="player-volume dropdown d-none d-md-block">*/}
-            {/*                    <button className="btn btn-icon" data-bs-toggle="dropdown" data-bs-auto-close="outside"*/}
-            {/*                            aria-label="Volume" aria-expanded="false"><i*/}
-            {/*                        className="ri-volume-mute-fill fs-5 d-none"></i> <i*/}
-            {/*                        className="ri-volume-down-fill fs-5"></i> <i*/}
-            {/*                        className="ri-volume-up-fill fs-5 d-none"></i></button>*/}
-            {/*                    <div className="dropdown-menu prevent-click"><input type="range"*/}
-            {/*                                                                        className="amplitude-volume-slider"*/}
-            {/*                                                                        value="50" min="0" max="100"*/}
-            {/*                                                                        aria-label="Volume slider"/></div>*/}
-            {/*                </div>*/}
-            {/*                <div className="dropstart d-none d-md-block">*/}
-            {/*                    <button className="btn btn-icon" data-bs-toggle="dropdown" aria-label="Song options"*/}
-            {/*                            aria-expanded="false"><i className="ri-more-2-fill fs-5"></i></button>*/}
-            {/*                    <ul className="dropdown-menu dropdown-menu-sm" id="player_options">*/}
-            {/*                        <li><a className="dropdown-item" href="javascript:void(0);" role="button"*/}
-            {/*                               data-favorite-id="1">Favorite</a>*/}
-            {/*                        </li>*/}
-            {/*                        <li><a className="dropdown-item" href="javascript:void(0);" role="button"*/}
-            {/*                               data-playlist-id="1">Add*/}
-            {/*                            to playlist</a></li>*/}
-            {/*                        <li><a className="dropdown-item" href="audio/ringtone-1.mp3" download>Download</a>*/}
-            {/*                        </li>*/}
-            {/*                        <li><a className="dropdown-item" href="javascript:void(0);" role="button">Share</a>*/}
-            {/*                        </li>*/}
-            {/*                        <li className="dropdown-divider"></li>*/}
-            {/*                        <li><a className="dropdown-item" href="song-details.html">View details</a></li>*/}
-            {/*                    </ul>*/}
-            {/*                </div>*/}
-            {/*                <div className="playlist dropstart me-3">*/}
-            {/*                    <button className="btn btn-icon" data-bs-toggle="dropdown" data-bs-auto-close="outside"*/}
-            {/*                            aria-label="Playlist" aria-expanded="false"><i*/}
-            {/*                        className="ri-play-list-fill fs-5"></i></button>*/}
-            {/*                    <div className="dropdown-menu playlist__dropdown">*/}
-            {/*                        <div className="playlist__head d-flex align-items-center justify-content-between">*/}
-            {/*                            <h6 className="mb-0">*/}
-            {/*                                Next Lineup</h6><a href="javascript:void(0);" role="button"*/}
-            {/*                                                   id="clear_playlist"*/}
-            {/*                                                   className="btn btn-link">Clear</a></div>*/}
-            {/*                        <div id="playlist" className="list playlist__body" data-scroll="true">*/}
-            {/*                            <div className="col-sm-8 col-10 mx-auto mt-5 text-center"><i*/}
-            {/*                                className="ri-music-2-line mb-3"></i>*/}
-            {/*                                <p>No songs, album or playlist are added on lineup.</p></div>*/}
-            {/*                        </div>*/}
-            {/*                    </div>*/}
-            {/*                </div>*/}
-            {/*            </div>*/}
-            {/*        </div>*/}
-            {/*    </div>*/}
-            {/*</div>*/}
         </div>
     );
 }

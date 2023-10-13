@@ -8,9 +8,11 @@ import {toast} from "react-toastify";
 const validateSchema = Yup.object().shape({
     password: Yup.string()
         .matches(/^(?=.*[A-Za-z])(?=.*\d).{8,}$/, 'Mật khẩu tối thiểu 8 kí tự. có cả chữ và số')
+        .max(50, 'Mật khẩu không được quá 50 kí tự')
         .required('Mật khẩu không được để trống'),
     confirmPassword: Yup.string()
         .oneOf([Yup.ref('password'), null], 'Mật khẩu xác nhận phải trùng khớp với mật khẩu')
+        .max(50, 'Mật khẩu không được quá 50 kí tự')
         .required('Xác nhận mật khẩu không được để trống'),
 });
 
@@ -57,7 +59,7 @@ const UpdatePassword = () => {
                                 })
                             }}>
                             <Form>
-                                <div className="hero" style={{backgroundImage: "url(images/banner/event.jpg)"}}></div>
+                                <div className="hero" style={{backgroundImage: "url(../../images/banner/event.jpg)"}}></div>
                                 <div className="under-hero container">
                                     <div className="section">
                                         <div className="plan bg-light">

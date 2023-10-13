@@ -28,7 +28,8 @@ class Top5Songs extends Component {
                             <div className="list__item" data-song-id={song.id}
                                  data-song-name="Shack your butty" data-song-artist={song.nameSong}
                                  data-song-album="Hot shot" data-song-url={song.pathSong}
-                                 data-song-cover={song.imgSong}>
+                                 data-song-cover={song.imgSong}
+                                 style={{width:"100%"}}>
                                 <div className="list__cover">
                                     <img src={song.imgSong} alt="Shack your butty"/>
                                     <a href="javascript:void(0);"

@@ -13,7 +13,7 @@ const HomeComponent = () => {
         <div>
             <div id="wrapper">
                 <main id="page_content">
-                    <div className="hero" style={{backgroundImage: "url(images/banner/home.jpg"}}></div>
+                    <div className="hero" style={{backgroundImage: "url(../../images/banner/home.jpg"}}></div>
                     <div className="under-hero container">
                         <div className="section">
                             <div className="section__head">

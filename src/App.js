@@ -1,7 +1,6 @@
-import React, {useState} from "react";
+import React from "react";
 import {Route, Routes} from "react-router-dom";
 import HomeComponent from "./component/HomeComponent";
-import Loader from "./component/Loader";
 import UpdateAccount from "./component/account/updateAccount";
 import 'react-toastify/dist/ReactToastify.css';
 import {ToastContainer} from "react-toastify";
@@ -10,23 +9,19 @@ import UpdatePassword from "./component/account/updatePassword";
 import CreateSong from "./component/song/createSong/createSong";
 import DetailSong from "./component/song/detailSong/DetailSong";
 import RegisterComponent from "./component/RegisterComponent";
-import NavbarComponent from "./component/navbarComponent";
 import LoginComponent from "./component/LoginComponent";
 import ListSong from "./component/song/listSong/ListSong";
 
 import 'react-toastify/dist/ReactToastify.css';
 import Page from "./component/page";
 import Component404 from "./component/Component404";
-import SearchComponent from "./component/SearchComponent";
+import ListSongFavorite from "./component/song/listSong/ListSongFavorite";
 
 
 function App() {
 
     return (
         <div className="App">
-            <NavbarComponent/>
-            <Loader/>
-            <SearchComponent/>
             <Routes>
                 <Route path="/" element={<Page/>}>
                     <Route path={"/"} element={<HomeComponent/>}/>
@@ -37,7 +32,9 @@ function App() {
                     <Route path="/register" element={<RegisterComponent/>}/>
                     <Route path="/login" element={<LoginComponent/>}/>
                     <Route path='/song/all' element={<ListSong/>}></Route>
+                    <Route path={'/favorite'} element={<ListSongFavorite/>}></Route>
                 </Route>
+                <Route path={'*'} element={<Component404/>}></Route>
             </Routes>
             <ToastContainer
                 position="top-center"

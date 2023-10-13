@@ -226,11 +226,11 @@ const CreateSong = () => {
                                                                 </div>
                                                             </div>
                                                             <div className="col-sm-6 mb-4">
-                                                                <label style={{margin: "5px 10px"}}>Hãy nhập tên của Ca sỹ(*)</label>
+                                                                <label style={{margin: "5px 10px"}}>Hãy nhập tên của Ca sĩ(*)</label>
                                                                 <div className="requiredInput requiredSinger">
                                                                     <Field type="text" id="nameSinger" name="nameSinger"
                                                                            className="form-control"
-                                                                           placeholder="Ca sỹ thực hiện"
+                                                                           placeholder="Ca sĩ thực hiện"
                                                                            onInput={handleInputCreateSong}
                                                                            />
                                                                 </div>
