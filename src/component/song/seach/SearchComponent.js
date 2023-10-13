@@ -1,14 +1,19 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Link, useNavigate} from "react-router-dom";
+import {searchListSongByName} from "../../api/songService/SongService";
 
 const SearchComponent = () => {
-    const [account,setAccount] = useState(localStorage.getItem("data"));
+    const [account, setAccount] = useState(localStorage.getItem("data"));
     const loggedIn = isLoggedIn();
     const navigate = useNavigate();
+    const [searchSong, setSearchSong] = useState([]);
+    const [searchInput, setSearchInput] = useState();
+
     function isLoggedIn() {
         return account ? true : false;
     }
-    const logOut =()=> {
+
+    const logOut = () => {
         localStorage.clear();
         navigate("/");
         window.location.reload()
@@ -16,6 +21,17 @@ const SearchComponent = () => {
     let accounts = null;
     if (account) {
         accounts = JSON.parse(account);
+    }
+
+    const handleSearchInput = (e) => {
+        setSearchInput(e.target.value);
+    }
+
+    const searchSongName = async (e) => {
+        e.preventDefault();
+        if (searchInput != '') {
+            navigate(`/song/search?q=${searchInput}`)
+        }
     }
 
     return (
@@ -27,11 +43,15 @@ const SearchComponent = () => {
                                                                       className="header-text sidebar-toggler d-lg-none me-3"
                                                                       aria-label="Sidebar toggler"><i
                             className="ri-menu-3-line"></i></a>
-                            <form action="#" id="search_form" className="me-3"><label for="search_input"><i
-                                className="ri-search-2-line"></i></label> <input type="text"
-                                                                                 placeholder="Type anything to get result..."
-                                                                                 id="search_input"
-                                                                                 className="form-control form-control-sm"/>
+                            <form id="search_form" className="me-3" onSubmit={searchSongName}>
+                                <label for="search_input"><i
+                                    className="ri-search-2-line"></i></label> <input type="text"
+                                                                                     placeholder="Type anything to get result..."
+                                                                                     id="search_input"
+                                                                                     className="form-control form-control-sm"
+                                                                                     value={searchInput}
+                                                                                     onChange={(e) => handleSearchInput(e)}
+                            />
                             </form>
                             <div className="d-flex align-items-center">
                                 {loggedIn ? (
@@ -49,7 +69,8 @@ const SearchComponent = () => {
                                                 <div className="py-2 px-3 avatar avatar--lg">
                                                     <div className="avatar__image"><img src={accounts.img}
                                                                                         alt="user"/></div>
-                                                    <div className="avatar__content"><span className="avatar__title">{accounts.name}</span>
+                                                    <div className="avatar__content"><span
+                                                        className="avatar__title">{accounts.name}</span>
                                                         <span className="avatar__subtitle">Artist</span></div>
                                                 </div>
                                             </li>
@@ -75,14 +96,19 @@ const SearchComponent = () => {
                                                 className="ri-heart-line fs-5"></i> <span
                                                 className="ps-2">Yêu thích</span></a></li>
                                             <li className="dropdown-divider"></li>
-                                            <li><button
-                                                className="dropdown-item d-flex align-items-center external text-danger" onClick={() => logOut()}><i className="ri-logout-circle-line fs-5"></i> <span
-                                                className="ps-2">Logout</span></button>
+                                            <li>
+                                                <button
+                                                    className="dropdown-item d-flex align-items-center external text-danger"
+                                                    onClick={() => logOut()}><i
+                                                    className="ri-logout-circle-line fs-5"></i> <span
+                                                    className="ps-2">Logout</span></button>
                                             </li>
                                         </ul>
                                     </div>
                                 ) : (
-                                    <Link to={'/login'}><button className="btn btn-primary">Đăng nhập</button></Link>
+                                    <Link to={'/login'}>
+                                        <button className="btn btn-primary">Đăng nhập</button>
+                                    </Link>
                                 )}
 
                             </div>

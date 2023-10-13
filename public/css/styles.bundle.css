@@ -3507,3 +3507,12 @@ body[data-theme=dark] .plan .plan__col {
     margin-left: 38%;
     margin-top: 3%;
 }
+
+.playing {
+    -webkit-transition: all .15s ease-in-out;
+    transition: all .15s ease-in-out;
+    color: blue;
+    opacity: 1 !important;
+    visibility: unset !important;
+    background-color: #eece8f !important;
+}
