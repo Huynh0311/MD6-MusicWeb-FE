@@ -1,0 +1,64 @@
+.login-nav-container {
+    padding: 15px 8px;
+    border-radius: 8px;
+    margin: 10px 20px;
+    text-align: center;
+    color: white;
+    background: linear-gradient(to right, #f26c6c, #ae00ae, #6f59ff);
+}
+.mar-t-15 {
+    margin-top: 15px!important;
+}
+div, p {
+    word-break: break-word;
+}
+.login-nav-container .text {
+    font-size: 12px;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+.login-nav-container .zm-btn {
+    border-color: white;
+    color: inherit;
+    padding: 6px 35px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.zm-btn.is-medium {
+    font-size: 14px;
+    padding: 9px 24px;
+}
+.zm-btn.is-outlined {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 400;
+    background-color: cornflowerblue;
+    border: 1px solid white;
+    color: white;
+    margin: 0 auto;
+}
+.is-upper {
+    text-transform: uppercase;
+}
+.zm-btn {
+    font-size: 14px;
+    border-radius: 999px;
+    line-height: normal;
+    border: 0;
+    display: inline-block;
+    font-weight: 400;
+    text-transform: none;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+}
+button, optgroup, select {
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.nav-item-color:hover{
+    background-color: #196eed1c;
+}
