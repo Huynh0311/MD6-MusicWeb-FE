@@ -37,7 +37,7 @@ function App() {
                     <Route path={"/song/detailSong/:id"} element={<DetailSong/>}/>
                     <Route path="/register" element={<RegisterComponent/>}/>
                     <Route path="/login" element={<LoginComponent/>}/>
-                    <Route path='/song/' element={<ListSong/>}></Route>
+                    <Route path='/song' element={<ListSong/>}></Route>
                     <Route path={"/song/edit/:songid"} element={<EditSong />}></Route>
                 </Route>
             </Routes>
