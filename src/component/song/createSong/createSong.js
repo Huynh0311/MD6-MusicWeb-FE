@@ -297,7 +297,7 @@ const CreateSong = () => {
                                                             'Add Music'
                                                         )}
                                                     </button>
-                                                    <button className="btn btn-danger">{navigate("/")}Cancel</button>
+                                                    <button className="btn btn-danger">Cancel</button>
                                                 </div>
                                             </div>
                                         </div>

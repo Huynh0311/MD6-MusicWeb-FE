@@ -64,12 +64,13 @@ const NavbarComponent = () => {
                                 className="ri-heart-line fs-5"></i> <span className="ps-3">Yêu thích</span></a>
                             </li>
                             {loggedIn ? (
-                                <li className="nav-item nav-item-color"><a href=""
-                                                            className="nav-link d-flex align-items-center">
+                                <Link to={"/song"}>
+                                <li className="nav-item nav-item-color">
+                                    <p  className="nav-link d-flex align-items-center">
                                     <i className="fa-solid fa-list-music" style={{fontSize: "20px"}}></i>
-                                    <span className="ps-3">List</span></a>
+                                    <span className="ps-3">Danh sách bài hát</span></p>
                                 </li>
-
+                                </Link>
                             ) : (
                                 <li className="nav-item nav-item-color">
                                     <div className="login-nav-container login mar-t-15">

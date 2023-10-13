@@ -13,6 +13,7 @@ import RegisterComponent from "./component/RegisterComponent";
 import NavbarComponent from "./component/navbarComponent";
 import LoginComponent from "./component/LoginComponent";
 import ListSong from "./component/song/listSong/ListSong";
+import EditSong from "./component/song/editSong/EditSong";
 
 import 'react-toastify/dist/ReactToastify.css';
 import Page from "./component/page";
@@ -30,16 +31,16 @@ function App() {
             <SearchComponent/>
             <Routes>
                 <Route path="/" element={<Page/>}>
-                    <Route index element={<HomeComponent/>}/>
+                    <Route path={"/"} element={<HomeComponent/>}/>
                     <Route path={"/updateProfile"} element={<UpdateAccount/>}/>
                     <Route path={"/updatePassword"} element={<UpdatePassword/>}/>
                     <Route path="/song/create" element={<CreateSong/>}/>
                     <Route path={"/song/detailSong/:id"} element={<DetailSong/>}/>
                     <Route path="/register" element={<RegisterComponent/>}/>
                     <Route path="/login" element={<LoginComponent/>}/>
-                    <Route path='/song/all' element={<ListSong/>}></Route>
+                    <Route path='/song' element={<ListSong/>}></Route>
+                    <Route path={"/song/edit/:songid"} element={<EditSong />}></Route>
                     <Route path='/song/search' element={<BodySearch/>}></Route>
-
                 </Route>
             </Routes>
             <ToastContainer
