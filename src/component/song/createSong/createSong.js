@@ -232,7 +232,7 @@ const CreateSong = () => {
                                                                            className="form-control"
                                                                            placeholder="Ca sỹ thực hiện"
                                                                            onInput={handleInputCreateSong}
-                                                                           />
+                                                                    />
                                                                 </div>
                                                             </div>
                                                             <span className="fomik-error" style={{color: "red"}}><ErrorMessage name={'nameSinger'}/></span>
@@ -261,7 +261,7 @@ const CreateSong = () => {
                                                                           rows="4"
                                                                           className="form-control requiredDescription"
                                                                           placeholder="Tiêu đề"
-                                                                            style={{whiteSpace: "pre-wrap"}}
+                                                                          style={{whiteSpace: "pre-wrap"}}
                                                                           onChange={handleInputCreateSong}>
                                                                 </textarea>
                                                                 <span className="fomik-error" style={{color: "red"}}><ErrorMessage

@@ -33,6 +33,10 @@ const SearchComponent = () => {
                                                                                  id="search_input"
                                                                                  className="form-control form-control-sm"/>
                             </form>
+                            <div className="icon" style={{ backgroundColor: 'blue' }}>
+                                <button><i className="fa-solid fa-bell"></i></button>
+                                <div className="counter">2</div>
+                            </div>
                             <div className="d-flex align-items-center">
                                 {loggedIn ? (
                                     <div className="dropdown ms-3 ms-sm-4"><a href="javascript:void(0);"
