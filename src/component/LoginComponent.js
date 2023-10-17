@@ -29,6 +29,7 @@ const LoginComponent = () => {
                 const data = JSON.stringify(re.data);
                 localStorage.setItem("data",data)
                 navigate('/')
+                window.location.reload()
             }).catch(er=>{
                axios.post('http://localhost:8080/api/auth/register', er.response.data)
                     .then(response => {
