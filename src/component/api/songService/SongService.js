@@ -25,11 +25,26 @@ const findListSongFavorite = () =>{
     return axios.get(`apiAccount/favorites`)
 }
 
+
+const searchListSongByName = (name) => {
+    return axios.get(`songs/findByName/${name}`)
+}
+
+const searchListSongByNameSinger = (name) => {
+    return axios.get(`songs/findBySingerName/${name}`)
+}
+
+const searchListSongByNamePlaylist = (name) => {
+    return axios.get(`songs/findByPlaylist/${name}`)
+}
 export {
     addSongSV,
     getAllGenres,
     getSongByID,
     playSong,
     getAllSongByGenresIDAPI,
-    findListSongFavorite
+    findListSongFavorite,
+    searchListSongByName,
+    searchListSongByNameSinger,
+    searchListSongByNamePlaylist
 }

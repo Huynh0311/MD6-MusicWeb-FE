@@ -1,6 +1,12 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import {logDOM} from "@testing-library/react";
+import {json, Link} from "react-router-dom";
+import {useSelector} from "react-redux";
+import _ from "lodash";
 
 const MusicPlayer = () => {
+
+    const listSong = useSelector(state => state.songs);
     return (
         <div>
             <div id="player">
@@ -30,10 +36,11 @@ const MusicPlayer = () => {
                             <button type="button" className="amplitude-prev btn btn-icon" aria-label="Backward"><i
                                 className="ri-skip-back-mini-fill"></i></button>
                             <button type="button" className="amplitude-play-pause btn btn-icon btn-default rounded-pill"
-                                    aria-label="Play pause"><i className="ri-play-fill icon-play"></i> <i
-                                className="ri-pause-fill icon-pause"></i></button>
-                            <button type="button" className="amplitude-next btn btn-icon" aria-label="Forward"><i
-                                className="ri-skip-forward-mini-fill"></i></button>
+                                    aria-label="Play pause"><i className="ri-play-fill icon-play"></i>
+                                <i className="ri-pause-fill icon-pause"></i></button>
+                            <button type="button" className="btn btn-icon" aria-label="Forward">
+                                <i className="ri-skip-forward-mini-fill"></i>
+                            </button>
                             <button type="button"
                                     className="amplitude-shuffle amplitude-shuffle-off btn btn-icon ms-4 d-none d-md-block"
                                     aria-label="Shuffle"><i className="ri-shuffle-fill fs-5"></i></button>
@@ -80,13 +87,57 @@ const MusicPlayer = () => {
                                 <div className="dropdown-menu playlist__dropdown">
                                     <div className="playlist__head d-flex align-items-center justify-content-between">
                                         <h6 className="mb-0">
-                                            Next Lineup</h6><a href="javascript:void(0);" role="button"
-                                                               id="clear_playlist"
+                                            Next Lineup
+                                        </h6>
+                                        <a href="javascript:void(0);" role="button" id="clear_playlist"
                                                                className="btn btn-link">Clear</a></div>
                                     <div id="playlist" className="list playlist__body" data-scroll="true">
-                                        <div className="col-sm-8 col-10 mx-auto mt-5 text-center"><i
-                                            className="ri-music-2-line mb-3"></i>
-                                            <p>No songs, album or playlist are added on lineup.</p></div>
+                                        {!_.isEmpty(listSong) ? (
+                                            listSong.map((song) => (
+                                            <div className="list__item" data-song-id={song.id}
+                                                 data-song-name={song.nameSong} data-song-artist={song.nameSinger}
+                                                 data-song-album="" data-song-url={song.pathSong}
+                                                 data-song-cover={song.imgSong}
+                                            style={{width:"100%"}}>
+                                                <div className="list__cover">
+                                                    <img src={song.url} alt={song.nameSong}/>
+                                                    <a href="javascript:void(0);"
+                                                       className="btn btn-play btn-sm btn-default btn-icon rounded-pill active"
+                                                       data-play-id={song.id}>
+                                                        <i className="ri-play-fill icon-play"></i>
+                                                        <i className="ri-pause-fill icon-pause"></i>
+                                                    </a>
+                                                </div>
+                                                <div className="list__content">
+                                                    <Link to={"/song/detailSong/" + song.id}>
+                                                    <p className="list__title text-truncate">{song.nameSong}</p>
+                                                    <p className="list__subtitle text-truncate">
+                                                        <p>{song.nameSinger}</p>
+                                                    </p>
+                                                    </Link>
+                                                </div>
+                                                <ul className="list__option">
+                                                    <li className="list__icon-hover">
+                                                        <a href="javascript:void(0);" role="button"
+                                                           className="d-inline-flex" data-remove-song-id={song.id}>
+                                                            <i className="ri-close-line fs-6"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="javascript:void(0);" role="button"
+                                                           className="d-inline-flex" data-favorite-id={song.id}>
+                                                            <i className="ri-heart-line heart-empty"></i>
+                                                            <i className="ri-heart-fill heart-fill"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        ))):(
+                                        <div className="col-sm-8 col-10 mx-auto mt-5 text-center">
+                                            <i className="ri-music-2-line mb-3"></i>
+                                            <p>No songs, album or playlist are added on lineup.</p>
+                                        </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>

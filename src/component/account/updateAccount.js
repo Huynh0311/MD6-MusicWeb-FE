@@ -8,6 +8,8 @@ import {v4} from "uuid";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as Yup from "yup";
 import {toast} from "react-toastify";
+import {useDispatch, useSelector} from "react-redux";
+import {editAccount} from "../../redux/actions";
 
 const validateSchema = Yup.object().shape({
     name: Yup.string()
@@ -25,7 +27,8 @@ const validateSchema = Yup.object().shape({
 
 
 const UpdateAccount = () => {
-    const [id, setId] = useState(JSON.parse(localStorage.getItem("data")).id);
+    const accountLogin = useSelector(state => state.account);
+    const dispatch = useDispatch();
     const [account, setAccount] = useState({});
 
     const uploadImg = (even) => {
@@ -59,10 +62,10 @@ const UpdateAccount = () => {
 
     useEffect(() => {
         findById();
-    }, [id]);
+    }, []);
 
     const findById = () => {
-        accountService.findById(id)
+        accountService.findById(accountLogin.id)
             .then((acc) => {
                 setAccount(acc.data);
             })
@@ -91,7 +94,15 @@ const UpdateAccount = () => {
                             validationSchema={validateSchema}
                             onSubmit={(values) => {
                                 const data = {...values, img: account.img}
-                                accountService.updateAccount(id, data).then((response) => {
+                                accountService.updateAccount(accountLogin.id, data).then((response) => {
+
+                                    const dataLogin = {
+                                        ...accountLogin,
+                                        name:response.data.name,
+                                        img:response.data.img,
+                                        phone:response.data.phone
+                                    }
+                                    dispatch(editAccount(dataLogin));
                                     toast.success('Cập nhật thành công');
                                 }).catch((error) => {
                                     toast.error('Cập nhật thất bại');

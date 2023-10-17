@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {Route, Routes} from "react-router-dom";
 import HomeComponent from "./component/HomeComponent";
 import UpdateAccount from "./component/account/updateAccount";
@@ -16,16 +16,20 @@ import EditSong from "./component/song/editSong/EditSong";
 import 'react-toastify/dist/ReactToastify.css';
 import Page from "./component/page";
 import Component404 from "./component/Component404";
+import SearchComponent from "./component/song/seach/SearchComponent";
+import BodySearch from "./component/song/seach/BodySearch";
 import ListSongFavorite from "./component/song/listSong/ListSongFavorite";
+import {useSelector} from "react-redux";
 
 
 function App() {
+    const listSong = useSelector(state => state.songs);
+    useEffect(() => {
+        localStorage.setItem("songs", JSON.stringify(listSong))
+    }, [listSong]);
 
     return (
         <div className="App">
-            {/*<NavbarComponent/>*/}
-            {/*<Loader/>*/}
-            {/*<SearchComponent/>*/}
             <Routes>
                 <Route path="/" element={<Page/>}>
                     <Route path={"/"} element={<HomeComponent/>}/>
@@ -35,10 +39,10 @@ function App() {
                     <Route path={"/song/detailSong/:id"} element={<DetailSong/>}/>
                     <Route path="/register" element={<RegisterComponent/>}/>
                     <Route path="/login" element={<LoginComponent/>}/>
-                    <Route path='/song/all' element={<ListSong/>}></Route>
                     <Route path={'/favorite'} element={<ListSongFavorite/>}></Route>
                     <Route path='/song' element={<ListSong/>}></Route>
                     <Route path={"/song/edit/:songid"} element={<EditSong />}></Route>
+                    <Route path='/song/search' element={<BodySearch/>}></Route>
                 </Route>
                 <Route path={'*'} element={<Component404/>}></Route>
             </Routes>
