@@ -26,7 +26,7 @@ const ActionPlay = () => {
         };
 
         const handlePreviousSongClick = () => {
-            const currentIndex = songs.findIndex((song) => song.id == currentSong.id)
+            const currentIndex = songs.findIndex((song) => song.id === currentSong.id)
             if (currentIndex > 0) {
                 const previousSong = songs[currentIndex - 1];
                 updateCurrentSongAndSongs(previousSong, songs);
@@ -37,20 +37,37 @@ const ActionPlay = () => {
                 console.log(previousSong);
             }
         }
+
+        const playNext = () =>{
+            const currentIndex = songs.findIndex((song) => song.id === currentSong.id);
+            const nextSongIndex = (currentIndex + 1) % songs.length;
+            const nextSong = songs[nextSongIndex];
+            updateCurrentSongAndSongs(nextSong, songs);
+    }
+
         const audiofunction = () => {
-            isPlaying ? player.current.audio.current.play() : player.current.audio.current.pause();
+            if (!isPlaying) {
+                player.current.audio.current.play();
+                handlePlayToggle(true);
+            } else {
+                player.current.audio.current.pause();
+                handlePlayToggle(false);
+            }
         };
 
         useEffect(() => {
             audiofunction();
-        }, [currentSong, isPlaying]);
+        }, [currentSong]);
+
+    useEffect(() => {
+    }, [isPlaying]);
 
         return (
             <div>
                 <div>
                     <H5AudioPlayer ref={player}
                                    src={currentSong && currentSong.pathSong} onPlay={() => handlePlayToggle(true)}
-                                   onPause={() => handlePlayToggle(false)}
+                                   onPause={() => handlePlayToggle(false)} onEnded={playNext}
                                    preload={"metadata"} style={{marginLeft: "500px", marginTop: "900px", width: "600px"}}/>
                     <BiSkipPreviousCircle onClick={handlePreviousSongClick}
                                           style={{marginLeft: "500px", marginTop: "100px", fontSize: "30px"}}/>

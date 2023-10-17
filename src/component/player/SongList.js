@@ -92,7 +92,8 @@ function SongList() {
                             />
                         )}
                         <div className="song-card">
-                            <div className="cover cover--round" data-song-id={song.id}
+                            <div className="cover cover--round"
+                                 data-song-id={song.id}
                                  data-song-name={song.nameSong}
                                  data-song-url={song.pathSong}
                                  data-song-cover={song.imgSong}>
