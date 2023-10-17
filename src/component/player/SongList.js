@@ -75,7 +75,7 @@ function SongList() {
                 {currentSongs.map((song) => (
                     <div className="col-lg-3 col-md-4 col-sm-6" key={song.id}>
                         {song.isPlaying ? (
-                            <AiOutlinePauseCircle
+                            <AiOutlinePauseCircle role='button'
                                 onClick={() => {
                                     handleToggleSongPlay(song.id);
                                     updateCurrentSongAndSongs(song, songs);
@@ -83,7 +83,7 @@ function SongList() {
                                 style={{fontSize: "30px"}}
                             />
                         ) : (
-                            <AiOutlinePlayCircle
+                            <AiOutlinePlayCircle role='button'
                                 onClick={() => {
                                     handleToggleSongPlay(song.id);
                                     updateCurrentSongAndSongs(song, songs);
