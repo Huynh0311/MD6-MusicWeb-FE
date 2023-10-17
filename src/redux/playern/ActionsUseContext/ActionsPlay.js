@@ -8,21 +8,18 @@ const ActionPlay = () => {
         const {currentSong, songs, updateCurrentSongAndSongs, isPlaying, handlePlayToggle} = useAudioPlayer();
         const player = useRef();
         const handleNextSongClick = () => {
-            console.log(songs);
             const currentIndex = songs.findIndex((song) => song.id === currentSong.id);
             if (currentIndex < songs.length - 1) {
                 const nextSong = songs[currentIndex + 1];
                 updateCurrentSongAndSongs(nextSong, songs);
-                console.log(nextSong);
             } else if (currentIndex == songs.length - 1) {
                 const nextSong = songs[0];
                 updateCurrentSongAndSongs(nextSong, songs);
-                console.log(nextSong);
             } else {
                 const defaultNextSong = songs[0];
                 updateCurrentSongAndSongs(defaultNextSong, songs);
-                console.log(defaultNextSong);
             }
+            player.current.audio.current.play();
         };
 
         const handlePreviousSongClick = () => {
@@ -30,20 +27,16 @@ const ActionPlay = () => {
             if (currentIndex > 0) {
                 const previousSong = songs[currentIndex - 1];
                 updateCurrentSongAndSongs(previousSong, songs);
-                console.log(previousSong);
             } else if (currentIndex == 0) {
                 const previousSong = songs[songs.length - 1];
                 updateCurrentSongAndSongs(previousSong, songs);
-                console.log(previousSong);
             }
+            player.current.audio.current.play();
         }
-        const audiofunction = () => {
-            isPlaying ? player.current.audio.current.play() : player.current.audio.current.pause();
-        };
 
         useEffect(() => {
-            audiofunction();
-        }, [currentSong, isPlaying]);
+            isPlaying ? player.current.audio.current.play() : player.current.audio.current.pause();
+        }, [isPlaying]);
 
         return (
             <div>
