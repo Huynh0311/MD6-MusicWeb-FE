@@ -39,7 +39,7 @@ const SearchComponent = () => {
             <header id="header">
                 <div className="container">
                     <div className="header-container">
-                        <div className="d-flex align-items-center"><a href="javascript:void(0);" role="button"
+                        <div className="d-flex align-items-center"><a href="#" role="button"
                                                                       className="header-text sidebar-toggler d-lg-none me-3"
                                                                       aria-label="Sidebar toggler"><i
                             className="ri-menu-3-line"></i></a>
@@ -55,7 +55,7 @@ const SearchComponent = () => {
                             </form>
                             <div className="d-flex align-items-center">
                                 {loggedIn ? (
-                                    <div className="dropdown ms-3 ms-sm-4"><a href="javascript:void(0);"
+                                    <div className="dropdown ms-3 ms-sm-4"><a href="#"
                                                                               className="avatar header-text"
                                                                               role="button" id="user_menu"
                                                                               data-bs-toggle="dropdown"

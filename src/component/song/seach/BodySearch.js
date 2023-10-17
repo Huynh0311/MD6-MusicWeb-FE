@@ -97,7 +97,7 @@ const BodySearch = () => {
                                                              data-song-cover={song.imgSong}>
                                                             <div className="list__cover"><img src={song.imgSong}
                                                                                               alt="ErrorLoading"/>
-                                                                <a href="javascript:void(0);"
+                                                                <a href="#"
                                                                    className="btn btn-play btn-sm btn-default btn-icon rounded-pill"
                                                                    data-play-id={song.id}
                                                                    aria-label="Play pause"><i
@@ -115,7 +115,7 @@ const BodySearch = () => {
                                                             </div>
                                                             <ul className="list__option">
                                                                 <li>
-                                                                    <a href="javascript:void(0);" role="button"
+                                                                    <a href="#" role="button"
                                                                        className="d-inline-flex"
                                                                        aria-label="Favorite" data-favorite-id={song.id}>
                                                                         {song.isLiked == 1 ? (
@@ -134,28 +134,28 @@ const BodySearch = () => {
                                                                 </li>
                                                                 <li className="dropstart d-inline-flex"><a
                                                                     className="dropdown-link"
-                                                                    href="javascript:void(0);" role="button"
+                                                                    href="#" role="button"
                                                                     data-bs-toggle="dropdown"
                                                                     aria-label="Cover options"
                                                                     aria-expanded="false"><i
                                                                     className="ri-more-fill"></i></a>
                                                                     <ul className="dropdown-menu dropdown-menu-sm">
                                                                         <li><a className="dropdown-item"
-                                                                               href="javascript:void(0);" role="button"
+                                                                               href="#" role="button"
                                                                                data-playlist-id="1">Add to playlist</a>
                                                                         </li>
                                                                         <li><a className="dropdown-item"
-                                                                               href="javascript:void(0);" role="button"
+                                                                               href="#" role="button"
                                                                                data-queue-id="1">Add to queue</a></li>
                                                                         <li><a className="dropdown-item"
-                                                                               href="javascript:void(0);" role="button"
+                                                                               href="#" role="button"
                                                                                data-next-id="1">Next to play</a></li>
                                                                         <li><a className="dropdown-item"
-                                                                               href="javascript:void(0);"
+                                                                               href="#"
                                                                                role="button">Share</a></li>
                                                                         <li className="dropdown-divider"></li>
                                                                         <li><a className="dropdown-item"
-                                                                               href="javascript:void(0);" role="button"
+                                                                               href="#" role="button"
                                                                                data-play-id="1">Play</a></li>
                                                                     </ul>
                                                                 </li>
@@ -186,7 +186,7 @@ const BodySearch = () => {
                                                                      style={{width: "200%"}}>
                                                                     <div className="list__cover"><img src={song?.imgSong}
                                                                                                       alt="ErrorLoading"/>
-                                                                        <a href="javascript:void(0);"
+                                                                        <a href="#"
                                                                            className="btn btn-play btn-sm btn-default btn-icon rounded-pill"
                                                                            data-play-id={song?.id}
                                                                            aria-label="Play pause"><i
@@ -205,7 +205,7 @@ const BodySearch = () => {
                                                                     </div>
                                                                     <ul className="list__option">
                                                                         <li>
-                                                                            <a href="javascript:void(0);" role="button"
+                                                                            <a href="#" role="button"
                                                                                className="d-inline-flex"
                                                                                aria-label="Favorite" data-favorite-id={song?.id}>
                                                                                 {song?.isLiked == 1 ? (
@@ -224,35 +224,35 @@ const BodySearch = () => {
                                                                         </li>
                                                                         <li className="dropstart d-inline-flex"><a
                                                                             className="dropdown-link"
-                                                                            href="javascript:void(0);" role="button"
+                                                                            href="#" role="button"
                                                                             data-bs-toggle="dropdown"
                                                                             aria-label="Cover options"
                                                                             aria-expanded="false"><i
                                                                             className="ri-more-fill"></i></a>
                                                                             <ul className="dropdown-menu dropdown-menu-sm">
                                                                                 <li><a className="dropdown-item"
-                                                                                       href="javascript:void(0);"
+                                                                                       href="#"
                                                                                        role="button"
                                                                                        data-playlist-id="1">Add to
                                                                                     playlist</a>
                                                                                 </li>
                                                                                 <li><a className="dropdown-item"
-                                                                                       href="javascript:void(0);"
+                                                                                       href="#"
                                                                                        role="button"
                                                                                        data-queue-id="1">Add to
                                                                                     queue</a>
                                                                                 </li>
                                                                                 <li><a className="dropdown-item"
-                                                                                       href="javascript:void(0);"
+                                                                                       href="#"
                                                                                        role="button"
                                                                                        data-next-id="1">Next to play</a>
                                                                                 </li>
                                                                                 <li><a className="dropdown-item"
-                                                                                       href="javascript:void(0);"
+                                                                                       href="#"
                                                                                        role="button">Share</a></li>
                                                                                 <li className="dropdown-divider"></li>
                                                                                 <li><a className="dropdown-item"
-                                                                                       href="javascript:void(0);"
+                                                                                       href="#"
                                                                                        role="button"
                                                                                        data-play-id="1">Play</a></li>
                                                                             </ul>
@@ -272,7 +272,7 @@ const BodySearch = () => {
                                 </div>
                             </div>
                             <div className="mt-5 text-center">
-                                <a href="javascript:void(0);" className="btn btn-primary"
+                                <a href="#" className="btn btn-primary"
                                    style={{marginBottom: "30px"}}>
                                     <div className="btn__wrap"><i className="ri-loader-3-fill"></i> <span
                                         onClick={loadMore}>Load more</span>
