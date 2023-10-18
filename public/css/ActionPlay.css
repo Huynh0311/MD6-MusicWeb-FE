@@ -1,8 +1,8 @@
-.iconify--mdi{
+.iconify--mdi {
     color: #000000 !important;
 }
 
-.body-player{
+.body-player {
     position: relative;
 }
 
@@ -15,6 +15,15 @@
     font-size: 40px;
     color: #000000 !important;
 }
+
+.prev {
+    cursor: pointer;
+}
+
+.next {
+    cursor: pointer;
+}
+
 .rhap_container {
     background: #f7f7f9;
 }
@@ -27,6 +36,7 @@
     color: #000000 !important;
 }
 
+
 .rhap_main-controls-button {
     color: #000000 !important;
 }
@@ -35,8 +45,12 @@
     color: #196EED !important;
 }
 
+.rhap_main-controls {
+    z-index: 999;
+}
+
 .rhap_rewind-button path,
-.rhap_forward-button path{
+.rhap_forward-button path {
     color: #000000 !important;
 }
 
@@ -45,7 +59,7 @@
     background-color: #196EED !important;
 }
 
-.rhap_progress-bar{
+.rhap_progress-bar {
     background-color: #8CB6F6 !important;
 }
 

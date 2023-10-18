@@ -215,26 +215,26 @@ const DetailSong = () => {
                                     <div className="d-flex flex-wrap mb-2"><span
                                         className="text-dark fs-4 fw-semi-bold pe-2">{currentSong && currentSong.nameSong}</span>
                                         <div className="dropstart d-inline-flex ms-auto"><a className="dropdown-link"
-                                                                                            href="javascript:void(0);"
+                                                                                            href="#"
                                                                                             role="button"
                                                                                             data-bs-toggle="dropdown"
                                                                                             aria-label="Cover options"
                                                                                             aria-expanded="false"><i
                                             className="ri-more-fill"></i></a>
                                             <ul className="dropdown-menu dropdown-menu-sm">
-                                                <li><a className="dropdown-item" href="javascript:void(0);"
+                                                <li><a className="dropdown-item" href="#"
                                                        role="button"
                                                        data-playlist-id="8">Add to playlist</a></li>
-                                                <li><a className="dropdown-item" href="javascript:void(0);"
+                                                <li><a className="dropdown-item" href="#"
                                                        role="button"
                                                        data-queue-id="8">Add to queue</a></li>
-                                                <li><a className="dropdown-item" href="javascript:void(0);"
+                                                <li><a className="dropdown-item" href="#"
                                                        role="button"
                                                        data-next-id="8">Next to play</a></li>
-                                                <li><a className="dropdown-item" href="javascript:void(0);"
+                                                <li><a className="dropdown-item" href="#"
                                                        role="button">Share</a></li>
                                                 <li className="dropdown-divider"></li>
-                                                <li><a className="dropdown-item" href="javascript:void(0);"
+                                                <li><a className="dropdown-item" href="#"
                                                        role="button"
                                                        data-play-id="8">Play</a></li>
                                             </ul>
@@ -270,7 +270,7 @@ const DetailSong = () => {
                                         </li>
                                         <li>
                                             {isLiked == 1 ?
-                                                (<a href="javascript:void(0);" role="button"
+                                                (<a href="#" role="button"
                                                     className="text-dark d-flex align-items-center"
                                                     aria-label="Favorite" data-favorite-id="1">
                                                     <i className="fa-sharp fa-solid fa-heart"
@@ -283,7 +283,7 @@ const DetailSong = () => {
                                                         likedQuantity != null ? likedQuantity : ''
                                                     }</span>
                                                 </a>) :
-                                                (<a href="javascript:void(0);" role="button"
+                                                (<a href="#" role="button"
                                                     className="text-dark d-flex align-items-center"
                                                     aria-label="Favorite" data-favorite-id="1"
                                                     onClick={likeClick}>
@@ -294,7 +294,7 @@ const DetailSong = () => {
                                                 }</span></a>)}
 
                                         </li>
-                                        <li><a href="javascript:void(0);" role="button"
+                                        <li><a href="#" role="button"
                                                className="text-dark d-flex align-items-center"
                                                aria-label="Download"><i className="ri-download-2-line"></i> <span
                                             className="ps-2 fw-medium">24</span></a></li>
@@ -331,35 +331,35 @@ const DetailSong = () => {
                                                             <div
                                                                 className="cover__options dropstart d-inline-flex ms-auto">
                                                                 <a
-                                                                    className="dropdown-link" href="javascript:void(0);"
+                                                                    className="dropdown-link" href="#"
                                                                     role="button"
                                                                     data-bs-toggle="dropdown" aria-label="Cover options"
                                                                     aria-expanded="false"><i
                                                                     className="ri-more-2-fill"></i></a>
                                                                 <ul className="dropdown-menu dropdown-menu-sm">
                                                                     <li><a className="dropdown-item"
-                                                                           href="javascript:void(0);"
+                                                                           href="#"
                                                                            role="button"
                                                                            data-favorite-id="1">Favorite</a></li>
                                                                     <li><a className="dropdown-item"
-                                                                           href="javascript:void(0);"
+                                                                           href="#"
                                                                            role="button"
                                                                            data-playlist-id="1">Add to playlist</a></li>
                                                                     <li><a className="dropdown-item"
-                                                                           href="javascript:void(0);"
+                                                                           href="#"
                                                                            role="button"
                                                                            data-queue-id="1">Add to queue</a></li>
                                                                     <li><a className="dropdown-item"
-                                                                           href="javascript:void(0);"
+                                                                           href="#"
                                                                            role="button"
                                                                            data-next-id="1">Next to play</a></li>
                                                                     <li><a className="dropdown-item"
-                                                                           href="javascript:void(0);"
+                                                                           href="#"
                                                                            role="button">Share</a>
                                                                     </li>
                                                                     <li className="dropdown-divider"></li>
                                                                     <li><a className="dropdown-item"
-                                                                           href="javascript:void(0);"
+                                                                           href="#"
                                                                            role="button"
                                                                            data-play-id="1">Play</a></li>
                                                                 </ul>
@@ -419,16 +419,18 @@ const DetailSong = () => {
                                             <div className="avatar avatar--lg align-items-start" key={cm.id}>
                                                 <div className="avatar__image"><img src={cm.account.img} alt="user"/>
                                                 </div>
-                                                <div className="avatar__content">
-                                                    <span className="avatar__title mb-1">{cm.account.name}</span>
-                                                    <span className="avatar__subtitle mb-2">{cm.timeComment}</span>
-                                                    <div className="text-warning d-flex mb-1">
-                                                        <i className="ri-star-s-fill"></i>
-                                                        <i className="ri-star-s-fill"></i>
-                                                        <i className="ri-star-s-fill"></i>
-                                                        <i className="ri-star-s-fill"></i>
-                                                    </div>
-                                                    <p>{cm.content}</p><a href="javascript:void(0);"
+                                                <div className="avatar__content"><span
+                                                    className="avatar__title mb-1">{cm.account.name}</span>
+                                                    <span
+                                                        className="avatar__subtitle mb-2">{cm.timeComment}</span>
+                                                    <div className="text-warning d-flex mb-1"><i
+                                                        className="ri-star-s-fill"></i>
+                                                        <i
+                                                            className="ri-star-s-fill"></i> <i
+                                                            className="ri-star-s-fill"></i>
+                                                        <i
+                                                            className="ri-star-s-fill"></i></div>
+                                                    <p>{cm.content}</p><a href="#"
                                                                           className="btn btn-link">
                                                         <div className="btn__wrap">
                                                             <i className="ri-reply-line fs-6"></i>
