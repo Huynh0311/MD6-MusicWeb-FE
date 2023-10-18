@@ -23,8 +23,8 @@ function Top5Songs() {
                 console.error('Lỗi khi lấy danh sách bài hát:', error);
             }
         }
-
         fetchData();
+        console.log(songs)
     }, [updateCurrentSongAndSongs, currentSong]);
     const handleToggleSongPlay = (songId) => {
         const updatedSongs = songs.map((song) => {

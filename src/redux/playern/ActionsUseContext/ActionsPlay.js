@@ -38,6 +38,12 @@ const ActionPlay = () => {
             isPlaying ? player.current.audio.current.play() : player.current.audio.current.pause();
         }, [isPlaying]);
 
+        const nextSong = () => {
+            let currentSongIndex = songs.findIndex((song) => song.id === currentSong.id);
+            let currentListSong = songs.slice(currentSongIndex);
+            currentListSong.shift();
+            updateCurrentSongAndSongs(currentListSong[0],songs);
+        }
         return (
             <div>
                     <div id="player">
@@ -66,6 +72,7 @@ const ActionPlay = () => {
                                                    preload={"metadata"}
                                                    className={"player-container"}
                                                    style={{height: "100%", boxShadow: "none",}}
+                                                   onEnded={nextSong}
                                     />
                                     <div className="prev_next">
                                         <BiSkipPrevious onClick={handlePreviousSongClick} className={"prev"}/>
