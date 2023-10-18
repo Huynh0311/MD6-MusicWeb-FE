@@ -54,7 +54,7 @@ export default function DetailPlaylist() {
                     <div className="row align-items-center">
                         <div className="col-xl-3 col-md-4">
                             <div className="cover cover--round">
-                                <div className="cover__image"><img src={playlist.imgPlaylist} alt={''}/>
+                                <div className="cover__image"><img src={playlist.playlistImg} alt={''}/>
                                 </div>
                             </div>
                         </div>

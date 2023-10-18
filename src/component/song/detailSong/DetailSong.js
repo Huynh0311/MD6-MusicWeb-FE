@@ -3,7 +3,6 @@ import {useNavigate, useParams} from "react-router-dom";
 import {getAllSongByGenresIDAPI, getSongByID, playSong} from "../../api/songService/SongService";
 import {getSongLikeQuantityAPI, isLikedAPI, likeClickAPI} from "../../api/LikesService/LikesService";
 import {getAllCommentBySongID, getAllCommentBySongIdAPI, sendCommentAPI} from "../../api/commentService/CommentService";
-import {logDOM} from "@testing-library/react";
 
 const DetailSong = () => {
     const navigate = useNavigate();
@@ -110,10 +109,13 @@ const DetailSong = () => {
         setSongCreateDate(songDateCreateObj);
     }
 
-    const setIsPlaying =  () => {
-        setIsPlay(!isPlay)
-            played(isPlay)
-    }
+    const setIsPlaying = () => {
+        setIsPlay((prevState) => {
+            const newIsPlayState = !prevState;
+            played(newIsPlayState);
+            return newIsPlayState;
+        });
+    };
 
     const played = async (isPlaying) => {
         if (isPlaying) {
@@ -165,7 +167,6 @@ const DetailSong = () => {
         <div>
             <div id="wrapper">
                 <main id="page_content">
-                    {console.log(isPlay)}
                     <div className="hero" style={{backgroundImage: "url(../../images/banner/song.jpg)"}}></div>
                     <div className="under-hero container">
                         <div className="section">
@@ -234,32 +235,38 @@ const DetailSong = () => {
                                     <ul className="info-list mb-5">
                                         <li>
                                             <div className="d-flex align-items-center">
-                                                <button type="button" id="play_all"
-                                                        className={isPlay ? "btn btn-icon btn-primary rounded-pill active" : "btn btn-icon btn-primary rounded-pill"}
+                                                <button type="button"
+                                                        className="btn btn-play btn-default btn-icon rounded-pill playing"
                                                         data-play-id={currentSong.id} onClick={setIsPlaying}>
-                                                    <i className={isPlay ? "ri-pause-fill icon-pause" : "ri-play-fill icon-play"}/>
+                                                    <i className="ri-play-fill icon-play"></i>
+                                                    <i className="ri-pause-fill icon-pause"></i>
                                                 </button>
                                                 <span className="ps-2 fw-semi-bold">{play}</span></div>
                                         </li>
                                         <li>
-                                            {isLiked == 1 ? (<a href="javascript:void(0);" role="button"
-                                                                className="text-dark d-flex align-items-center"
-                                                                aria-label="Favorite" data-favorite-id="1">
-                                                <i className="fa-sharp fa-solid fa-heart"
-                                                   style={{color: "#ff0000", fontSize: "24px"}} onClick={likeClick}></i>
-                                                <i className="ri-heart-fill heart-fill"></i> <span
-                                                className="ps-2 fw-medium">{
-                                                likedQuantity != null ? likedQuantity : ''
-                                            }</span></a>) : (<a href="javascript:void(0);" role="button"
-                                                                className="text-dark d-flex align-items-center"
-                                                                aria-label="Favorite" data-favorite-id="1"
-                                                                onClick={likeClick}>
-
-                                                <i className="ri-heart-line heart-empty"></i>
-                                                <i className="ri-heart-fill heart-fill"></i> <span
-                                                className="ps-2 fw-medium">{
-                                                likedQuantity != null ? likedQuantity : ''
-                                            }</span></a>)}
+                                            {isLiked == 1 ?
+                                                (<a href="javascript:void(0);" role="button"
+                                                    className="text-dark d-flex align-items-center"
+                                                    aria-label="Favorite" data-favorite-id="1">
+                                                    <i className="fa-sharp fa-solid fa-heart"
+                                                       style={{color: "#ff0000", fontSize: "24px"}}
+                                                       onClick={likeClick}>
+                                                    </i>
+                                                    <i className="ri-heart-fill heart-fill"></i>
+                                                    <span
+                                                        className="ps-2 fw-medium">{
+                                                        likedQuantity != null ? likedQuantity : ''
+                                                    }</span>
+                                                </a>) :
+                                                (<a href="javascript:void(0);" role="button"
+                                                    className="text-dark d-flex align-items-center"
+                                                    aria-label="Favorite" data-favorite-id="1"
+                                                    onClick={likeClick}>
+                                                    <i className="ri-heart-line heart-empty"></i>
+                                                    <i className="ri-heart-fill heart-fill"></i> <span
+                                                    className="ps-2 fw-medium">{
+                                                    likedQuantity != null ? likedQuantity : ''
+                                                }</span></a>)}
 
                                         </li>
                                         <li><a href="javascript:void(0);" role="button"

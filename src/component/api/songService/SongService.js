@@ -20,10 +20,25 @@ const playSong = (id) => {
 const getAllSongByGenresIDAPI = (id) => {
     return axios.get(`songs/getByGenresID/${id}`)
 }
+
+const searchListSongByName = (name) => {
+    return axios.get(`songs/findByName/${name}`)
+}
+
+const searchListSongByNameSinger = (name) => {
+    return axios.get(`songs/findBySingerName/${name}`)
+}
+
+const searchListSongByNamePlaylist = (name) => {
+    return axios.get(`songs/findByPlaylist/${name}`)
+}
 export {
     addSongSV,
     getAllGenres,
     getSongByID,
     playSong,
-    getAllSongByGenresIDAPI
+    getAllSongByGenresIDAPI,
+    searchListSongByName,
+    searchListSongByNameSinger,
+    searchListSongByNamePlaylist
 }

@@ -37,7 +37,6 @@ const LoginComponent = () => {
                         localStorage.setItem("data",data)
                         navigate('/');
                         window.location.reload()
-
                     })
                     .catch(error => {
                         toast.error('Đăng nhập thất bại', {

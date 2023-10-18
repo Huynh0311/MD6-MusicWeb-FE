@@ -43,7 +43,7 @@ export default function ListPlaylist(){
                                 <div className="cover cover--round">
                                     <div className="cover__image">
                                         <Link to={`/detailPlaylist/${item.id}`}>
-                                            <img src={item.imgPlaylist} alt="DJ Remix" />
+                                            <img src={item.playlistImg} alt="DJ Remix" />
                                         </Link>
                                         <div className="cover__image__content">
                                             <Link to={`/detailPlaylist/${item.id}`} className="cover__title mb-1 fs-6 text-truncate">{item.namePlaylist}</Link>

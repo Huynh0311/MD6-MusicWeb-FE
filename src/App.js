@@ -18,17 +18,16 @@ import EditSong from "./component/song/editSong/EditSong";
 import 'react-toastify/dist/ReactToastify.css';
 import Page from "./component/page";
 import Component404 from "./component/Component404";
-import SearchComponent from "./component/SearchComponent";
 import DetailPlaylist from "./component/playlist/DetailPlaylist";
+import SearchComponent from "./component/song/seach/SearchComponent";
+import BodySearch from "./component/song/seach/BodySearch";
 
 
 function App() {
 
     return (
         <div className="App">
-           <NavbarComponent/>
-            <Loader/>
-            <SearchComponent/>
+
             <Routes>
                 <Route path="/" element={<Page/>}>
                     <Route path={"/"} element={<HomeComponent/>}/>
@@ -41,6 +40,7 @@ function App() {
                     <Route path="/login" element={<LoginComponent/>}/>
                     <Route path='/song' element={<ListSong/>}></Route>
                     <Route path={"/song/edit/:songid"} element={<EditSong />}></Route>
+                    <Route path='/song/search' element={<BodySearch/>}></Route>
                 </Route>
             </Routes>
             <ToastContainer
