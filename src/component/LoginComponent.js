@@ -41,7 +41,6 @@ const LoginComponent = () => {
                         dispatch(saveAccount(response.data));
                         navigate('/');
                         window.location.reload()
-
                     })
                     .catch(error => {
                         toast.error('Đăng nhập thất bại');

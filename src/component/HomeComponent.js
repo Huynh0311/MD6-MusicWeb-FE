@@ -3,6 +3,7 @@ import {Link, useNavigate} from "react-router-dom";
 import SongList from "./player/SongList";
 import TopSong from "./player/TopSong";
 import MusicPlayer from "./player/MusicPlayer";
+import TopPlaylist from "./playlist/TopPlaylist";
 
 
 const HomeComponent = () => {
@@ -737,87 +738,7 @@ const HomeComponent = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="section">
-                            <div className="section__head">
-                                <div className="flex-grow-1"><span
-                                    className="section__subtitle">Collection to listen</span>
-                                    <h3 className="mb-0">Best <span className="text-primary">Playlist</span></h3></div>
-                                <a href="albums.html" className="btn btn-link">View All</a></div>
-                            <div className="swiper-carousel">
-                                <div className="swiper" data-swiper-slides="4" data-swiper-autoplay="true">
-                                    <div className="swiper-wrapper">
-                                        <div className="swiper-slide">
-                                            <div className="cover cover--round">
-                                                <div className="cover__image"><a href="album-details.html"><img
-                                                    src="images/background/horizontal/1.jpg" alt="DJ Remix"/></a>
-                                                    <div className="cover__image__content"><a href="album-details.html"
-                                                                                              className="cover__title mb-1 fs-6 text-truncate">DJ
-                                                        Remix</a> <span className="cover__subtitle">10 Songs | 10 Favorites</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="swiper-slide">
-                                            <div className="cover cover--round">
-                                                <div className="cover__image"><a href="album-details.html"><img
-                                                    src="images/background/horizontal/2.jpg" alt="Rock Band"/></a>
-                                                    <div className="cover__image__content"><a href="album-details.html"
-                                                                                              className="cover__title mb-1 fs-6 text-truncate">Rock
-                                                        Band</a> <span className="cover__subtitle">14 Songs | 12 Favorites</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="swiper-slide">
-                                            <div className="cover cover--round">
-                                                <div className="cover__image"><a href="album-details.html"><img
-                                                    src="images/background/horizontal/3.jpg" alt="Solo Special"/></a>
-                                                    <div className="cover__image__content"><a href="album-details.html"
-                                                                                              className="cover__title mb-1 fs-6 text-truncate">Solo
-                                                        Special</a> <span className="cover__subtitle">21 Songs | 45 Favorites</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="swiper-slide">
-                                            <div className="cover cover--round">
-                                                <div className="cover__image"><a href="album-details.html"><img
-                                                    src="images/background/horizontal/4.jpg" alt="Romantic"/></a>
-                                                    <div className="cover__image__content"><a href="album-details.html"
-                                                                                              className="cover__title mb-1 fs-6 text-truncate">Romantic</a>
-                                                        <span className="cover__subtitle">12 Songs | 75 Favorites</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="swiper-slide">
-                                            <div className="cover cover--round">
-                                                <div className="cover__image"><a href="album-details.html"><img
-                                                    src="images/background/horizontal/5.jpg" alt="GYM"/></a>
-                                                    <div className="cover__image__content"><a href="album-details.html"
-                                                                                              className="cover__title mb-1 fs-6 text-truncate">GYM</a>
-                                                        <span className="cover__subtitle">16 Songs | 32 Favorites</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="swiper-slide">
-                                            <div className="cover cover--round">
-                                                <div className="cover__image"><a href="album-details.html"><img
-                                                    src="images/background/horizontal/6.jpg" alt="Retro Special"/></a>
-                                                    <div className="cover__image__content"><a href="album-details.html"
-                                                                                              className="cover__title mb-1 fs-6 text-truncate">Retro
-                                                        Special</a> <span className="cover__subtitle">34 Songs | 69 Favorites</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="swiper-button-prev btn-default rounded-pill"></div>
-                                <div className="swiper-button-next btn-default rounded-pill"></div>
-                            </div>
-                        </div>
+                        <TopPlaylist/>
                         <div className="section">
                             <div className="section__head">
                                 <div className="flex-grow-1"><span className="section__subtitle">Listen live now</span>
