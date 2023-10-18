@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useNavigate, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {getAllSongByGenresIDAPI, getSongByID, playSong} from "../../api/songService/SongService";
 import {getSongLikeQuantityAPI, isLikedAPI, likeClickAPI} from "../../api/LikesService/LikesService";
 import {getAllCommentBySongID, getAllCommentBySongIdAPI, sendCommentAPI} from "../../api/commentService/CommentService";
@@ -134,14 +134,6 @@ const DetailSong = () => {
             const res = await playSong(id)
             setPlay(res.data)
         }
-    }
-
-
-    if (currentSongDT.nameSong == null) {
-    } else {
-        document.querySelector('[data-amplitude-song-info="name"]').textContent = currentSongDT.nameSong;
-        document.querySelector('[data-amplitude-song-info="artist"]').textContent = currentSongDT.nameSinger;
-        document.querySelector('[data-amplitude-song-info="cover_art_url"]').setAttribute("src", currentSongDT.imgSong)
     }
 
     const handleInputComment = (e) => {
@@ -301,7 +293,7 @@ const DetailSong = () => {
                                             <div className="d-flex align-items-center">
                                                 <button type="button"
                                                         className="btn btn-play btn-default btn-icon rounded-pill playing"
-                                                        data-play-id={currentSongDT.id} onClick={setIsPlaying}>
+                                                        data-play-id={currentSongDT.id}>
                                                     <i className="ri-play-fill icon-play"></i>
                                                     <i className="ri-pause-fill icon-pause"></i>
                                                 </button>
@@ -322,7 +314,7 @@ const DetailSong = () => {
                                                         likedQuantity != null ? likedQuantity : ''
                                                     }</span>
                                                 </a>) :
-                                                (<a role="button"
+                                                (<div role="button"
                                                     className="text-dark d-flex align-items-center"
                                                     aria-label="Favorite" data-favorite-id="1"
                                                     onClick={likeClick}>
@@ -330,7 +322,7 @@ const DetailSong = () => {
                                                     <i className="ri-heart-fill heart-fill"></i> <span
                                                     className="ps-2 fw-medium">{
                                                     likedQuantity != null ? likedQuantity : ''
-                                                }</span></a>)}
+                                                }</span></div>)}
 
                                         </li>
                                         <li><a href="#" role="button"
@@ -484,9 +476,10 @@ const DetailSong = () => {
                                                             className="ri-star-s-fill"></i></div>
                                                     <p>{cm.content}</p><a href="#"
                                                                           className="btn btn-link">
-                                                        <div className="btn__wrap"><i
-                                                            className="ri-reply-line fs-6"></i>
-                                                            <span>Reply</span></div>
+                                                        <div className="btn__wrap">
+                                                            <i className="ri-reply-line fs-6"></i>
+                                                            <span>Reply</span>
+                                                        </div>
                                                     </a>
                                                 </div>
                                             </div>

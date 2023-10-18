@@ -175,7 +175,7 @@ const BodySearch = () => {
                                                             </div>
                                                             <ul className="list__option">
                                                                 <li>
-                                                                    <a href="#" role="button"
+                                                                    <a role="button"
                                                                        className="d-inline-flex"
                                                                        aria-label="Favorite" data-favorite-id={song.id}>
                                                                         {song.isLiked == 1 ? (
@@ -241,7 +241,7 @@ const BodySearch = () => {
                                                                     <AiOutlinePauseCircle
                                                                         onClick={() => {
                                                                             handleToggleSongPlay(song.id);
-                                                                            updateCurrentSongAndSongs(song, searchList);
+                                                                            updateCurrentSongAndSongs(song, songList);
                                                                         }}
                                                                         style={{fontSize: "30px"}}
                                                                     />
@@ -249,7 +249,7 @@ const BodySearch = () => {
                                                                     <AiOutlinePlayCircle
                                                                         onClick={() => {
                                                                             handleToggleSongPlay(song.id);
-                                                                            updateCurrentSongAndSongs(song, searchList);
+                                                                            updateCurrentSongAndSongs(song, songList);
                                                                         }}
                                                                         style={{fontSize: "30px"}}
                                                                     />
