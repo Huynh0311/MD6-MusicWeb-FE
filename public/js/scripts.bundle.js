@@ -253,6 +253,9 @@ var Dashboard = function () {
 $(document).ready((function () {
     Dashboard.init()
 }));
+
+//----------------------------------------------------------------
+
 var Player = function () {
     var e = "active", t = $("body"), a = $("#playlist"), i = [], n = Amplitude.getConfig(),
         r = {playPause: !1, nextPrev: !1}, l = function (e) {
@@ -387,6 +390,9 @@ var Player = function () {
         }
     }
 }();
+
+//--------------------------------------------------------------------------------------------------------------------------------
+
 $(document).ready((function () {
     Player.init()
 })), function (e, t, a, i) {

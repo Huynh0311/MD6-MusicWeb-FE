@@ -1,9 +1,10 @@
-/*.card-listsong {*/
-/*    background-color: #fff1e3;*/
-/*}*/
 
 .card header{
     background-color: orange;
+}
+
+.card-title {
+    text-align: center;
 }
 
 .btn{
@@ -30,7 +31,6 @@
 
 
 .custom-button{
-    padding-top: 20px;
     padding-left: 15px;
     padding-right: 15px;
 }
@@ -45,11 +45,29 @@
 }
 
 .count-numb-rs{
-    text-align: center;
+
     counter-reset: my-sec-counter;
 }
 
 .count-numb::before {
     counter-increment: my-sec-counter;
     content:  counter(my-sec-counter) " ";
+}
+
+.container-fluid {
+    position: absolute;
+    top: 30%;
+    left: 16%;
+    width: 82%;
+    padding-right: var(--bs-gutter-x, 10px);
+    padding-left: var(--bs-gutter-x, 10px);
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.col-md-10 {
+    position: relative;
+    top: -80px;
+    left: 130px;
+
 }
