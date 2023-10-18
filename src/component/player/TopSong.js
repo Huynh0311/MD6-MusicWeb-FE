@@ -5,6 +5,7 @@ import {
     AudioPlayerContext,
     useAudioPlayer
 } from '../../redux/playern/ActionsUseContext/AudioPlayerProvider';
+import {BsFillPlayFill, BsPauseFill} from "react-icons/bs";
 
 function Top5Songs() {
     const {currentSong, updateCurrentSongAndSongs} = useAudioPlayer();
@@ -49,23 +50,6 @@ function Top5Songs() {
             <ul>
                 {songs.map((song) => (
                     <div className="list" key={song.id}>
-                        {song.isPlaying ? (
-                            <AiOutlinePauseCircle
-                                onClick={() => {
-                                    handleToggleSongPlay(song.id);
-                                    updateCurrentSongAndSongs(song, songs);
-                                }}
-                                style={{fontSize: "30px"}}
-                            />
-                        ) : (
-                            <AiOutlinePlayCircle
-                                onClick={() => {
-                                    handleToggleSongPlay(song.id);
-                                    updateCurrentSongAndSongs(song, songs);
-                                }}
-                                style={{fontSize: "30px"}}
-                            />
-                        )}
                         <div
                             className="list__item"
                             data-song-id={song.id}
@@ -77,15 +61,26 @@ function Top5Songs() {
                         >
                             <div className="list__cover">
                                 <img src={song.imgSong} alt="Shack your butty"/>
-                                <a
-                                    href="#"
-                                    className="btn btn-play btn-sm btn-default btn-icon rounded-pill"
-                                    data-play-id={song.id}
-                                    aria-label="Play pause"
-                                >
-                                    <i className="ri-play-fill icon-play"></i>{' '}<i
-                                    className="ri-pause-fill icon-pause"></i>
-                                </a>
+                                <div  className="btn btn-play btn-sm btn-default btn-icon rounded-pill"
+                                    data-play-id="" aria-label="Play pause" >
+                                    {song.isPlaying ? (
+                                        <BsPauseFill role='button'
+                                                     onClick={() => {
+                                                         handleToggleSongPlay(song.id);
+                                                         updateCurrentSongAndSongs(song, songs);
+                                                     }}
+                                                     style={{fontSize: "30px"}}
+                                        />
+                                    ) : (
+                                        <BsFillPlayFill role='button'
+                                                        onClick={() => {
+                                                            handleToggleSongPlay(song.id);
+                                                            updateCurrentSongAndSongs(song, songs);
+                                                        }}
+                                                        style={{fontSize: "30px"}}
+                                        />
+                                    )}
+                                </div>
                             </div>
                             <div className="list__content">
                                 <a href="song-details.html" className="list__title text-truncate">

@@ -12,7 +12,7 @@ const ActionPlay = () => {
         if (currentIndex < songs.length - 1) {
             const nextSong = songs[currentIndex + 1];
             updateCurrentSongAndSongs(nextSong, songs);
-        } else if (currentIndex == songs.length - 1) {
+        } else if (currentIndex === songs.length - 1) {
             const nextSong = songs[0];
             updateCurrentSongAndSongs(nextSong, songs);
         } else {
@@ -23,11 +23,11 @@ const ActionPlay = () => {
     };
 
     const handlePreviousSongClick = () => {
-        const currentIndex = songs.findIndex((song) => song.id == currentSong.id)
+        const currentIndex = songs.findIndex((song) => song.id === currentSong.id)
         if (currentIndex > 0) {
             const previousSong = songs[currentIndex - 1];
             updateCurrentSongAndSongs(previousSong, songs);
-        } else if (currentIndex == 0) {
+        } else if (currentIndex === 0) {
             const previousSong = songs[songs.length - 1];
             updateCurrentSongAndSongs(previousSong, songs);
         }

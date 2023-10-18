@@ -10,13 +10,14 @@ import {
 import {BsFillPlayFill, BsPauseFill} from "react-icons/bs";
 
 function SongList() {
+
     const [songs, setSongs] = useState([]);
     const [songsPerPage] = useState(4);
     const [currentPage, setCurrentPage] = useState(1);
     const dispatch = useDispatch();
-
     const {currentSong, updateCurrentSongAndSongs} = useAudioPlayer();
     const {isPlaying, handlePlayToggle} = useContext(AudioPlayerContext);
+
     useEffect(() => {
         async function fetchData() {
             try {
@@ -30,7 +31,6 @@ function SongList() {
                 console.error('Lỗi khi lấy danh sách bài hát:', error);
             }
         }
-
         fetchData();
     }, [updateCurrentSongAndSongs, currentSong]); // The empty dependency array ensures the effect runs only once (like componentDidMount)
 
@@ -140,19 +140,19 @@ function SongList() {
                                         {/*<i className="ri-pause-fill icon-pause"></i>*/}
                                         {song.isPlaying ? (
                                             <BsPauseFill role='button'
-                                                                  onClick={() => {
-                                                                      handleToggleSongPlay(song.id);
-                                                                      updateCurrentSongAndSongs(song, songs);
-                                                                  }}
-                                                                  style={{fontSize: "30px"}}
+                                                         onClick={() => {
+                                                             handleToggleSongPlay(song.id);
+                                                             updateCurrentSongAndSongs(song, songs);
+                                                         }}
+                                                         style={{fontSize: "30px"}}
                                             />
                                         ) : (
                                             <BsFillPlayFill role='button'
-                                                                 onClick={() => {
-                                                                     handleToggleSongPlay(song.id);
-                                                                     updateCurrentSongAndSongs(song, songs);
-                                                                 }}
-                                                                 style={{fontSize: "30px"}}
+                                                            onClick={() => {
+                                                                handleToggleSongPlay(song.id);
+                                                                updateCurrentSongAndSongs(song, songs);
+                                                            }}
+                                                            style={{fontSize: "30px"}}
                                             />
                                         )}
                                     </button>
