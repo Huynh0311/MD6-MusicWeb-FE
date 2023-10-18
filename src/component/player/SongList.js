@@ -1,9 +1,13 @@
-
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import axiosInstance from '../api/service/axios-instance';
 import {Link} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {saveSong} from "../../redux/actions";
+import {
+    AudioPlayerContext,
+    useAudioPlayer
+} from "../../redux/playern/ActionsUseContext/AudioPlayerProvider";
+import {BsFillPlayFill, BsPauseFill} from "react-icons/bs";
 
 function SongList() {
     const [songs, setSongs] = useState([]);
@@ -11,19 +15,26 @@ function SongList() {
     const [currentPage, setCurrentPage] = useState(1);
     const dispatch = useDispatch();
 
+    const {currentSong, updateCurrentSongAndSongs} = useAudioPlayer();
+    const {isPlaying, handlePlayToggle} = useContext(AudioPlayerContext);
     useEffect(() => {
         async function fetchData() {
             try {
                 const response = await axiosInstance.get('/songs/getall');
-                setSongs(response.data);
+                const songs = response.data.map((song) => ({
+                    ...song,
+                    isPlaying: currentSong && currentSong.id === song.id ? isPlaying : false,
+                }));
+                setSongs(songs);
             } catch (error) {
                 console.error('Lỗi khi lấy danh sách bài hát:', error);
             }
         }
-        fetchData();
-    }, []); // The empty dependency array ensures the effect runs only once (like componentDidMount)
 
-    const addToQueue = (song) =>{
+        fetchData();
+    }, [updateCurrentSongAndSongs, currentSong]); // The empty dependency array ensures the effect runs only once (like componentDidMount)
+
+    const addToQueue = (song) => {
         dispatch(saveSong(song));
     }
 
@@ -40,12 +51,30 @@ function SongList() {
     const currentSongs = songs.slice(indexOfFirstSong, indexOfLastSong);
 
     const pageCount = calculatePageCount();
+    const handleToggleSongPlay = (songId) => {
+        const updatedSongs = songs.map((song) => {
+            if (song.id === songId) {
+                const newIsPlaying = !song.isPlaying;
+                song.isPlaying = newIsPlaying;
+                if (newIsPlaying) {
+                    handlePlayToggle(true);
+                } else {
+                    handlePlayToggle(false);
+                }
+            } else {
+                song.isPlaying = false;
+            }
+            return song;
+        });
+        setSongs(updatedSongs);
+    };
 
     return (
         <div className="container">
             <div className="row">
                 {currentSongs.map((song) => (
                     <div className="col-lg-3 col-md-4 col-sm-6" key={song.id}>
+
                         <div className="song-card">
                             <div className="cover cover--round" data-song-id={song.id}
                                  data-song-name={song.nameSong}
@@ -79,9 +108,9 @@ function SongList() {
                                             </li>
                                             <li>
                                                 <p className="dropdown-item"
-                                                   // role="button"
-                                                   // data-queue-id="1"
-                                                onClick={() => addToQueue(song)}
+                                                   role="button"
+                                                    // data-queue-id="1"
+                                                   onClick={() => addToQueue(song)}
                                                 >Add to queue</p>
                                             </li>
                                             <li>
@@ -104,12 +133,29 @@ function SongList() {
                                 </div>
 
                                 <div className="cover__image">
-                                    <img src={song.imgSong} alt={song.nameSong} />
+                                    <img src={song.imgSong} alt={song.nameSong}/>
                                     <button type="button"
                                             className="btn btn-play btn-default btn-icon rounded-pill"
-                                            data-play-id={song.id}>
-                                        <i className="ri-play-fill icon-play"></i>
-                                        <i className="ri-pause-fill icon-pause"></i>
+                                            data-play-id="">
+                                        {/*<i className="ri-play-fill icon-play"></i>*/}
+                                        {/*<i className="ri-pause-fill icon-pause"></i>*/}
+                                        {song.isPlaying ? (
+                                            <BsPauseFill
+                                                onClick={() => {
+                                                    handleToggleSongPlay(song.id);
+                                                    updateCurrentSongAndSongs(song, songs);
+                                                }}
+                                                style={{fontSize: "30px"}}
+                                            />
+                                        ) : (
+                                            <BsFillPlayFill
+                                                onClick={() => {
+                                                    handleToggleSongPlay(song.id);
+                                                    updateCurrentSongAndSongs(song, songs);
+                                                }}
+                                                style={{fontSize: "30px"}}
+                                            />
+                                        )}
                                     </button>
                                 </div>
 
@@ -129,7 +175,7 @@ function SongList() {
                 ))}
             </div>
             <div className="pagination">
-                {Array.from({ length: pageCount }, (_, index) => (
+                {Array.from({length: pageCount}, (_, index) => (
                     <button
                         key={index + 1}
                         className={`pagination-button ${currentPage === index + 1 ? 'active' : ''}`}

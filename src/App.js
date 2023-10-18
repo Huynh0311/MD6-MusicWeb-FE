@@ -20,6 +20,7 @@ import SearchComponent from "./component/song/seach/SearchComponent";
 import BodySearch from "./component/song/seach/BodySearch";
 import ListSongFavorite from "./component/song/listSong/ListSongFavorite";
 import {useSelector} from "react-redux";
+import ActionsPlaycopy from "./redux/playern/ActionsUseContext/ActionsPlaycopy";
 
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
                     <Route path='/song/search' element={<BodySearch/>}></Route>
                 </Route>
                 <Route path={'*'} element={<Component404/>}></Route>
+                <Route path={'/test'} element={<ActionsPlaycopy/>}></Route>
             </Routes>
             <ToastContainer
                 position="top-center"

@@ -3,6 +3,10 @@ import {Link, useNavigate, useParams} from "react-router-dom";
 import {getAllSongByGenresIDAPI, getSongByID, playSong} from "../../api/songService/SongService";
 import {getSongLikeQuantityAPI, isLikedAPI, likeClickAPI} from "../../api/LikesService/LikesService";
 import {getAllCommentBySongID, getAllCommentBySongIdAPI, sendCommentAPI} from "../../api/commentService/CommentService";
+import BodySearch from "../seach/BodySearch";
+import {AiOutlinePauseCircle, AiOutlinePlayCircle} from "react-icons/ai";
+import {AudioPlayerContext} from "../../../redux/playern/ActionsUseContext/AudioPlayerProvider";
+import {useContext} from "react";
 
 const DetailSong = () => {
     const navigate = useNavigate();
@@ -87,7 +91,7 @@ const DetailSong = () => {
     const likeClick = () => {
         if (account !== null) {
             if (like.account != null && like.song != null) {
-                likeClickAPI(like).then(res => {
+                likeClickAPI(id).then(res => {
                     setIsLiked(res.data)
                     getLikeQuantity();
                 })
@@ -124,14 +128,6 @@ const DetailSong = () => {
         }
     }
 
-
-    if (currentSong.nameSong == null) {
-    } else {
-        document.querySelector('[data-amplitude-song-info="name"]').textContent = currentSong.nameSong;
-        document.querySelector('[data-amplitude-song-info="artist"]').textContent = currentSong.nameSinger;
-        document.querySelector('[data-amplitude-song-info="cover_art_url"]').setAttribute("src", currentSong.imgSong)
-    }
-
     const handleInputComment = (e) => {
         setComment(e.target.value);
     }
@@ -163,6 +159,34 @@ const DetailSong = () => {
         })
     }
 
+    //Hải viết tạm test Bài hát
+    const PlayButton = () => {
+        const [isPlaying, setIsPlaying] = useState(false);
+        const audioPlayerContext = useContext(AudioPlayerContext);
+
+        const handleSongClick = (song) => {
+            setIsPlaying(!isPlaying);
+            const {updateCurrentSongAndSongs, handlePlayToggle} = audioPlayerContext;
+            updateCurrentSongAndSongs(song);
+            handlePlayToggle(!isPlaying)
+        };
+
+        if (isPlaying) {
+            return (
+                <AiOutlinePauseCircle
+                    onClick={() => handleSongClick(like.song)}
+                    style={{fontSize: '30px'}}
+                />
+            );
+        } else {
+            return (
+                <AiOutlinePlayCircle
+                    onClick={() => handleSongClick(like.song)}
+                    style={{fontSize: '30px'}}
+                />
+            );
+        }
+    };
     return (
         <div>
             <div id="wrapper">
@@ -170,10 +194,11 @@ const DetailSong = () => {
                     <div className="hero" style={{backgroundImage: "url(../../images/banner/song.jpg)"}}></div>
                     <div className="under-hero container">
                         <div className="section">
+                            <PlayButton/>
                             <div className="row" data-song-id={currentSong.id} data-song-name={currentSong.nameSong}
                                  data-song-artist={currentSong.nameSinger}
                                  data-song-album="Sadness" data-song-url={currentSong.pathSong}
-                                 data-song-cover="images/cover/small/8.jpg">
+                                 data-song-cover={currentSong.imgSong}>
                                 <div className="col-xl-3 col-md-4">
 
                                     <div className="cover cover--round">
@@ -294,9 +319,9 @@ const DetailSong = () => {
                                                 <div className="swiper-slide" key={rs.id}>
                                                     <div className="cover cover--round" data-song-id={rs.id}
                                                          data-song-name={rs.nameSong}
-                                                         data-song-artist="Arebica Luna" data-song-album="Mummy"
+                                                         data-song-artist={rs.nameSinger} data-song-album="Mummy"
                                                          data-song-url={rs.pathSong}
-                                                         data-song-cover={rs.pathSong}>
+                                                         data-song-cover={rs.imgSong}>
                                                         <div className="cover__head">
                                                             <ul className="cover__label d-flex">
                                                                 <li><span className="badge rounded-pill bg-danger"><i
@@ -422,6 +447,7 @@ const DetailSong = () => {
                     </div>
                 </main>
             </div>
+
         </div>
     );
 }
