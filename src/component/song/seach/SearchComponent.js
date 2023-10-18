@@ -1,26 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import {Link, useNavigate} from "react-router-dom";
 import {searchListSongByName} from "../../api/songService/SongService";
+import {useSelector} from "react-redux";
+import _ from "lodash";
 
 const SearchComponent = () => {
-    const [account, setAccount] = useState(localStorage.getItem("data"));
-    const loggedIn = isLoggedIn();
+    const accountLogin = useSelector(state => state.account);
     const navigate = useNavigate();
     const [searchSong, setSearchSong] = useState([]);
     const [searchInput, setSearchInput] = useState();
-
-    function isLoggedIn() {
-        return account ? true : false;
-    }
 
     const logOut = () => {
         localStorage.clear();
         navigate("/");
         window.location.reload()
-    }
-    let accounts = null;
-    if (account) {
-        accounts = JSON.parse(account);
     }
 
     const handleSearchInput = (e) => {
@@ -54,23 +47,23 @@ const SearchComponent = () => {
                             />
                             </form>
                             <div className="d-flex align-items-center">
-                                {loggedIn ? (
+                                {!_.isEmpty(accountLogin) ? (
                                     <div className="dropdown ms-3 ms-sm-4"><a href="#"
                                                                               className="avatar header-text"
                                                                               role="button" id="user_menu"
                                                                               data-bs-toggle="dropdown"
                                                                               aria-expanded="false">
-                                        <div className="avatar__image"><img src={accounts.img} alt="user"/>
+                                        <div className="avatar__image"><img src={accountLogin.img} alt="user"/>
                                         </div>
-                                        <span className="ps-2 d-none d-sm-block">{accounts.name}</span></a>
+                                        <span className="ps-2 d-none d-sm-block">{accountLogin.name}</span></a>
                                         <ul className="dropdown-menu dropdown-menu-md dropdown-menu-end"
                                             aria-labelledby="user_menu">
                                             <li>
                                                 <div className="py-2 px-3 avatar avatar--lg">
-                                                    <div className="avatar__image"><img src={accounts.img}
+                                                    <div className="avatar__image"><img src={accountLogin.img}
                                                                                         alt="user"/></div>
                                                     <div className="avatar__content"><span
-                                                        className="avatar__title">{accounts.name}</span>
+                                                        className="avatar__title">{accountLogin.name}</span>
                                                         <span className="avatar__subtitle">Artist</span></div>
                                                 </div>
                                             </li>

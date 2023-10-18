@@ -1,12 +1,18 @@
 import React from 'react';
 import {Outlet} from "react-router-dom";
-import MusicPlayer from "./player/MusicPlayer";
+import NavbarComponent from "./navbarComponent";
+import Loader from "./Loader";
+import SearchComponent from "./song/seach/SearchComponent";
+import ActionPlay from "../redux/playern/ActionsUseContext/ActionsPlay";
 
 const Page = () => {
     return (
         <div>
+            <NavbarComponent/>
+            <Loader/>
+            <SearchComponent/>
             <Outlet></Outlet>
-            <MusicPlayer/>
+            <ActionPlay/>
         </div>
     );
 };

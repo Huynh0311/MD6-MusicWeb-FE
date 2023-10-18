@@ -21,6 +21,11 @@ const getAllSongByGenresIDAPI = (id) => {
     return axios.get(`songs/getByGenresID/${id}`)
 }
 
+const findListSongFavorite = () =>{
+    return axios.get(`apiAccount/favorites`)
+}
+
+
 const searchListSongByName = (name) => {
     return axios.get(`songs/findByName/${name}`)
 }
@@ -38,6 +43,7 @@ export {
     getSongByID,
     playSong,
     getAllSongByGenresIDAPI,
+    findListSongFavorite,
     searchListSongByName,
     searchListSongByNameSinger,
     searchListSongByNamePlaylist

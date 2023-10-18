@@ -5,15 +5,17 @@ import {ErrorMessage, Field, Form, Formik} from "formik";
 import {toast} from "react-toastify";
 import {signInWithPopup} from 'firebase/auth';
 import {auth, provider} from "../firebase/Firebase";
+import {useDispatch} from "react-redux";
+import {saveAccount} from "../redux/actions";
 
 const LoginComponent = () => {
     const [value,setValue] = useState('')
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const signInWithGoogle = () => {
         signInWithPopup(auth, provider).then((data) =>{
             localStorage.setItem("token",data.user.accessToken)
-            console.log(data)
             setValue(data.user.email)
             const values = {
                 email : data.user.email,
@@ -25,9 +27,9 @@ const LoginComponent = () => {
                 }
             };
             axios.post('http://localhost:8080/api/auth/check',values).then(re => {
-                console.log(re.data)
                 const data = JSON.stringify(re.data);
                 localStorage.setItem("data",data)
+                dispatch(saveAccount(re.data));
                 navigate('/')
                 window.location.reload()
             }).catch(er=>{
@@ -35,21 +37,13 @@ const LoginComponent = () => {
                     .then(response => {
                         const data = JSON.stringify(response.data);
                         localStorage.setItem("data",data)
+                        dispatch(saveAccount(response.data));
                         navigate('/');
                         window.location.reload()
 
                     })
                     .catch(error => {
-                        toast.error('Đăng nhập thất bại', {
-                            position: "top-center",
-                            autoClose: 1000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                            theme: "light",
-                        });
+                        toast.error('Đăng nhập thất bại');
                     })
             })
         })
@@ -80,30 +74,18 @@ const LoginComponent = () => {
                 email: '',
                 password: '',
             }} onSubmit={(values) => {
-                console.log(values)
                 axios.post('http://localhost:8080/api/auth/login', values, {
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': 'Bearer <token>',
                     }
                 }).then(res => {
-                    console.log(res.data)
                     const data = JSON.stringify(res.data);
                     localStorage.setItem("data", data);
                     navigate("/")
                     window.location.reload()
                 }).catch(error => {
-                    console.log(1)
-                    toast.error('Đăng nhập thất bại!', {
-                        position: "top-center",
-                        autoClose: 1000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "light",
-                    });
+                    toast.error('Đăng nhập thất bại!');
                 })
             }}>
                 <Form>

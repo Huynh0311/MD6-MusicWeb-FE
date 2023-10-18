@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useNavigate, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {getAllSongByGenresIDAPI, getSongByID, playSong} from "../../api/songService/SongService";
 import {getSongLikeQuantityAPI, isLikedAPI, likeClickAPI} from "../../api/LikesService/LikesService";
 import {getAllCommentBySongID, getAllCommentBySongIdAPI, sendCommentAPI} from "../../api/commentService/CommentService";
@@ -51,7 +51,7 @@ const DetailSong = () => {
         getLikeQuantity();
         getAllCommentBySongID(id)
         getAllSongByGenres();
-    }, [])
+    }, [id])
 
     const checkLike = () => {
         if (like.account.name != null && like.song.nameSong != null) {
@@ -126,14 +126,6 @@ const DetailSong = () => {
             const res = await playSong(id)
             setPlay(res.data)
         }
-    }
-
-
-    if (currentSong.nameSong == null) {
-    } else {
-        document.querySelector('[data-amplitude-song-info="name"]').textContent = currentSong.nameSong;
-        document.querySelector('[data-amplitude-song-info="artist"]').textContent = currentSong.nameSinger;
-        document.querySelector('[data-amplitude-song-info="cover_art_url"]').setAttribute("src", currentSong.imgSong)
     }
 
     const handleInputComment = (e) => {
@@ -385,16 +377,19 @@ const DetailSong = () => {
                                                                 className="ri-play-fill icon-play"/> <i
                                                                 className="ri-pause-fill icon-pause"/></button>
                                                         </div>
-                                                        <div className="cover__foot"><a href="song-details.html"
-                                                                                        className="cover__title text-truncate">{rs.nameSong}</a>
-                                                            <p className="cover__subtitle text-truncate"><a
-                                                                href="artist-details.html">{rs.nameSinger}</a></p></div>
+
+                                                        <div className="cover__foot" onClick={() => {navigate("/song/detailSong/" + rs.id)}}>
+                                                            <p className="cover__title text-truncate">
+                                                                {rs.nameSong}
+                                                            </p>
+                                                            <p className="cover__subtitle text-truncate">
+                                                                {rs.nameSinger}
+                                                            </p>
+                                                        </div>
                                                     </div>
-
-
                                                 </div>
-                                            )
-                                        })}
+                                            )})
+                                        }
                                     </div>
                                 </div>
                                 <div className="swiper-button-prev btn-default rounded-pill"></div>
@@ -437,9 +432,10 @@ const DetailSong = () => {
                                                             className="ri-star-s-fill"></i></div>
                                                     <p>{cm.content}</p><a href="#"
                                                                           className="btn btn-link">
-                                                        <div className="btn__wrap"><i
-                                                            className="ri-reply-line fs-6"></i>
-                                                            <span>Reply</span></div>
+                                                        <div className="btn__wrap">
+                                                            <i className="ri-reply-line fs-6"></i>
+                                                            <span>Reply</span>
+                                                        </div>
                                                     </a>
                                                 </div>
                                             </div>
