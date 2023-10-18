@@ -23,8 +23,8 @@ function Top5Songs() {
                 console.error('Lỗi khi lấy danh sách bài hát:', error);
             }
         }
-
         fetchData();
+        console.log(songs)
     }, [updateCurrentSongAndSongs, currentSong]);
     const handleToggleSongPlay = (songId) => {
         const updatedSongs = songs.map((song) => {
@@ -78,7 +78,7 @@ function Top5Songs() {
                             <div className="list__cover">
                                 <img src={song.imgSong} alt="Shack your butty"/>
                                 <a
-                                    href="javascript:void(0);"
+                                    href="#"
                                     className="btn btn-play btn-sm btn-default btn-icon rounded-pill"
                                     data-play-id={song.id}
                                     aria-label="Play pause"
@@ -103,7 +103,7 @@ function Top5Songs() {
                                 </li>
                                 <li>
                                     <a
-                                        href="javascript:void(0);"
+                                        href="#"
                                         role="button"
                                         className="d-inline-flex"
                                         aria-label="Favorite"
@@ -116,7 +116,7 @@ function Top5Songs() {
                                 <li className="dropstart d-inline-flex">
                                     <a
                                         className="dropdown-link"
-                                        href="javascript:void(0);"
+                                        href="#"
                                         role="button"
                                         data-bs-toggle="dropdown"
                                         aria-label="Cover options"
@@ -128,7 +128,7 @@ function Top5Songs() {
                                         <li>
                                             <a
                                                 className="dropdown-item"
-                                                href="javascript:void(0);"
+                                                href="#"
                                                 role="button"
                                                 data-play-id={song.id}
                                             >
@@ -137,7 +137,7 @@ function Top5Songs() {
                                         </li>
                                         <li><a
                                             className="dropdown-item"
-                                            href="javascript:void(0);"
+                                            href="#"
                                             role="button"
                                             data-play-id={song.id}
                                         >
@@ -147,7 +147,7 @@ function Top5Songs() {
                                         <li>
                                             <a
                                                 className="dropdown-item"
-                                                href="javascript:void(0);"
+                                                href="#"
                                                 role="button"
                                                 data-play-id={song.id}
                                             >
@@ -157,7 +157,7 @@ function Top5Songs() {
                                         <li>
                                             <a
                                                 className="dropdown-item"
-                                                href="javascript:void(0);"
+                                                href="#"
                                                 role="button"
                                             >
                                                 Share
@@ -167,7 +167,7 @@ function Top5Songs() {
                                         <li>
                                             <a
                                                 className="dropdown-item"
-                                                href="javascript:void(0);"
+                                                href="#"
                                                 role="button"
                                                 data-play-id={song.id}
                                             >

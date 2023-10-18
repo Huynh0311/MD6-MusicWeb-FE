@@ -8,66 +8,48 @@ const ActionPlay = () => {
         const {currentSong, songs, updateCurrentSongAndSongs, isPlaying, handlePlayToggle} = useAudioPlayer();
         const player = useRef();
         const handleNextSongClick = () => {
-            console.log(songs);
             const currentIndex = songs.findIndex((song) => song.id === currentSong.id);
             if (currentIndex < songs.length - 1) {
                 const nextSong = songs[currentIndex + 1];
                 updateCurrentSongAndSongs(nextSong, songs);
-                console.log(nextSong);
             } else if (currentIndex == songs.length - 1) {
                 const nextSong = songs[0];
                 updateCurrentSongAndSongs(nextSong, songs);
-                console.log(nextSong);
             } else {
                 const defaultNextSong = songs[0];
                 updateCurrentSongAndSongs(defaultNextSong, songs);
-                console.log(defaultNextSong);
             }
+            player.current.audio.current.play();
         };
 
         const handlePreviousSongClick = () => {
-            const currentIndex = songs.findIndex((song) => song.id === currentSong.id)
+            const currentIndex = songs.findIndex((song) => song.id == currentSong.id)
             if (currentIndex > 0) {
                 const previousSong = songs[currentIndex - 1];
                 updateCurrentSongAndSongs(previousSong, songs);
-                console.log(previousSong);
             } else if (currentIndex == 0) {
                 const previousSong = songs[songs.length - 1];
                 updateCurrentSongAndSongs(previousSong, songs);
-                console.log(previousSong);
             }
+            player.current.audio.current.play();
         }
 
-        const playNext = () =>{
-            const currentIndex = songs.findIndex((song) => song.id === currentSong.id);
-            const nextSongIndex = (currentIndex + 1) % songs.length;
-            const nextSong = songs[nextSongIndex];
-            updateCurrentSongAndSongs(nextSong, songs);
-    }
-
-        const audiofunction = () => {
-            if (!isPlaying) {
-                player.current.audio.current.play();
-                handlePlayToggle(true);
-            } else {
-                player.current.audio.current.pause();
-                handlePlayToggle(false);
-            }
-        };
-
         useEffect(() => {
-            audiofunction();
-        }, [currentSong]);
+            isPlaying ? player.current.audio.current.play() : player.current.audio.current.pause();
+        }, [isPlaying]);
 
-    useEffect(() => {
-    }, [isPlaying]);
-
+        const nextSong = () => {
+            let currentSongIndex = songs.findIndex((song) => song.id === currentSong.id);
+            let currentListSong = songs.slice(currentSongIndex);
+            currentListSong.shift();
+            updateCurrentSongAndSongs(currentListSong[0],songs);
+        }
         return (
             <div>
                 <div>
                     <H5AudioPlayer ref={player}
                                    src={currentSong && currentSong.pathSong} onPlay={() => handlePlayToggle(true)}
-                                   onPause={() => handlePlayToggle(false)} onEnded={playNext}
+                                   onPause={() => handlePlayToggle(false)} onEnded={nextSong}
                                    preload={"metadata"} style={{marginLeft: "500px", marginTop: "900px", width: "600px"}}/>
                     <BiSkipPreviousCircle onClick={handlePreviousSongClick}
                                           style={{marginLeft: "500px", marginTop: "100px", fontSize: "30px"}}/>

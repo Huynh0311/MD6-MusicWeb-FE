@@ -75,7 +75,7 @@ function SongList() {
                 {currentSongs.map((song) => (
                     <div className="col-lg-3 col-md-4 col-sm-6" key={song.id}>
                         {song.isPlaying ? (
-                            <AiOutlinePauseCircle
+                            <AiOutlinePauseCircle role='button'
                                 onClick={() => {
                                     handleToggleSongPlay(song.id);
                                     updateCurrentSongAndSongs(song, songs);
@@ -83,7 +83,7 @@ function SongList() {
                                 style={{fontSize: "30px"}}
                             />
                         ) : (
-                            <AiOutlinePlayCircle
+                            <AiOutlinePlayCircle role='button'
                                 onClick={() => {
                                     handleToggleSongPlay(song.id);
                                     updateCurrentSongAndSongs(song, songs);
@@ -106,7 +106,7 @@ function SongList() {
                                         </li>
                                     </ul>
                                     <div className="cover__options dropstart d-inline-flex ms-auto">
-                                        <a className="dropdown-link" href="javascript:void(0);"
+                                        <a className="dropdown-link" href="#"
                                            role="button"
                                            data-bs-toggle="dropdown" aria-label="Cover options"
                                            aria-expanded="false">
@@ -114,12 +114,12 @@ function SongList() {
                                         </a>
                                         <ul className="dropdown-menu dropdown-menu-sm">
                                             <li>
-                                                <a className="dropdown-item" href="javascript:void(0);"
+                                                <a className="dropdown-item" href="#"
                                                    role="button"
                                                    data-favorite-id="1">Favorite</a>
                                             </li>
                                             <li>
-                                                <a className="dropdown-item" href="javascript:void(0);"
+                                                <a className="dropdown-item" href="#"
                                                    role="button"
                                                    data-playlist-id="1">Add to playlist</a>
                                             </li>
@@ -131,17 +131,17 @@ function SongList() {
                                                 >Add to queue</p>
                                             </li>
                                             <li>
-                                                <a className="dropdown-item" href="javascript:void(0);"
+                                                <a className="dropdown-item" href="#"
                                                    role="button"
                                                    data-next-id="1">Next to play</a>
                                             </li>
                                             <li>
-                                                <a className="dropdown-item" href="javascript:void(0);"
+                                                <a className="dropdown-item" href="#"
                                                    role="button">Share</a>
                                             </li>
                                             <li className="dropdown-divider"></li>
                                             <li>
-                                                <a className="dropdown-item" href="javascript:void(0);"
+                                                <a className="dropdown-item" href="#"
                                                    role="button"
                                                    data-play-id="1">Play</a>
                                             </li>
@@ -165,7 +165,7 @@ function SongList() {
                                             {song.nameSong}
                                         </p>
                                         <p className="cover__subtitle text-truncate">
-                                            <p> {song.description}</p>
+                                            {song.description}
                                         </p>
                                     </div>
                                 </Link>

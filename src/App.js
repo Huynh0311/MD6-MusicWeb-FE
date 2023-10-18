@@ -26,8 +26,7 @@ function App() {
 
     return (
         <div className="App">
-            <NavbarComponent/>
-            <Loader/>
+
             <Routes>
                 <Route path="/" element={<Page/>}>
                     <Route path={"/"} element={<HomeComponent/>}/>

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
 import "./BodySearch.css"
 import {
@@ -7,6 +7,8 @@ import {
     searchListSongByNameSinger
 } from "../../api/songService/SongService";
 import {likeClickAPI} from "../../api/LikesService/LikesService";
+import {AiOutlinePauseCircle, AiOutlinePlayCircle} from "react-icons/ai";
+import {AudioPlayerContext, useAudioPlayer} from "../../../redux/playern/ActionsUseContext/AudioPlayerProvider";
 
 
 const BodySearch = () => {
@@ -19,6 +21,9 @@ const BodySearch = () => {
     const [searchList, setSearchList] = useState([]);
     const slice = searchList.slice(0, numberOfElement);
     const [isLike, setIsLike] = useState(false);
+    const {currentSong, updateCurrentSongAndSongs} = useAudioPlayer();
+    const {isPlaying, handlePlayToggle} = useContext(AudioPlayerContext);
+    // const [songs, setSongs] = useState([]);
 
 
     const loadMore = () => {
@@ -33,25 +38,36 @@ const BodySearch = () => {
     useEffect(() => {
         searchSong();
         // setNumberOfElement(4);
-    }, [selection, searchInput, isLike])
+    }, [selection, searchInput, isLike,updateCurrentSongAndSongs, currentSong])
 
     useEffect(() => {
         setNumberOfElement(4);
     }, [selection, searchInput])
     const searchSong = async () => {
-
         if (searchInput != '' && selection == 'song') {
             const res = await searchListSongByName(searchInput);
-            setSearchList(res.data);
+            // setSearchList(res.data);
+            const songs = res.data.map((song) => ({
+                ...song,
+                isPlaying: currentSong && currentSong.id === song.id ? isPlaying : false,
+            }));
+            setSearchList(songs);
         } else if (searchInput != '' && selection == 'singer') {
             const res = await searchListSongByNameSinger(searchInput);
-            setSearchList(res.data);
+            // setSearchList(res.data);
+            const songs = res.data.map((song) => ({
+                ...song,
+                isPlaying: currentSong && currentSong.id === song.id ? isPlaying : false,
+            }));
+            setSearchList(songs);
         } else {
             const res = await searchListSongByNamePlaylist(searchInput);
-            setSearchList(res.data)
+            // setSearchList(res.data);
+            handleSetASongFromList(res.data);
         }
     }
 
+    console.log(searchList);
 
     function likeClick(id) {
         likeClickAPI(id).then(res => {
@@ -59,11 +75,38 @@ const BodySearch = () => {
         })
     }
 
+    const handleSetASongFromList = (songList) => {
+        const songs = songList.map((aSongList) => {
+            return aSongList.map((song) => ({
+                ...song,
+                isPlaying: currentSong && currentSong.id === song.id ? isPlaying : false,
+            }));
+
+        });
+        setSearchList(songs);
+    }
+    const handleToggleSongPlay = (songId) => {
+        const updatedSongs = searchList.map((song) => {
+            if (song.id === songId) {
+                const newIsPlaying = !song.isPlaying;
+                song.isPlaying = newIsPlaying;
+                if (newIsPlaying) {
+                    handlePlayToggle(true);
+                } else {
+                    handlePlayToggle(false);
+                }
+            } else {
+                song.isPlaying = false;
+            }
+            return song;
+        });
+        setSearchList(updatedSongs);
+    };
+
     return (
         <div>
             <div id="wrapper">
                 <main id="page_content">
-                    {console.log(slice)}
                     <div className="hero" style={{backgroundImage: "url(../images/banner/song.jpg)"}}></div>
                     <div className="under-hero container">
                         <div className="section">
@@ -90,6 +133,23 @@ const BodySearch = () => {
                                             slice.map((song) =>
                                                 (
                                                     <div className="col-xl-6" key={song.id}>
+                                                        {song.isPlaying ? (
+                                                            <AiOutlinePauseCircle
+                                                                onClick={() => {
+                                                                    handleToggleSongPlay(song.id);
+                                                                    updateCurrentSongAndSongs(song, searchList);
+                                                                }}
+                                                                style={{fontSize: "30px"}}
+                                                            />
+                                                        ) : (
+                                                            <AiOutlinePlayCircle
+                                                                onClick={() => {
+                                                                    handleToggleSongPlay(song.id);
+                                                                    updateCurrentSongAndSongs(song, searchList);
+                                                                }}
+                                                                style={{fontSize: "30px"}}
+                                                            />
+                                                        )}
                                                         <div className="list__item" data-song-id={song.id}
                                                              data-song-name={song.nameSong}
                                                              data-song-artist={song.nameSinger} data-song-album="Mummy"
@@ -97,7 +157,7 @@ const BodySearch = () => {
                                                              data-song-cover={song.imgSong}>
                                                             <div className="list__cover"><img src={song.imgSong}
                                                                                               alt="ErrorLoading"/>
-                                                                <a href="javascript:void(0);"
+                                                                <a href="#"
                                                                    className="btn btn-play btn-sm btn-default btn-icon rounded-pill"
                                                                    data-play-id={song.id}
                                                                    aria-label="Play pause"><i
@@ -115,7 +175,7 @@ const BodySearch = () => {
                                                             </div>
                                                             <ul className="list__option">
                                                                 <li>
-                                                                    <a href="javascript:void(0);" role="button"
+                                                                    <a href="#" role="button"
                                                                        className="d-inline-flex"
                                                                        aria-label="Favorite" data-favorite-id={song.id}>
                                                                         {song.isLiked == 1 ? (
@@ -134,28 +194,28 @@ const BodySearch = () => {
                                                                 </li>
                                                                 <li className="dropstart d-inline-flex"><a
                                                                     className="dropdown-link"
-                                                                    href="javascript:void(0);" role="button"
+                                                                    href="#" role="button"
                                                                     data-bs-toggle="dropdown"
                                                                     aria-label="Cover options"
                                                                     aria-expanded="false"><i
                                                                     className="ri-more-fill"></i></a>
                                                                     <ul className="dropdown-menu dropdown-menu-sm">
                                                                         <li><a className="dropdown-item"
-                                                                               href="javascript:void(0);" role="button"
+                                                                               href="#" role="button"
                                                                                data-playlist-id="1">Add to playlist</a>
                                                                         </li>
                                                                         <li><a className="dropdown-item"
-                                                                               href="javascript:void(0);" role="button"
+                                                                               href="#" role="button"
                                                                                data-queue-id="1">Add to queue</a></li>
                                                                         <li><a className="dropdown-item"
-                                                                               href="javascript:void(0);" role="button"
+                                                                               href="#" role="button"
                                                                                data-next-id="1">Next to play</a></li>
                                                                         <li><a className="dropdown-item"
-                                                                               href="javascript:void(0);"
+                                                                               href="#"
                                                                                role="button">Share</a></li>
                                                                         <li className="dropdown-divider"></li>
                                                                         <li><a className="dropdown-item"
-                                                                               href="javascript:void(0);" role="button"
+                                                                               href="#" role="button"
                                                                                data-play-id="1">Play</a></li>
                                                                     </ul>
                                                                 </li>
@@ -176,7 +236,24 @@ const BodySearch = () => {
                                                     </div>
                                                     <div className="song-component">
                                                         {songList.map((song) => (
-                                                            <div className="col-xl-6">
+                                                            <div className="col-xl-6" key={song.id}>
+                                                                {song.isPlaying ? (
+                                                                    <AiOutlinePauseCircle
+                                                                        onClick={() => {
+                                                                            handleToggleSongPlay(song.id);
+                                                                            updateCurrentSongAndSongs(song, searchList);
+                                                                        }}
+                                                                        style={{fontSize: "30px"}}
+                                                                    />
+                                                                ) : (
+                                                                    <AiOutlinePlayCircle
+                                                                        onClick={() => {
+                                                                            handleToggleSongPlay(song.id);
+                                                                            updateCurrentSongAndSongs(song, searchList);
+                                                                        }}
+                                                                        style={{fontSize: "30px"}}
+                                                                    />
+                                                                )}
                                                                 <div className="list__item" data-song-id={song.id}
                                                                      data-song-name={song?.nameSong}
                                                                      data-song-artist={song?.nameSinger}
@@ -184,9 +261,10 @@ const BodySearch = () => {
                                                                      data-song-url={song?.pathSong}
                                                                      data-song-cover={song?.imgSong}
                                                                      style={{width: "200%"}}>
-                                                                    <div className="list__cover"><img src={song?.imgSong}
-                                                                                                      alt="ErrorLoading"/>
-                                                                        <a href="javascript:void(0);"
+                                                                    <div className="list__cover"><img
+                                                                        src={song?.imgSong}
+                                                                        alt="ErrorLoading"/>
+                                                                        <a href="#"
                                                                            className="btn btn-play btn-sm btn-default btn-icon rounded-pill"
                                                                            data-play-id={song?.id}
                                                                            aria-label="Play pause"><i
@@ -205,9 +283,10 @@ const BodySearch = () => {
                                                                     </div>
                                                                     <ul className="list__option">
                                                                         <li>
-                                                                            <a href="javascript:void(0);" role="button"
+                                                                            <a href="#" role="button"
                                                                                className="d-inline-flex"
-                                                                               aria-label="Favorite" data-favorite-id={song?.id}>
+                                                                               aria-label="Favorite"
+                                                                               data-favorite-id={song?.id}>
                                                                                 {song?.isLiked == 1 ? (
                                                                                     <i className="fa-sharp fa-solid fa-heart"
                                                                                        style={{
@@ -224,35 +303,35 @@ const BodySearch = () => {
                                                                         </li>
                                                                         <li className="dropstart d-inline-flex"><a
                                                                             className="dropdown-link"
-                                                                            href="javascript:void(0);" role="button"
+                                                                            href="#" role="button"
                                                                             data-bs-toggle="dropdown"
                                                                             aria-label="Cover options"
                                                                             aria-expanded="false"><i
                                                                             className="ri-more-fill"></i></a>
                                                                             <ul className="dropdown-menu dropdown-menu-sm">
                                                                                 <li><a className="dropdown-item"
-                                                                                       href="javascript:void(0);"
+                                                                                       href="#"
                                                                                        role="button"
                                                                                        data-playlist-id="1">Add to
                                                                                     playlist</a>
                                                                                 </li>
                                                                                 <li><a className="dropdown-item"
-                                                                                       href="javascript:void(0);"
+                                                                                       href="#"
                                                                                        role="button"
                                                                                        data-queue-id="1">Add to
                                                                                     queue</a>
                                                                                 </li>
                                                                                 <li><a className="dropdown-item"
-                                                                                       href="javascript:void(0);"
+                                                                                       href="#"
                                                                                        role="button"
                                                                                        data-next-id="1">Next to play</a>
                                                                                 </li>
                                                                                 <li><a className="dropdown-item"
-                                                                                       href="javascript:void(0);"
+                                                                                       href="#"
                                                                                        role="button">Share</a></li>
                                                                                 <li className="dropdown-divider"></li>
                                                                                 <li><a className="dropdown-item"
-                                                                                       href="javascript:void(0);"
+                                                                                       href="#"
                                                                                        role="button"
                                                                                        data-play-id="1">Play</a></li>
                                                                             </ul>
@@ -272,7 +351,7 @@ const BodySearch = () => {
                                 </div>
                             </div>
                             <div className="mt-5 text-center">
-                                <a href="javascript:void(0);" className="btn btn-primary"
+                                <a className="btn btn-primary"
                                    style={{marginBottom: "30px"}}>
                                     <div className="btn__wrap"><i className="ri-loader-3-fill"></i> <span
                                         onClick={loadMore}>Load more</span>
