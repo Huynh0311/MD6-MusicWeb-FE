@@ -1,7 +1,6 @@
-import React, {useState} from "react";
+import React, {useEffect} from "react";
 import {Route, Routes} from "react-router-dom";
 import HomeComponent from "./component/HomeComponent";
-import Loader from "./component/Loader";
 import UpdateAccount from "./component/account/updateAccount";
 import 'react-toastify/dist/ReactToastify.css';
 import {ToastContainer} from "react-toastify";
@@ -10,7 +9,6 @@ import UpdatePassword from "./component/account/updatePassword";
 import CreateSong from "./component/song/createSong/createSong";
 import DetailSong from "./component/song/detailSong/DetailSong";
 import RegisterComponent from "./component/RegisterComponent";
-import NavbarComponent from "./component/navbarComponent";
 import LoginComponent from "./component/LoginComponent";
 import ListSong from "./component/song/listSong/ListSong";
 import EditSong from "./component/song/editSong/EditSong";
@@ -20,11 +18,19 @@ import Page from "./component/page";
 import Component404 from "./component/Component404";
 import SearchComponent from "./component/song/seach/SearchComponent";
 import BodySearch from "./component/song/seach/BodySearch";
+
 import DetailPlaylist from "./component/playlist/DetailPlaylist";
 import ListPlaylist from "./component/playlist/ListPlaylist";
+import ListSongFavorite from "./component/song/listSong/ListSongFavorite";
+import {useSelector} from "react-redux";
+import ActionsPlaycopy from "./redux/playern/ActionsUseContext/ActionsPlaycopy";
 
 
 function App() {
+    const listSong = useSelector(state => state.songs);
+    useEffect(() => {
+        localStorage.setItem("songs", JSON.stringify(listSong))
+    }, [listSong]);
 
     return (
         <div className="App">
@@ -39,10 +45,12 @@ function App() {
                     <Route path={"/listPlaylist"} element={<ListPlaylist/>}/>
                     <Route path="/register" element={<RegisterComponent/>}/>
                     <Route path="/login" element={<LoginComponent/>}/>
+                    <Route path={'/favorite'} element={<ListSongFavorite/>}></Route>
                     <Route path='/song' element={<ListSong/>}></Route>
                     <Route path={"/song/edit/:songid"} element={<EditSong />}></Route>
                     <Route path='/song/search' element={<BodySearch/>}></Route>
                 </Route>
+                <Route path={'*'} element={<Component404/>}></Route>
             </Routes>
             <ToastContainer
                 position="top-center"

@@ -1,7 +1,7 @@
 import React, {useEffect, useRef} from 'react';
 import H5AudioPlayer from "react-h5-audio-player";
 import 'react-h5-audio-player/lib/styles.css';
-import {BiSkipNextCircle, BiSkipPreviousCircle} from "react-icons/bi";
+import {BiSkipNext, BiSkipPrevious} from "react-icons/bi";
 import {useAudioPlayer} from "./AudioPlayerProvider";
 
 const ActionPlay = () => {
@@ -38,18 +38,50 @@ const ActionPlay = () => {
             isPlaying ? player.current.audio.current.play() : player.current.audio.current.pause();
         }, [isPlaying]);
 
+        const nextSong = () => {
+            let currentSongIndex = songs.findIndex((song) => song.id === currentSong.id);
+            let currentListSong = songs.slice(currentSongIndex);
+            currentListSong.shift();
+            updateCurrentSongAndSongs(currentListSong[0],songs);
+        }
         return (
             <div>
-                <div>
-                    <H5AudioPlayer ref={player}
-                                   src={currentSong && currentSong.pathSong} onPlay={() => handlePlayToggle(true)}
-                                   onPause={() => handlePlayToggle(false)}
-                                   preload={"metadata"} style={{marginLeft: "500px", marginTop: "900px", width: "600px"}}/>
-                    <BiSkipPreviousCircle onClick={handlePreviousSongClick}
-                                          style={{marginLeft: "500px", marginTop: "100px", fontSize: "30px"}}/>
-                    <BiSkipNextCircle onClick={handleNextSongClick}
-                                      style={{marginLeft: "500px", marginTop: "100px", fontSize: "30px"}}/>
-                </div>
+                    <div id="player">
+                        <div className="container" style={{maxWidth: "1200px"}}>
+                            <div className="player-container">
+                                <div className="cover d-flex align-items-center">
+                                    <div className="cover__image">
+                                        <img src="../../images/cover/small/1.jpg"
+                                             alt="" style={{height: "100%"}}/>
+                                    </div>
+                                    <div className="cover__content ps-3 d-none d-sm-block"><a href="song-details.html"
+                                                                                              className="cover__title text-truncate">
+
+                                    </a>
+                                        <a href="artist-details.html" className="cover__subtitle text-truncate"
+                                           data-amplitude-song-info="artist">
+
+                                        </a>
+                                    </div>
+                                </div>
+                                <div className={"body-player player-control"}>
+                                    <H5AudioPlayer ref={player}
+                                                   src={currentSong && currentSong.pathSong}
+                                                   onPlay={() => handlePlayToggle(true)}
+                                                   onPause={() => handlePlayToggle(false)}
+                                                   preload={"metadata"}
+                                                   className={"player-container"}
+                                                   style={{height: "100%", boxShadow: "none",}}
+                                                   onEnded={nextSong}
+                                    />
+                                    <div className="prev_next">
+                                        <BiSkipPrevious onClick={handlePreviousSongClick} className={"prev"}/>
+                                        <BiSkipNext onClick={handleNextSongClick} className={"next"}/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
             </div>
         );
     }

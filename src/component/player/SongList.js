@@ -3,11 +3,11 @@ import axiosInstance from '../api/service/axios-instance';
 import {Link} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {saveSong} from "../../redux/actions";
-import {AiOutlinePauseCircle, AiOutlinePlayCircle} from "react-icons/ai";
 import {
     AudioPlayerContext,
     useAudioPlayer
 } from "../../redux/playern/ActionsUseContext/AudioPlayerProvider";
+import {BsFillPlayFill, BsPauseFill} from "react-icons/bs";
 
 function SongList() {
     const [songs, setSongs] = useState([]);
@@ -74,25 +74,9 @@ function SongList() {
             <div className="row">
                 {currentSongs.map((song) => (
                     <div className="col-lg-3 col-md-4 col-sm-6" key={song.id}>
-                        {song.isPlaying ? (
-                            <AiOutlinePauseCircle role='button'
-                                onClick={() => {
-                                    handleToggleSongPlay(song.id);
-                                    updateCurrentSongAndSongs(song, songs);
-                                }}
-                                style={{fontSize: "30px"}}
-                            />
-                        ) : (
-                            <AiOutlinePlayCircle role='button'
-                                onClick={() => {
-                                    handleToggleSongPlay(song.id);
-                                    updateCurrentSongAndSongs(song, songs);
-                                }}
-                                style={{fontSize: "30px"}}
-                            />
-                        )}
                         <div className="song-card">
-                            <div className="cover cover--round" data-song-id={song.id}
+                            <div className="cover cover--round"
+                                 data-song-id={song.id}
                                  data-song-name={song.nameSong}
                                  data-song-url={song.pathSong}
                                  data-song-cover={song.imgSong}>
@@ -152,9 +136,26 @@ function SongList() {
                                     <img src={song.imgSong} alt={song.nameSong}/>
                                     <button type="button"
                                             className="btn btn-play btn-default btn-icon rounded-pill"
-                                            data-play-id={song.id}>
-                                        <i className="ri-play-fill icon-play"></i>
-                                        <i className="ri-pause-fill icon-pause"></i>
+                                            data-play-id="">
+                                        {/*<i className="ri-play-fill icon-play"></i>*/}
+                                        {/*<i className="ri-pause-fill icon-pause"></i>*/}
+                                        {song.isPlaying ? (
+                                            <BsPauseFill role='button'
+                                                                  onClick={() => {
+                                                                      handleToggleSongPlay(song.id);
+                                                                      updateCurrentSongAndSongs(song, songs);
+                                                                  }}
+                                                                  style={{fontSize: "30px"}}
+                                            />
+                                        ) : (
+                                            <BsFillPlayFill role='button'
+                                                                 onClick={() => {
+                                                                     handleToggleSongPlay(song.id);
+                                                                     updateCurrentSongAndSongs(song, songs);
+                                                                 }}
+                                                                 style={{fontSize: "30px"}}
+                                            />
+                                        )}
                                     </button>
                                 </div>
 
