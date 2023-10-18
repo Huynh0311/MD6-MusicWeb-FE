@@ -36,28 +36,61 @@ const CreateSong = () => {
     const [song, setSong] = useState({
         genres: {id: 1}
     });
-    const uploadAudio = async (imgFile) => {
+
+    const [imgUrl,setImgUrl] = useState();
+    const [audioUrl,setAuioUrl] = useState();
+
+    // const uploadAudio = async (imgFile) => {
+    //     if (audioUpload == null) return;
+    //     const audioRef = ref(storage, `audios/${audioUpload.name + v4()}`);
+    //
+    //     try {
+    //         await uploadBytes(audioRef, audioUpload);
+    //         const audioUrl = await getDownloadURL(audioRef);
+    //         addSong(audioUrl, imgFile);
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // }
+
+    const uploadAudio = async (audioUpload) => {
         if (audioUpload == null) return;
         const audioRef = ref(storage, `audios/${audioUpload.name + v4()}`);
 
         try {
             await uploadBytes(audioRef, audioUpload);
             const audioUrl = await getDownloadURL(audioRef);
-            addSong(audioUrl, imgFile);
+            toast.success('Thêm bài hát thành công');
+            setAuioUrl(audioUrl);
         } catch (error) {
             console.error(error);
         }
     }
 
 
-    const uploadImg = async () => {
-        setIsLoading(true);
+    // const uploadImg = async () => {
+    //     setIsLoading(true);
+    //     if (imageUpload == null) return;
+    //     const imgRef = ref(storage, `images/${imageUpload.name + v4()}`);
+    //     try {
+    //         await uploadBytes(imgRef, imageUpload);
+    //         const imgUrl = await getDownloadURL(imgRef);
+    //
+    //         uploadAudio(imgUrl);
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // }
+
+    const uploadImg = async (imageUpload) => {
+        // setIsLoading(true);
         if (imageUpload == null) return;
         const imgRef = ref(storage, `images/${imageUpload.name + v4()}`);
         try {
             await uploadBytes(imgRef, imageUpload);
             const imgUrl = await getDownloadURL(imgRef);
-            uploadAudio(imgUrl);
+            toast.success('Upload ảnh thành công');
+            setImgUrl(imgUrl);
         } catch (error) {
             console.error(error);
         }
@@ -82,13 +115,27 @@ const CreateSong = () => {
     }
 
 
-    const addSong = async (audioUrl, imgUrl) => {
+    // const addSong = async (audioUrl, imgUrl) => {
+    //     if (audioUrl && imgUrl) {
+    //         song.imgSong = imgUrl;
+    //         song.pathSong = audioUrl;
+    //         try {
+    //             const response = await addSongSV(song)
+    //             setIsLoading(false);
+    //             let obj = response.data;
+    //             navigate(`/song/detailSong/${obj.id}`)
+    //         } catch (error) {
+    //             console.log(error)
+    //         }
+    //     }
+    // }
+    const addSong = async () => {
         if (audioUrl && imgUrl) {
             song.imgSong = imgUrl;
             song.pathSong = audioUrl;
             try {
                 const response = await addSongSV(song)
-                setIsLoading(false);
+                // setIsLoading(false);
                 let obj = response.data;
                 navigate(`/song/detailSong/${obj.id}`)
             } catch (error) {
@@ -130,7 +177,8 @@ const CreateSong = () => {
                 }}
                 validationSchema={validateSchema}
                 onSubmit={(values, {resetForm}) => {
-                    uploadImg();
+                    // uploadImg();
+                    addSong();
                     resetForm();
                     document.getElementById("previewImage").value = '';
                 }}>
@@ -176,7 +224,8 @@ const CreateSong = () => {
 
                                                                 <div>
                                                                     <label style={{margin: "5px 10px"}}>Hãy chọn ảnh đại
-                                                                        diện của Bài hát(*)</label>
+                                                                        diện của Bài hát(*)
+                                                                    </label>
                                                                     <div style={{display: "flex"}}>
                                                                         <input type={"file"} style={{flex: "1"}}
                                                                                accept={".jpg,.jpeg,.png,.gif"}
@@ -187,9 +236,9 @@ const CreateSong = () => {
                                                                                     toast.error('Thêm ảnh thất bại!');
                                                                                     event.target.value = null;
                                                                                 } else {
-                                                                                    setImageUpload(event.target.files[0]);
                                                                                     previewSelectedImage(event.target.files[0])
-                                                                                    toast.success('Upload ảnh thành công');
+                                                                                    uploadImg(event.target.files[0]);
+
                                                                                 }
                                                                             } else {
                                                                                 event.target.value = null;
@@ -226,8 +275,7 @@ const CreateSong = () => {
                                                                                        toast.error('Thêm bài hát thất bại!');
                                                                                        event.target.value = null;
                                                                                    } else {
-                                                                                       setAudioUpload(event.target.files[0])
-                                                                                       toast.success('Thêm bài hát thành công');
+                                                                                       uploadAudio(event.target.files[0]);
                                                                                    }
                                                                                } else {
                                                                                    event.target.value = null;

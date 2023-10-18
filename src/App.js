@@ -18,16 +18,16 @@ import EditSong from "./component/song/editSong/EditSong";
 import 'react-toastify/dist/ReactToastify.css';
 import Page from "./component/page";
 import Component404 from "./component/Component404";
-import DetailPlaylist from "./component/playlist/DetailPlaylist";
 import SearchComponent from "./component/song/seach/SearchComponent";
 import BodySearch from "./component/song/seach/BodySearch";
+import DetailPlaylist from "./component/playlist/DetailPlaylist";
+import ListPlaylist from "./component/playlist/ListPlaylist";
 
 
 function App() {
 
     return (
         <div className="App">
-
             <Routes>
                 <Route path="/" element={<Page/>}>
                     <Route path={"/"} element={<HomeComponent/>}/>
@@ -36,6 +36,7 @@ function App() {
                     <Route path="/song/create" element={<CreateSong/>}/>
                     <Route path={"/song/detailSong/:id"} element={<DetailSong/>}/>
                     <Route path={"/detailPlaylist/:id"} element={<DetailPlaylist/>}/>
+                    <Route path={"/listPlaylist"} element={<ListPlaylist/>}/>
                     <Route path="/register" element={<RegisterComponent/>}/>
                     <Route path="/login" element={<LoginComponent/>}/>
                     <Route path='/song' element={<ListSong/>}></Route>

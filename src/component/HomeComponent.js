@@ -3,7 +3,7 @@ import {Link, useNavigate} from "react-router-dom";
 import SongList from "./player/SongList";
 import TopSong from "./player/TopSong";
 import MusicPlayer from "./player/MusicPlayer";
-import ListPlaylist from "./playlist/ListPlaylist";
+import TopPlaylist from "./playlist/TopPlaylist";
 
 
 const HomeComponent = () => {
@@ -201,28 +201,28 @@ const HomeComponent = () => {
                                                         </li>
                                                     </ul>
                                                     <div className="cover__options dropstart d-inline-flex ms-auto"><a
-                                                        className="dropdown-link" href="javascript:void(0);"
+                                                        className="dropdown-link" href="#"
                                                         role="button"
                                                         data-bs-toggle="dropdown" aria-label="Cover options"
                                                         aria-expanded="false"><i className="ri-more-2-fill"></i></a>
                                                         <ul className="dropdown-menu dropdown-menu-sm">
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button"
                                                                    data-favorite-id="1">Favorite</a></li>
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button"
                                                                    data-playlist-id="1">Add to playlist</a></li>
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button"
                                                                    data-queue-id="1">Add to queue</a></li>
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button"
                                                                    data-next-id="1">Next to play</a></li>
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button">Share</a>
                                                             </li>
                                                             <li className="dropdown-divider"></li>
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button"
                                                                    data-play-id="1">Play</a></li>
                                                         </ul>
@@ -356,25 +356,25 @@ const HomeComponent = () => {
                                             <ul className="list__option">
                                                 <li><span className="badge rounded-pill bg-info"><i
                                                     className="ri-vip-crown-fill"></i></span></li>
-                                                <li><a href="javascript:void(0);" role="button"
+                                                <li><a href="#" role="button"
                                                        className="d-inline-flex"
                                                        aria-label="Favorite" data-favorite-id="100"><i
                                                     className="ri-heart-line heart-empty"></i> <i
                                                     className="ri-heart-fill heart-fill"></i></a></li>
                                                 <li className="dropstart d-inline-flex"><a className="dropdown-link"
-                                                                                           href="javascript:void(0);"
+                                                                                           href="#"
                                                                                            role="button"
                                                                                            data-bs-toggle="dropdown"
                                                                                            aria-label="Cover options"
                                                                                            aria-expanded="false"><i
                                                     className="ri-more-fill"></i></a>
                                                     <ul className="dropdown-menu dropdown-menu-sm">
-                                                        <li><a className="dropdown-item" href="javascript:void(0);"
+                                                        <li><a className="dropdown-item" href="#"
                                                                role="button"
                                                                data-favorite-id="100">Favorite</a></li>
                                                         <li><a className="dropdown-item" href="audio/ringtone-1.mp3"
                                                                download>Download</a></li>
-                                                        <li><a className="dropdown-item" href="javascript:void(0);"
+                                                        <li><a className="dropdown-item" href="#"
                                                                role="button">Share</a></li>
                                                         <li className="dropdown-divider"></li>
                                                         <li><a className="dropdown-item" href="album-details.html">View
@@ -395,25 +395,25 @@ const HomeComponent = () => {
                                             <ul className="list__option">
                                                 <li><span className="badge rounded-pill bg-info"><i
                                                     className="ri-vip-crown-fill"></i></span></li>
-                                                <li><a href="javascript:void(0);" role="button"
+                                                <li><a href="#" role="button"
                                                        className="d-inline-flex"
                                                        aria-label="Favorite" data-favorite-id="101"><i
                                                     className="ri-heart-line heart-empty"></i> <i
                                                     className="ri-heart-fill heart-fill"></i></a></li>
                                                 <li className="dropstart d-inline-flex"><a className="dropdown-link"
-                                                                                           href="javascript:void(0);"
+                                                                                           href="#"
                                                                                            role="button"
                                                                                            data-bs-toggle="dropdown"
                                                                                            aria-label="Cover options"
                                                                                            aria-expanded="false"><i
                                                     className="ri-more-fill"></i></a>
                                                     <ul className="dropdown-menu dropdown-menu-sm">
-                                                        <li><a className="dropdown-item" href="javascript:void(0);"
+                                                        <li><a className="dropdown-item" href="#"
                                                                role="button"
                                                                data-favorite-id="101">Favorite</a></li>
                                                         <li><a className="dropdown-item" href="audio/ringtone-2.mp3"
                                                                download>Download</a></li>
-                                                        <li><a className="dropdown-item" href="javascript:void(0);"
+                                                        <li><a className="dropdown-item" href="#"
                                                                role="button">Share</a></li>
                                                         <li className="dropdown-divider"></li>
                                                         <li><a className="dropdown-item" href="album-details.html">View
@@ -434,25 +434,25 @@ const HomeComponent = () => {
                                             <ul className="list__option">
                                                 <li><span className="badge rounded-pill bg-info"><i
                                                     className="ri-vip-crown-fill"></i></span></li>
-                                                <li><a href="javascript:void(0);" role="button"
+                                                <li><a href="#" role="button"
                                                        className="d-inline-flex"
                                                        aria-label="Favorite" data-favorite-id="102"><i
                                                     className="ri-heart-line heart-empty"></i> <i
                                                     className="ri-heart-fill heart-fill"></i></a></li>
                                                 <li className="dropstart d-inline-flex"><a className="dropdown-link"
-                                                                                           href="javascript:void(0);"
+                                                                                           href="#"
                                                                                            role="button"
                                                                                            data-bs-toggle="dropdown"
                                                                                            aria-label="Cover options"
                                                                                            aria-expanded="false"><i
                                                     className="ri-more-fill"></i></a>
                                                     <ul className="dropdown-menu dropdown-menu-sm">
-                                                        <li><a className="dropdown-item" href="javascript:void(0);"
+                                                        <li><a className="dropdown-item" href="#"
                                                                role="button"
                                                                data-favorite-id="102">Favorite</a></li>
                                                         <li><a className="dropdown-item" href="audio/ringtone-3.mp3"
                                                                download>Download</a></li>
-                                                        <li><a className="dropdown-item" href="javascript:void(0);"
+                                                        <li><a className="dropdown-item" href="#"
                                                                role="button">Share</a></li>
                                                         <li className="dropdown-divider"></li>
                                                         <li><a className="dropdown-item" href="album-details.html">View
@@ -473,25 +473,25 @@ const HomeComponent = () => {
                                             <ul className="list__option">
                                                 <li><span className="badge rounded-pill bg-info"><i
                                                     className="ri-vip-crown-fill"></i></span></li>
-                                                <li><a href="javascript:void(0);" role="button"
+                                                <li><a href="#" role="button"
                                                        className="d-inline-flex"
                                                        aria-label="Favorite" data-favorite-id="103"><i
                                                     className="ri-heart-line heart-empty"></i> <i
                                                     className="ri-heart-fill heart-fill"></i></a></li>
                                                 <li className="dropstart d-inline-flex"><a className="dropdown-link"
-                                                                                           href="javascript:void(0);"
+                                                                                           href="#"
                                                                                            role="button"
                                                                                            data-bs-toggle="dropdown"
                                                                                            aria-label="Cover options"
                                                                                            aria-expanded="false"><i
                                                     className="ri-more-fill"></i></a>
                                                     <ul className="dropdown-menu dropdown-menu-sm">
-                                                        <li><a className="dropdown-item" href="javascript:void(0);"
+                                                        <li><a className="dropdown-item" href="#"
                                                                role="button"
                                                                data-favorite-id="103">Favorite</a></li>
                                                         <li><a className="dropdown-item" href="audio/ringtone-4.mp3"
                                                                download>Download</a></li>
-                                                        <li><a className="dropdown-item" href="javascript:void(0);"
+                                                        <li><a className="dropdown-item" href="#"
                                                                role="button">Share</a></li>
                                                         <li className="dropdown-divider"></li>
                                                         <li><a className="dropdown-item" href="album-details.html">View
@@ -511,25 +511,25 @@ const HomeComponent = () => {
                                             <ul className="list__option">
                                                 <li><span className="badge rounded-pill bg-info"><i
                                                     className="ri-vip-crown-fill"></i></span></li>
-                                                <li><a href="javascript:void(0);" role="button"
+                                                <li><a href="#" role="button"
                                                        className="d-inline-flex"
                                                        aria-label="Favorite" data-favorite-id="104"><i
                                                     className="ri-heart-line heart-empty"></i> <i
                                                     className="ri-heart-fill heart-fill"></i></a></li>
                                                 <li className="dropstart d-inline-flex"><a className="dropdown-link"
-                                                                                           href="javascript:void(0);"
+                                                                                           href="#"
                                                                                            role="button"
                                                                                            data-bs-toggle="dropdown"
                                                                                            aria-label="Cover options"
                                                                                            aria-expanded="false"><i
                                                     className="ri-more-fill"></i></a>
                                                     <ul className="dropdown-menu dropdown-menu-sm">
-                                                        <li><a className="dropdown-item" href="javascript:void(0);"
+                                                        <li><a className="dropdown-item" href="#"
                                                                role="button"
                                                                data-favorite-id="104">Favorite</a></li>
                                                         <li><a className="dropdown-item" href="audio/ringtone-5.mp3"
                                                                download>Download</a></li>
-                                                        <li><a className="dropdown-item" href="javascript:void(0);"
+                                                        <li><a className="dropdown-item" href="#"
                                                                role="button">Share</a></li>
                                                         <li className="dropdown-divider"></li>
                                                         <li><a className="dropdown-item" href="album-details.html">View
@@ -552,25 +552,25 @@ const HomeComponent = () => {
                                             <ul className="list__option">
                                                 <li><span className="badge rounded-pill bg-info"><i
                                                     className="ri-vip-crown-fill"></i></span></li>
-                                                <li><a href="javascript:void(0);" role="button"
+                                                <li><a href="#" role="button"
                                                        className="d-inline-flex"
                                                        aria-label="Favorite" data-favorite-id="105"><i
                                                     className="ri-heart-line heart-empty"></i> <i
                                                     className="ri-heart-fill heart-fill"></i></a></li>
                                                 <li className="dropstart d-inline-flex"><a className="dropdown-link"
-                                                                                           href="javascript:void(0);"
+                                                                                           href="#"
                                                                                            role="button"
                                                                                            data-bs-toggle="dropdown"
                                                                                            aria-label="Cover options"
                                                                                            aria-expanded="false"><i
                                                     className="ri-more-fill"></i></a>
                                                     <ul className="dropdown-menu dropdown-menu-sm">
-                                                        <li><a className="dropdown-item" href="javascript:void(0);"
+                                                        <li><a className="dropdown-item" href="#"
                                                                role="button"
                                                                data-favorite-id="105">Favorite</a></li>
                                                         <li><a className="dropdown-item" href="audio/ringtone-6.mp3"
                                                                download>Download</a></li>
-                                                        <li><a className="dropdown-item" href="javascript:void(0);"
+                                                        <li><a className="dropdown-item" href="#"
                                                                role="button">Share</a></li>
                                                         <li className="dropdown-divider"></li>
                                                         <li><a className="dropdown-item" href="album-details.html">View
@@ -591,25 +591,25 @@ const HomeComponent = () => {
                                             <ul className="list__option">
                                                 <li><span className="badge rounded-pill bg-info"><i
                                                     className="ri-vip-crown-fill"></i></span></li>
-                                                <li><a href="javascript:void(0);" role="button"
+                                                <li><a href="#" role="button"
                                                        className="d-inline-flex"
                                                        aria-label="Favorite" data-favorite-id="106"><i
                                                     className="ri-heart-line heart-empty"></i> <i
                                                     className="ri-heart-fill heart-fill"></i></a></li>
                                                 <li className="dropstart d-inline-flex"><a className="dropdown-link"
-                                                                                           href="javascript:void(0);"
+                                                                                           href="#"
                                                                                            role="button"
                                                                                            data-bs-toggle="dropdown"
                                                                                            aria-label="Cover options"
                                                                                            aria-expanded="false"><i
                                                     className="ri-more-fill"></i></a>
                                                     <ul className="dropdown-menu dropdown-menu-sm">
-                                                        <li><a className="dropdown-item" href="javascript:void(0);"
+                                                        <li><a className="dropdown-item" href="#"
                                                                role="button"
                                                                data-favorite-id="106">Favorite</a></li>
                                                         <li><a className="dropdown-item" href="audio/ringtone-7.mp3"
                                                                download>Download</a></li>
-                                                        <li><a className="dropdown-item" href="javascript:void(0);"
+                                                        <li><a className="dropdown-item" href="#"
                                                                role="button">Share</a></li>
                                                         <li className="dropdown-divider"></li>
                                                         <li><a className="dropdown-item" href="album-details.html">View
@@ -629,25 +629,25 @@ const HomeComponent = () => {
                                             <ul className="list__option">
                                                 <li><span className="badge rounded-pill bg-info"><i
                                                     className="ri-vip-crown-fill"></i></span></li>
-                                                <li><a href="javascript:void(0);" role="button"
+                                                <li><a href="#" role="button"
                                                        className="d-inline-flex"
                                                        aria-label="Favorite" data-favorite-id="107"><i
                                                     className="ri-heart-line heart-empty"></i> <i
                                                     className="ri-heart-fill heart-fill"></i></a></li>
                                                 <li className="dropstart d-inline-flex"><a className="dropdown-link"
-                                                                                           href="javascript:void(0);"
+                                                                                           href="#"
                                                                                            role="button"
                                                                                            data-bs-toggle="dropdown"
                                                                                            aria-label="Cover options"
                                                                                            aria-expanded="false"><i
                                                     className="ri-more-fill"></i></a>
                                                     <ul className="dropdown-menu dropdown-menu-sm">
-                                                        <li><a className="dropdown-item" href="javascript:void(0);"
+                                                        <li><a className="dropdown-item" href="#"
                                                                role="button"
                                                                data-favorite-id="107">Favorite</a></li>
                                                         <li><a className="dropdown-item" href="audio/ringtone-8.mp3"
                                                                download>Download</a></li>
-                                                        <li><a className="dropdown-item" href="javascript:void(0);"
+                                                        <li><a className="dropdown-item" href="#"
                                                                role="button">Share</a></li>
                                                         <li className="dropdown-divider"></li>
                                                         <li><a className="dropdown-item" href="album-details.html">View
@@ -668,25 +668,25 @@ const HomeComponent = () => {
                                             <ul className="list__option">
                                                 <li><span className="badge rounded-pill bg-info"><i
                                                     className="ri-vip-crown-fill"></i></span></li>
-                                                <li><a href="javascript:void(0);" role="button"
+                                                <li><a href="#" role="button"
                                                        className="d-inline-flex"
                                                        aria-label="Favorite" data-favorite-id="108"><i
                                                     className="ri-heart-line heart-empty"></i> <i
                                                     className="ri-heart-fill heart-fill"></i></a></li>
                                                 <li className="dropstart d-inline-flex"><a className="dropdown-link"
-                                                                                           href="javascript:void(0);"
+                                                                                           href="#"
                                                                                            role="button"
                                                                                            data-bs-toggle="dropdown"
                                                                                            aria-label="Cover options"
                                                                                            aria-expanded="false"><i
                                                     className="ri-more-fill"></i></a>
                                                     <ul className="dropdown-menu dropdown-menu-sm">
-                                                        <li><a className="dropdown-item" href="javascript:void(0);"
+                                                        <li><a className="dropdown-item" href="#"
                                                                role="button"
                                                                data-favorite-id="108">Favorite</a></li>
                                                         <li><a className="dropdown-item" href="audio/ringtone-1.mp3"
                                                                download>Download</a></li>
-                                                        <li><a className="dropdown-item" href="javascript:void(0);"
+                                                        <li><a className="dropdown-item" href="#"
                                                                role="button">Share</a></li>
                                                         <li className="dropdown-divider"></li>
                                                         <li><a className="dropdown-item" href="album-details.html">View
@@ -707,25 +707,25 @@ const HomeComponent = () => {
                                             <ul className="list__option">
                                                 <li><span className="badge rounded-pill bg-info"><i
                                                     className="ri-vip-crown-fill"></i></span></li>
-                                                <li><a href="javascript:void(0);" role="button"
+                                                <li><a href="#" role="button"
                                                        className="d-inline-flex"
                                                        aria-label="Favorite" data-favorite-id="109"><i
                                                     className="ri-heart-line heart-empty"></i> <i
                                                     className="ri-heart-fill heart-fill"></i></a></li>
                                                 <li className="dropstart d-inline-flex"><a className="dropdown-link"
-                                                                                           href="javascript:void(0);"
+                                                                                           href="#"
                                                                                            role="button"
                                                                                            data-bs-toggle="dropdown"
                                                                                            aria-label="Cover options"
                                                                                            aria-expanded="false"><i
                                                     className="ri-more-fill"></i></a>
                                                     <ul className="dropdown-menu dropdown-menu-sm">
-                                                        <li><a className="dropdown-item" href="javascript:void(0);"
+                                                        <li><a className="dropdown-item" href="#"
                                                                role="button"
                                                                data-favorite-id="109">Favorite</a></li>
                                                         <li><a className="dropdown-item" href="audio/ringtone-2.mp3"
                                                                download>Download</a></li>
-                                                        <li><a className="dropdown-item" href="javascript:void(0);"
+                                                        <li><a className="dropdown-item" href="#"
                                                                role="button">Share</a></li>
                                                         <li className="dropdown-divider"></li>
                                                         <li><a className="dropdown-item" href="album-details.html">View
@@ -738,7 +738,7 @@ const HomeComponent = () => {
                                 </div>
                             </div>
                         </div>
-                        <ListPlaylist/>
+                        <TopPlaylist/>
                         <div className="section">
                             <div className="section__head">
                                 <div className="flex-grow-1"><span className="section__subtitle">Listen live now</span>
@@ -760,25 +760,25 @@ const HomeComponent = () => {
                                                         </li>
                                                     </ul>
                                                     <div className="cover__options dropstart d-inline-flex ms-auto"><a
-                                                        className="dropdown-link" href="javascript:void(0);"
+                                                        className="dropdown-link" href="#"
                                                         role="button"
                                                         data-bs-toggle="dropdown" aria-label="Cover options"
                                                         aria-expanded="false"><i className="ri-more-2-fill"></i></a>
                                                         <ul className="dropdown-menu dropdown-menu-sm">
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button"
                                                                    data-favorite-id="1">Favorite</a></li>
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button"
                                                                    data-queue-id="1">Add to queue</a></li>
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button"
                                                                    data-next-id="1">Next to play</a></li>
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button">Share</a>
                                                             </li>
                                                             <li className="dropdown-divider"></li>
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button"
                                                                    data-play-id="1">Play</a></li>
                                                         </ul>
@@ -792,7 +792,7 @@ const HomeComponent = () => {
                                                         <i
                                                             className="ri-pause-fill icon-pause"></i></button>
                                                 </div>
-                                                <div className="cover__foot"><a href="javascript:void(0);" role="button"
+                                                <div className="cover__foot"><a href="#" role="button"
                                                                                 className="cover__title text-truncate">International</a>
                                                 </div>
                                             </div>
@@ -809,25 +809,25 @@ const HomeComponent = () => {
                                                             className="ri-vip-crown-fill"></i></span></li>
                                                     </ul>
                                                     <div className="cover__options dropstart d-inline-flex ms-auto"><a
-                                                        className="dropdown-link" href="javascript:void(0);"
+                                                        className="dropdown-link" href="#"
                                                         role="button"
                                                         data-bs-toggle="dropdown" aria-label="Cover options"
                                                         aria-expanded="false"><i className="ri-more-2-fill"></i></a>
                                                         <ul className="dropdown-menu dropdown-menu-sm">
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button"
                                                                    data-favorite-id="2">Favorite</a></li>
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button"
                                                                    data-queue-id="2">Add to queue</a></li>
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button"
                                                                    data-next-id="2">Next to play</a></li>
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button">Share</a>
                                                             </li>
                                                             <li className="dropdown-divider"></li>
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button"
                                                                    data-play-id="2">Play</a></li>
                                                         </ul>
@@ -841,7 +841,7 @@ const HomeComponent = () => {
                                                         <i
                                                             className="ri-pause-fill icon-pause"></i></button>
                                                 </div>
-                                                <div className="cover__foot"><a href="javascript:void(0);" role="button"
+                                                <div className="cover__foot"><a href="#" role="button"
                                                                                 className="cover__title text-truncate">Network</a>
                                                 </div>
                                             </div>
@@ -854,25 +854,25 @@ const HomeComponent = () => {
                                                  data-song-cover="images/cover/small/3.jpg">
                                                 <div className="cover__head">
                                                     <div className="cover__options dropstart d-inline-flex ms-auto"><a
-                                                        className="dropdown-link" href="javascript:void(0);"
+                                                        className="dropdown-link" href="#"
                                                         role="button"
                                                         data-bs-toggle="dropdown" aria-label="Cover options"
                                                         aria-expanded="false"><i className="ri-more-2-fill"></i></a>
                                                         <ul className="dropdown-menu dropdown-menu-sm">
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button"
                                                                    data-favorite-id="3">Favorite</a></li>
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button"
                                                                    data-queue-id="3">Add to queue</a></li>
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button"
                                                                    data-next-id="3">Next to play</a></li>
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button">Share</a>
                                                             </li>
                                                             <li className="dropdown-divider"></li>
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button"
                                                                    data-play-id="3">Play</a></li>
                                                         </ul>
@@ -886,7 +886,7 @@ const HomeComponent = () => {
                                                         <i
                                                             className="ri-pause-fill icon-pause"></i></button>
                                                 </div>
-                                                <div className="cover__foot"><a href="javascript:void(0);" role="button"
+                                                <div className="cover__foot"><a href="#" role="button"
                                                                                 className="cover__title text-truncate">Alpha
                                                     Gamma</a></div>
                                             </div>
@@ -906,25 +906,25 @@ const HomeComponent = () => {
                                                             className="ri-vip-crown-fill"></i></span></li>
                                                     </ul>
                                                     <div className="cover__options dropstart d-inline-flex ms-auto"><a
-                                                        className="dropdown-link" href="javascript:void(0);"
+                                                        className="dropdown-link" href="#"
                                                         role="button"
                                                         data-bs-toggle="dropdown" aria-label="Cover options"
                                                         aria-expanded="false"><i className="ri-more-2-fill"></i></a>
                                                         <ul className="dropdown-menu dropdown-menu-sm">
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button"
                                                                    data-favorite-id="4">Favorite</a></li>
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button"
                                                                    data-queue-id="4">Add to queue</a></li>
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button"
                                                                    data-next-id="4">Next to play</a></li>
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button">Share</a>
                                                             </li>
                                                             <li className="dropdown-divider"></li>
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button"
                                                                    data-play-id="4">Play</a></li>
                                                         </ul>
@@ -938,7 +938,7 @@ const HomeComponent = () => {
                                                         <i
                                                             className="ri-pause-fill icon-pause"></i></button>
                                                 </div>
-                                                <div className="cover__foot"><a href="javascript:void(0);" role="button"
+                                                <div className="cover__foot"><a href="#" role="button"
                                                                                 className="cover__title text-truncate">Leanne
                                                     Hutton</a>
                                                 </div>
@@ -956,25 +956,25 @@ const HomeComponent = () => {
                                                             className="ri-vip-crown-fill"></i></span></li>
                                                     </ul>
                                                     <div className="cover__options dropstart d-inline-flex ms-auto"><a
-                                                        className="dropdown-link" href="javascript:void(0);"
+                                                        className="dropdown-link" href="#"
                                                         role="button"
                                                         data-bs-toggle="dropdown" aria-label="Cover options"
                                                         aria-expanded="false"><i className="ri-more-2-fill"></i></a>
                                                         <ul className="dropdown-menu dropdown-menu-sm">
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button"
                                                                    data-favorite-id="5">Favorite</a></li>
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button"
                                                                    data-queue-id="5">Add to queue</a></li>
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button"
                                                                    data-next-id="5">Next to play</a></li>
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button">Share</a>
                                                             </li>
                                                             <li className="dropdown-divider"></li>
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button"
                                                                    data-play-id="5">Play</a></li>
                                                         </ul>
@@ -988,7 +988,7 @@ const HomeComponent = () => {
                                                         <i
                                                             className="ri-pause-fill icon-pause"></i></button>
                                                 </div>
-                                                <div className="cover__foot"><a href="javascript:void(0);" role="button"
+                                                <div className="cover__foot"><a href="#" role="button"
                                                                                 className="cover__title text-truncate">K
                                                     S N F</a></div>
                                             </div>
@@ -1005,25 +1005,25 @@ const HomeComponent = () => {
                                                             className="ri-vip-crown-fill"></i></span></li>
                                                     </ul>
                                                     <div className="cover__options dropstart d-inline-flex ms-auto"><a
-                                                        className="dropdown-link" href="javascript:void(0);"
+                                                        className="dropdown-link" href="#"
                                                         role="button"
                                                         data-bs-toggle="dropdown" aria-label="Cover options"
                                                         aria-expanded="false"><i className="ri-more-2-fill"></i></a>
                                                         <ul className="dropdown-menu dropdown-menu-sm">
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button"
                                                                    data-favorite-id="6">Favorite</a></li>
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button"
                                                                    data-queue-id="6">Add to queue</a></li>
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button"
                                                                    data-next-id="6">Next to play</a></li>
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button">Share</a>
                                                             </li>
                                                             <li className="dropdown-divider"></li>
-                                                            <li><a className="dropdown-item" href="javascript:void(0);"
+                                                            <li><a className="dropdown-item" href="#"
                                                                    role="button"
                                                                    data-play-id="6">Play</a></li>
                                                         </ul>
@@ -1037,7 +1037,7 @@ const HomeComponent = () => {
                                                         <i
                                                             className="ri-pause-fill icon-pause"></i></button>
                                                 </div>
-                                                <div className="cover__foot"><a href="javascript:void(0);" role="button"
+                                                <div className="cover__foot"><a href="#" role="button"
                                                                                 className="cover__title text-truncate">Clay
                                                     Gandy</a></div>
                                             </div>
