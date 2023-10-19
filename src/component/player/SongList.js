@@ -10,12 +10,14 @@ import {BsFillPlayFill, BsPauseFill} from "react-icons/bs";
 import AxiosCustomize from "../api/utils/AxiosCustomize";
 
 function SongList() {
+
     const [songs, setSongs] = useState([]);
     const [songsPerPage] = useState(4);
     const [currentPage, setCurrentPage] = useState(1);
     const dispatch = useDispatch();
     const {currentSong, updateCurrentSongAndSongs} = useAudioPlayer();
     const {isPlaying, handlePlayToggle} = useContext(AudioPlayerContext);
+
     useEffect(() => {
         async function fetchData() {
             try {
@@ -63,19 +65,16 @@ function SongList() {
     };
 
     return (
-        <div className="container">
-            <div className="row">
-                {currentSongs.map((song) => (
-                    <div className="col-lg-3 col-md-4 col-sm-6" key={song.id}>
-                        <div className="song-card">
-                            <div className="cover cover--round"
-                                 data-song-id={song.id}
-                                 data-song-name={song.nameSong}
-                                 data-song-url={song.pathSong}
-                                 data-song-cover={song.imgSong}>
-                                <div className="cover__head">
-                                    <ul className="cover__label d-flex">
-                                        <li>
+        <>
+            <div className="container">
+                <div className="row">
+                    {currentSongs.map((song) => (
+                        <div className="col-lg-3 col-md-4 col-sm-6" key={song.id}>
+                            <div className="song-card">
+                                <div className="cover cover--round">
+                                    <div className="cover__head">
+                                        <ul className="cover__label d-flex">
+                                            <li>
                                                 <span className="badge rounded-pill bg-danger">
                                                     <i className="ri-heart-fill"></i>
                                                 </span>
@@ -154,33 +153,34 @@ function SongList() {
                                     </button>
                                 </div>
 
-                                <Link to={"/song/detailSong/" + song.id}>
-                                    <div className="cover__foot">
-                                        <p className="cover__title text-truncate">
-                                            {song.nameSong}
-                                        </p>
-                                        <p className="cover__subtitle text-truncate">
-                                            {song.description}
-                                        </p>
-                                    </div>
-                                </Link>
+                                    <Link to={"/song/detailSong/" + song.id}>
+                                        <div className="cover__foot">
+                                            <p className="cover__title text-truncate">
+                                                {song.nameSong}
+                                            </p>
+                                            <p className="cover__subtitle text-truncate">
+                                                {song.description}
+                                            </p>
+                                        </div>
+                                    </Link>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
+                <div className="pagination">
+                    {Array.from({length: pageCount}, (_, index) => (
+                        <button
+                            key={index + 1}
+                            className={`pagination-button ${currentPage === index + 1 ? 'active' : ''}`}
+                            onClick={() => handlePageChange(index + 1)}
+                        >
+
+                        </button>
+                    ))}
+                </div>
             </div>
-            <div className="pagination">
-                {Array.from({length: pageCount}, (_, index) => (
-                    <button
-                        key={index + 1}
-                        className={`pagination-button ${currentPage === index + 1 ? 'active' : ''}`}
-                        onClick={() => handlePageChange(index + 1)}
-                    >
-                        {index + 1}
-                    </button>
-                ))}
-            </div>
-        </div>
+        </>
     );
 }
 

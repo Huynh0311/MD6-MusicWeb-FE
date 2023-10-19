@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {Link, useNavigate} from "react-router-dom";
-import {searchListSongByName} from "../../api/songService/SongService";
 import {useSelector} from "react-redux";
 import _ from "lodash";
 
@@ -25,7 +24,6 @@ const SearchComponent = () => {
             navigate(`/song/search?q=${searchInput}`)
         }
     }
-
     return (
         <div>
             <header id="header">
@@ -88,9 +86,12 @@ const SearchComponent = () => {
                                                     </div>
                                                 </Link>
                                             </li>
-                                            <li><div className="dropdown-item d-flex align-items-center"><i
-                                                className="ri-heart-line fs-5"></i> <span
-                                                className="ps-2">Yêu thích</span></div></li>
+                                            <li>
+                                                <div className="dropdown-item d-flex align-items-center">
+                                                    <i className="ri-heart-line fs-5"></i>
+                                                    <span className="ps-2">Yêu thích</span>
+                                                </div>
+                                            </li>
                                             <li className="dropdown-divider"></li>
                                             <li>
                                                 <button
