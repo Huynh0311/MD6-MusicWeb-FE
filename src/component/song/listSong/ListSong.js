@@ -27,6 +27,7 @@ const ListSong = () => {
 
     const DetailFunction = (id) => {
         navigate("/song/detailSong/" +id);
+        navigate(0);
     }
 
     const RemoveFunction = (id) => {

@@ -18,6 +18,10 @@ class AccountService {
     updatePassword = (account) => {
         return instance.post("http://localhost:8080/apiAccount/save", account)
     }
+
+    getAllAccountByAuth = () => {
+        return instance.get("/apiAccount/findByAuth")
+    }
 }
 
 let accountService = new AccountService();

@@ -7,7 +7,6 @@ import _ from "lodash";
 const SearchComponent = () => {
     const accountLogin = useSelector(state => state.account);
     const navigate = useNavigate();
-    const [searchSong, setSearchSong] = useState([]);
     const [searchInput, setSearchInput] = useState();
 
     const logOut = () => {
@@ -32,14 +31,14 @@ const SearchComponent = () => {
             <header id="header">
                 <div className="container">
                     <div className="header-container">
-                        <div className="d-flex align-items-center"><a href="#" role="button"
+                        <div className="d-flex align-items-center"><div role="button"
                                                                       className="header-text sidebar-toggler d-lg-none me-3"
                                                                       aria-label="Sidebar toggler"><i
-                            className="ri-menu-3-line"></i></a>
+                            className="ri-menu-3-line"></i></div>
                             <form id="search_form" className="me-3" onSubmit={searchSongName}>
-                                <label for="search_input"><i
-                                    className="ri-search-2-line"></i></label> <input type="text"
-                                                                                     placeholder="Type anything to get result..."
+                                <label for="search_input">
+                                    <i className="ri-search-2-line" onClick={searchSongName}/></label> <input type="text"
+                                                                                     placeholder="Hãy tìm gì đó ở đây ..."
                                                                                      id="search_input"
                                                                                      className="form-control form-control-sm"
                                                                                      value={searchInput}
@@ -52,14 +51,15 @@ const SearchComponent = () => {
                             </div>
                             <div className="d-flex align-items-center">
                                 {!_.isEmpty(accountLogin) ? (
-                                    <div className="dropdown ms-3 ms-sm-4"><a href="#"
-                                                                              className="avatar header-text"
-                                                                              role="button" id="user_menu"
-                                                                              data-bs-toggle="dropdown"
-                                                                              aria-expanded="false">
-                                        <div className="avatar__image"><img src={accountLogin.img} alt="user"/>
+                                    <div className="dropdown ms-3 ms-sm-4">
+                                        <div className="avatar header-text"
+                                             role="button" id="user_menu"
+                                             data-bs-toggle="dropdown"
+                                             aria-expanded="false">
+                                        <div className="avatar__image">
+                                            <img src={accountLogin.img} alt="user"/>
                                         </div>
-                                        <span className="ps-2 d-none d-sm-block">{accountLogin.name}</span></a>
+                                        <span className="ps-2 d-none d-sm-block">{accountLogin.name}</span></div>
                                         <ul className="dropdown-menu dropdown-menu-md dropdown-menu-end"
                                             aria-labelledby="user_menu">
                                             <li>
@@ -88,10 +88,9 @@ const SearchComponent = () => {
                                                     </div>
                                                 </Link>
                                             </li>
-                                            <li><a className="dropdown-item d-flex align-items-center"
-                                                   href="favorites.html"><i
+                                            <li><div className="dropdown-item d-flex align-items-center"><i
                                                 className="ri-heart-line fs-5"></i> <span
-                                                className="ps-2">Yêu thích</span></a></li>
+                                                className="ps-2">Yêu thích</span></div></li>
                                             <li className="dropdown-divider"></li>
                                             <li>
                                                 <button

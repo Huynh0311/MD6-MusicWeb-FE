@@ -3,7 +3,7 @@ import {storage} from "../../../firebase/Firebase"
 import {v4} from 'uuid';
 import {ref, uploadBytes, getDownloadURL} from "firebase/storage"
 import "./create.css"
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as Yup from "yup";
 import {addSongSV, getAllGenres} from "../../api/songService/SongService";
@@ -11,24 +11,18 @@ import {toast} from "react-toastify";
 
 const validateSchema = Yup.object().shape({
     nameSong: Yup.string()
-        .min(5, 'song name must be at least 5 characters long')
-        .max(50, 'song name must be maximum 50 characters long')
+        .min(5, 'Tên bài hát có ít nhất 5 ký tự')
+        .max(50, 'Tên bài hát dài tối đa 50 ký tự')
         .required('Tên bài hát không được để trống'),
     nameSinger: Yup.string()
-        .min(3, 'Artists name must be at least 3 characters long')
-        .max(150, 'Artists name must be maximum 150 characters long')
-        .required('Tên ca sĩ không được để trống'),
+        .min(3, 'Tên nghệ sĩ không được ngắn hơn 3 ký tự')
+        .max(150, 'Tên nghệ sĩ dài tối đa 150 ký tự')
+        .required('Tên nghệ sĩ không được trống'),
 });
 
 const CreateSong = () => {
     const navigate = useNavigate();
-    const [audioUpload, setAudioUpload] = useState(null);
-    const [singer, setSinger] = useState();
-    const [nameSong, setNameSong] = useState('');
-    const [genres, setGenres] = useState(1);
     const [genresList, setGenresList] = useState([]);
-    const [description, setDescription] = useState('');
-    const [imageUpload, setImageUpload] = useState(null)
     const [previewImage, setPreviewImage] = useState(null);
     const [defaultImg, setDefaultImg] = useState('https://www.billboard.com/wp-content/uploads/media/streaming-illustration-v-2019-billboard-1548.jpg');
     const [isLoading, setIsLoading] = useState(false);
@@ -40,23 +34,9 @@ const CreateSong = () => {
     const [imgUrl,setImgUrl] = useState();
     const [audioUrl,setAuioUrl] = useState();
 
-    // const uploadAudio = async (imgFile) => {
-    //     if (audioUpload == null) return;
-    //     const audioRef = ref(storage, `audios/${audioUpload.name + v4()}`);
-    //
-    //     try {
-    //         await uploadBytes(audioRef, audioUpload);
-    //         const audioUrl = await getDownloadURL(audioRef);
-    //         addSong(audioUrl, imgFile);
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // }
-
     const uploadAudio = async (audioUpload) => {
         if (audioUpload == null) return;
         const audioRef = ref(storage, `audios/${audioUpload.name + v4()}`);
-
         try {
             await uploadBytes(audioRef, audioUpload);
             const audioUrl = await getDownloadURL(audioRef);
@@ -68,22 +48,7 @@ const CreateSong = () => {
     }
 
 
-    // const uploadImg = async () => {
-    //     setIsLoading(true);
-    //     if (imageUpload == null) return;
-    //     const imgRef = ref(storage, `images/${imageUpload.name + v4()}`);
-    //     try {
-    //         await uploadBytes(imgRef, imageUpload);
-    //         const imgUrl = await getDownloadURL(imgRef);
-    //
-    //         uploadAudio(imgUrl);
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // }
-
     const uploadImg = async (imageUpload) => {
-        // setIsLoading(true);
         if (imageUpload == null) return;
         const imgRef = ref(storage, `images/${imageUpload.name + v4()}`);
         try {
@@ -102,42 +67,27 @@ const CreateSong = () => {
     }
 
     const handleInputCreateSong = (e) => {
-        let {id, value} = e.target;
-        if (id == "description") {
-            let renewValue = insertLineBreaks(value);
+        const {id, value} = e.target;
+        if (id === "description") {
+            const renewValue = insertLineBreaks(value);
             setSong({...song, [id]: renewValue})
         }
-        if (id == "genres_id") {
+        if (id === "genres_id") {
             setSong({...song, genres: {id: value}});
         } else {
             setSong({...song, [id]: value})
         }
     }
 
-
-    // const addSong = async (audioUrl, imgUrl) => {
-    //     if (audioUrl && imgUrl) {
-    //         song.imgSong = imgUrl;
-    //         song.pathSong = audioUrl;
-    //         try {
-    //             const response = await addSongSV(song)
-    //             setIsLoading(false);
-    //             let obj = response.data;
-    //             navigate(`/song/detailSong/${obj.id}`)
-    //         } catch (error) {
-    //             console.log(error)
-    //         }
-    //     }
-    // }
     const addSong = async () => {
         if (audioUrl && imgUrl) {
             song.imgSong = imgUrl;
             song.pathSong = audioUrl;
             try {
                 const response = await addSongSV(song)
-                // setIsLoading(false);
                 let obj = response.data;
-                navigate(`/song/detailSong/${obj.id}`)
+                navigate(`/song/detailSong/${obj.id}`);
+                navigate(0);
             } catch (error) {
                 console.log(error)
             }
@@ -200,8 +150,8 @@ const CreateSong = () => {
                                                                         data-bs-target="#music_pane" type="button"
                                                                         role="tab"
                                                                         aria-controls="music_pane"
-                                                                        aria-selected="true">Add
-                                                                    Music
+                                                                        aria-selected="true">
+                                                                    Tạo bài hát
                                                                 </button>
                                                             </li>
                                                         </ul>
@@ -341,10 +291,14 @@ const CreateSong = () => {
                                                                 <span className="visually-hidden">Loading...</span>
                                                             </div>
                                                         ) : (
-                                                            'Add Music'
+                                                            'Thêm bài'
                                                         )}
                                                     </button>
-                                                    <button className="btn btn-danger">Cancel</button>
+                                                    <Link to={"/"}>
+                                                    <button className="btn btn-danger">
+                                                        Hủy
+                                                    </button>
+                                                    </Link>
                                                 </div>
                                             </div>
                                         </div>

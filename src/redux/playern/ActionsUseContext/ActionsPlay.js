@@ -12,7 +12,7 @@ const ActionPlay = () => {
             if (currentIndex < songs.length - 1) {
                 const nextSong = songs[currentIndex + 1];
                 updateCurrentSongAndSongs(nextSong, songs);
-            } else if (currentIndex == songs.length - 1) {
+            } else if (currentIndex === songs.length - 1) {
                 const nextSong = songs[0];
                 updateCurrentSongAndSongs(nextSong, songs);
             } else {
@@ -23,11 +23,11 @@ const ActionPlay = () => {
         };
 
         const handlePreviousSongClick = () => {
-            const currentIndex = songs.findIndex((song) => song.id == currentSong.id)
+            const currentIndex = songs.findIndex((song) => song.id === currentSong.id)
             if (currentIndex > 0) {
                 const previousSong = songs[currentIndex - 1];
                 updateCurrentSongAndSongs(previousSong, songs);
-            } else if (currentIndex == 0) {
+            } else if (currentIndex === 0) {
                 const previousSong = songs[songs.length - 1];
                 updateCurrentSongAndSongs(previousSong, songs);
             }
@@ -54,14 +54,11 @@ const ActionPlay = () => {
                                         <img src="../../images/cover/small/1.jpg"
                                              alt="" style={{height: "100%"}}/>
                                     </div>
-                                    <div className="cover__content ps-3 d-none d-sm-block"><a href="song-details.html"
-                                                                                              className="cover__title text-truncate">
-
-                                    </a>
-                                        <a href="artist-details.html" className="cover__subtitle text-truncate"
+                                    <div className="cover__content ps-3 d-none d-sm-block">
+                                        <div className="cover__title text-truncate"></div>
+                                        <div className="cover__subtitle text-truncate"
                                            data-amplitude-song-info="artist">
-
-                                        </a>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className={"body-player player-control"}>
