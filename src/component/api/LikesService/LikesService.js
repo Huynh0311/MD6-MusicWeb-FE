@@ -3,8 +3,6 @@ const isLikedAPI = (likeObj) => {
     return axios.post("likes/check", likeObj);
 }
 
-
-
 const getSongLikeQuantityAPI = (id) => {
     return axios.get(`likes/getlike/${id}`);
 }

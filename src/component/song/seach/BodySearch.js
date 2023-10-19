@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import "./BodySearch.css"
 import {
     searchListSongByName,
@@ -7,12 +7,10 @@ import {
     searchListSongByNameSinger
 } from "../../api/songService/SongService";
 import {likeClickAPI} from "../../api/LikesService/LikesService";
-import {AiOutlinePauseCircle, AiOutlinePlayCircle} from "react-icons/ai";
 import {AudioPlayerContext, useAudioPlayer} from "../../../redux/playern/ActionsUseContext/AudioPlayerProvider";
-
+import {BsFillPlayFill, BsPauseFill} from "react-icons/bs";
 
 const BodySearch = () => {
-    const navigate = useNavigate();
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const searchInput = queryParams.get('q');
@@ -23,7 +21,6 @@ const BodySearch = () => {
     const [isLike, setIsLike] = useState(false);
     const {currentSong, updateCurrentSongAndSongs} = useAudioPlayer();
     const {isPlaying, handlePlayToggle} = useContext(AudioPlayerContext);
-    // const [songs, setSongs] = useState([]);
 
 
     const loadMore = () => {
@@ -37,24 +34,21 @@ const BodySearch = () => {
 
     useEffect(() => {
         searchSong();
-        // setNumberOfElement(4);
-    }, [selection, searchInput, isLike,updateCurrentSongAndSongs, currentSong])
+    }, [selection, searchInput, isLike, updateCurrentSongAndSongs, currentSong])
 
     useEffect(() => {
         setNumberOfElement(4);
     }, [selection, searchInput])
     const searchSong = async () => {
-        if (searchInput != '' && selection == 'song') {
+        if (searchInput !== '' && selection === 'song') {
             const res = await searchListSongByName(searchInput);
-            // setSearchList(res.data);
             const songs = res.data.map((song) => ({
                 ...song,
                 isPlaying: currentSong && currentSong.id === song.id ? isPlaying : false,
             }));
             setSearchList(songs);
-        } else if (searchInput != '' && selection == 'singer') {
+        } else if (searchInput !== '' && selection === 'singer') {
             const res = await searchListSongByNameSinger(searchInput);
-            // setSearchList(res.data);
             const songs = res.data.map((song) => ({
                 ...song,
                 isPlaying: currentSong && currentSong.id === song.id ? isPlaying : false,
@@ -62,12 +56,9 @@ const BodySearch = () => {
             setSearchList(songs);
         } else {
             const res = await searchListSongByNamePlaylist(searchInput);
-            // setSearchList(res.data);
             handleSetASongFromList(res.data);
         }
     }
-
-    console.log(searchList);
 
     function likeClick(id) {
         likeClickAPI(id).then(res => {
@@ -81,7 +72,6 @@ const BodySearch = () => {
                 ...song,
                 isPlaying: currentSong && currentSong.id === song.id ? isPlaying : false,
             }));
-
         });
         setSearchList(songs);
     }
@@ -133,23 +123,6 @@ const BodySearch = () => {
                                             slice.map((song) =>
                                                 (
                                                     <div className="col-xl-6" key={song.id}>
-                                                        {song.isPlaying ? (
-                                                            <AiOutlinePauseCircle
-                                                                onClick={() => {
-                                                                    handleToggleSongPlay(song.id);
-                                                                    updateCurrentSongAndSongs(song, searchList);
-                                                                }}
-                                                                style={{fontSize: "30px"}}
-                                                            />
-                                                        ) : (
-                                                            <AiOutlinePlayCircle
-                                                                onClick={() => {
-                                                                    handleToggleSongPlay(song.id);
-                                                                    updateCurrentSongAndSongs(song, searchList);
-                                                                }}
-                                                                style={{fontSize: "30px"}}
-                                                            />
-                                                        )}
                                                         <div className="list__item" data-song-id={song.id}
                                                              data-song-name={song.nameSong}
                                                              data-song-artist={song.nameSinger} data-song-album="Mummy"
@@ -157,28 +130,44 @@ const BodySearch = () => {
                                                              data-song-cover={song.imgSong}>
                                                             <div className="list__cover"><img src={song.imgSong}
                                                                                               alt="ErrorLoading"/>
-                                                                <a href="#"
-                                                                   className="btn btn-play btn-sm btn-default btn-icon rounded-pill"
-                                                                   data-play-id={song.id}
-                                                                   aria-label="Play pause"><i
-                                                                    className="ri-play-fill icon-play"></i> <i
-                                                                    className="ri-pause-fill icon-pause"></i>
-                                                                </a>
+                                                                <div
+                                                                    className="btn btn-play btn-sm btn-default btn-icon rounded-pill"
+                                                                    aria-label="Play pause">
+                                                                    {song.isPlaying ? (
+                                                                        <BsPauseFill
+                                                                            onClick={() => {
+                                                                                handleToggleSongPlay(song.id);
+                                                                                updateCurrentSongAndSongs(song, searchList);
+                                                                            }}
+                                                                            style={{fontSize: "30px"}}
+                                                                        />
+                                                                    ) : (
+                                                                        <BsFillPlayFill
+                                                                            onClick={() => {
+                                                                                handleToggleSongPlay(song.id);
+                                                                                updateCurrentSongAndSongs(song, searchList);
+                                                                            }}
+                                                                            style={{fontSize: "30px"}}
+                                                                        />
+                                                                    )}
+                                                                </div>
                                                             </div>
                                                             <div className="list__content">
                                                                 <Link to={`/song/detailSong/${song.id}`}
                                                                       className="list__title text-truncate">
                                                                     {song.nameSong}
                                                                 </Link>
-                                                                <p className="list__subtitle text-truncate"><a
-                                                                    href="artist-details.html">{song.nameSinger}</a></p>
+                                                                <p className="list__subtitle text-truncate">
+                                                                    <div>{song.nameSinger}</div>
+                                                                </p>
                                                             </div>
                                                             <ul className="list__option">
                                                                 <li>
-                                                                    <a role="button"
-                                                                       className="d-inline-flex"
-                                                                       aria-label="Favorite" data-favorite-id={song.id}>
-                                                                        {song.isLiked == 1 ? (
+                                                                    <div role="button"
+                                                                         className="d-inline-flex"
+                                                                         aria-label="Favorite"
+                                                                         data-favorite-id={song.id}>
+                                                                        {song.isLiked === 1 ? (
                                                                             <i className="fa-sharp fa-solid fa-heart"
                                                                                style={{
                                                                                    color: "#ff0000",
@@ -188,35 +177,50 @@ const BodySearch = () => {
                                                                             </i>
                                                                         ) : (
                                                                             <i className="ri-heart-line heart-empty"
-                                                                               onClick={() => likeClick(song.id)}/>
+                                                                               onClick={() => likeClick(song.id)}
+                                                                            />
                                                                         )}
-                                                                    </a>
+                                                                    </div>
                                                                 </li>
-                                                                <li className="dropstart d-inline-flex"><a
-                                                                    className="dropdown-link"
-                                                                    href="#" role="button"
-                                                                    data-bs-toggle="dropdown"
-                                                                    aria-label="Cover options"
-                                                                    aria-expanded="false"><i
-                                                                    className="ri-more-fill"></i></a>
+                                                                <li className="dropstart d-inline-flex">
+                                                                    <div
+                                                                        className="dropdown-link"
+                                                                        role="button"
+                                                                        data-bs-toggle="dropdown"
+                                                                        aria-label="Cover options"
+                                                                        aria-expanded="false"><i
+                                                                        className="ri-more-fill"></i>
+                                                                    </div>
                                                                     <ul className="dropdown-menu dropdown-menu-sm">
-                                                                        <li><a className="dropdown-item"
-                                                                               href="#" role="button"
-                                                                               data-playlist-id="1">Add to playlist</a>
+                                                                        <li>
+                                                                            <div className="dropdown-item" role="button"
+                                                                                 data-playlist-id="1">Add to playlist
+                                                                            </div>
                                                                         </li>
-                                                                        <li><a className="dropdown-item"
-                                                                               href="#" role="button"
-                                                                               data-queue-id="1">Add to queue</a></li>
-                                                                        <li><a className="dropdown-item"
-                                                                               href="#" role="button"
-                                                                               data-next-id="1">Next to play</a></li>
-                                                                        <li><a className="dropdown-item"
-                                                                               href="#"
-                                                                               role="button">Share</a></li>
+                                                                        <li>
+                                                                            <div className="dropdown-item"
+                                                                                 role="button"
+                                                                                 data-queue-id="1">Add to queue
+                                                                            </div>
+                                                                        </li>
+                                                                        <li>
+                                                                            <div className="dropdown-item" role="button"
+                                                                                 data-next-id="1">Next to play
+                                                                            </div>
+                                                                        </li>
+                                                                        <li>
+                                                                            <div className="dropdown-item"
+
+                                                                                 role="button">Share
+                                                                            </div>
+                                                                        </li>
                                                                         <li className="dropdown-divider"></li>
-                                                                        <li><a className="dropdown-item"
-                                                                               href="#" role="button"
-                                                                               data-play-id="1">Play</a></li>
+                                                                        <li>
+                                                                            <div className="dropdown-item"
+                                                                                 role="button"
+                                                                                 data-play-id="1">Play
+                                                                            </div>
+                                                                        </li>
                                                                     </ul>
                                                                 </li>
                                                             </ul>
@@ -237,23 +241,6 @@ const BodySearch = () => {
                                                     <div className="song-component">
                                                         {songList.map((song) => (
                                                             <div className="col-xl-6" key={song.id}>
-                                                                {song.isPlaying ? (
-                                                                    <AiOutlinePauseCircle
-                                                                        onClick={() => {
-                                                                            handleToggleSongPlay(song.id);
-                                                                            updateCurrentSongAndSongs(song, songList);
-                                                                        }}
-                                                                        style={{fontSize: "30px"}}
-                                                                    />
-                                                                ) : (
-                                                                    <AiOutlinePlayCircle
-                                                                        onClick={() => {
-                                                                            handleToggleSongPlay(song.id);
-                                                                            updateCurrentSongAndSongs(song, songList);
-                                                                        }}
-                                                                        style={{fontSize: "30px"}}
-                                                                    />
-                                                                )}
                                                                 <div className="list__item" data-song-id={song.id}
                                                                      data-song-name={song?.nameSong}
                                                                      data-song-artist={song?.nameSinger}
@@ -264,30 +251,47 @@ const BodySearch = () => {
                                                                     <div className="list__cover"><img
                                                                         src={song?.imgSong}
                                                                         alt="ErrorLoading"/>
-                                                                        <a href="#"
-                                                                           className="btn btn-play btn-sm btn-default btn-icon rounded-pill"
-                                                                           data-play-id={song?.id}
-                                                                           aria-label="Play pause"><i
-                                                                            className="ri-play-fill icon-play"></i> <i
-                                                                            className="ri-pause-fill icon-pause"></i>
-                                                                        </a>
+                                                                        <div
+                                                                            className="btn btn-play btn-sm btn-default btn-icon rounded-pill"
+                                                                            // data-play-id={song?.id}
+                                                                            aria-label="Play pause">
+                                                                            {/*<i className="ri-play-fill icon-play"></i>*/}
+                                                                            {/*<i className="ri-pause-fill icon-pause"></i>*/}
+                                                                            {song.isPlaying ? (
+                                                                                <BsPauseFill
+                                                                                    onClick={() => {
+                                                                                        handleToggleSongPlay(song.id);
+                                                                                        updateCurrentSongAndSongs(song, songList);
+                                                                                    }}
+                                                                                    style={{fontSize: "30px"}}
+                                                                                />
+                                                                            ) : (
+                                                                                <BsFillPlayFill
+                                                                                    onClick={() => {
+                                                                                        handleToggleSongPlay(song.id);
+                                                                                        updateCurrentSongAndSongs(song, songList);
+                                                                                    }}
+                                                                                    style={{fontSize: "30px"}}
+                                                                                />
+                                                                            )}
+                                                                        </div>
                                                                     </div>
                                                                     <div className="list__content">
                                                                         <Link to={`/song/detailSong/${song?.id}`}
                                                                               className="list__title text-truncate">
                                                                             {song?.nameSong}
                                                                         </Link>
-                                                                        <p className="list__subtitle text-truncate"><a
-                                                                            href="artist-details.html">{song.nameSinger}</a>
+                                                                        <p className="list__subtitle text-truncate">
+                                                                            <div>{song.nameSinger}</div>
                                                                         </p>
                                                                     </div>
                                                                     <ul className="list__option">
                                                                         <li>
-                                                                            <a href="#" role="button"
-                                                                               className="d-inline-flex"
-                                                                               aria-label="Favorite"
-                                                                               data-favorite-id={song?.id}>
-                                                                                {song?.isLiked == 1 ? (
+                                                                            <div role="button"
+                                                                                 className="d-inline-flex"
+                                                                                 aria-label="Favorite"
+                                                                                 data-favorite-id={song?.id}>
+                                                                                {song?.isLiked === 1 ? (
                                                                                     <i className="fa-sharp fa-solid fa-heart"
                                                                                        style={{
                                                                                            color: "#ff0000",
@@ -299,41 +303,49 @@ const BodySearch = () => {
                                                                                     <i className="ri-heart-line heart-empty"
                                                                                        onClick={() => likeClick(song?.id)}/>
                                                                                 )}
-                                                                            </a>
+                                                                            </div>
                                                                         </li>
-                                                                        <li className="dropstart d-inline-flex"><a
-                                                                            className="dropdown-link"
-                                                                            href="#" role="button"
-                                                                            data-bs-toggle="dropdown"
-                                                                            aria-label="Cover options"
-                                                                            aria-expanded="false"><i
-                                                                            className="ri-more-fill"></i></a>
+                                                                        <li className="dropstart d-inline-flex">
+                                                                            <div
+                                                                                className="dropdown-link"
+                                                                                role="button"
+                                                                                data-bs-toggle="dropdown"
+                                                                                aria-label="Cover options"
+                                                                                aria-expanded="false"><i
+                                                                                className="ri-more-fill"></i></div>
                                                                             <ul className="dropdown-menu dropdown-menu-sm">
-                                                                                <li><a className="dropdown-item"
-                                                                                       href="#"
-                                                                                       role="button"
-                                                                                       data-playlist-id="1">Add to
-                                                                                    playlist</a>
+                                                                                <li>
+                                                                                    <div className="dropdown-item"
+                                                                                         role="button"
+                                                                                         data-playlist-id="1">Add to
+                                                                                        playlist
+                                                                                    </div>
                                                                                 </li>
-                                                                                <li><a className="dropdown-item"
-                                                                                       href="#"
-                                                                                       role="button"
-                                                                                       data-queue-id="1">Add to
-                                                                                    queue</a>
+                                                                                <li>
+                                                                                    <div className="dropdown-item"
+                                                                                         role="button"
+                                                                                         data-queue-id="1">Add to
+                                                                                        queue
+                                                                                    </div>
                                                                                 </li>
-                                                                                <li><a className="dropdown-item"
-                                                                                       href="#"
-                                                                                       role="button"
-                                                                                       data-next-id="1">Next to play</a>
+                                                                                <li>
+                                                                                    <div className="dropdown-item"
+                                                                                         role="button"
+                                                                                         data-next-id="1">Next to play
+                                                                                    </div>
                                                                                 </li>
-                                                                                <li><a className="dropdown-item"
-                                                                                       href="#"
-                                                                                       role="button">Share</a></li>
+                                                                                <li>
+                                                                                    <div className="dropdown-item"
+                                                                                         role="button">Share
+                                                                                    </div>
+                                                                                </li>
                                                                                 <li className="dropdown-divider"></li>
-                                                                                <li><a className="dropdown-item"
-                                                                                       href="#"
-                                                                                       role="button"
-                                                                                       data-play-id="1">Play</a></li>
+                                                                                <li>
+                                                                                    <div className="dropdown-item"
+                                                                                         role="button"
+                                                                                         data-play-id="1">Play
+                                                                                    </div>
+                                                                                </li>
                                                                             </ul>
                                                                         </li>
                                                                     </ul>
@@ -351,12 +363,12 @@ const BodySearch = () => {
                                 </div>
                             </div>
                             <div className="mt-5 text-center">
-                                <a className="btn btn-primary"
-                                   style={{marginBottom: "30px"}}>
+                                <div className="btn btn-primary"
+                                     style={{marginBottom: "30px"}}>
                                     <div className="btn__wrap"><i className="ri-loader-3-fill"></i> <span
                                         onClick={loadMore}>Load more</span>
                                     </div>
-                                </a>
+                                </div>
                             </div>
                         </div>
                     </div>
