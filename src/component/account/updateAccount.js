@@ -8,6 +8,8 @@ import {v4} from "uuid";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as Yup from "yup";
 import {toast} from "react-toastify";
+import {useDispatch, useSelector} from "react-redux";
+import {editAccount} from "../../redux/actions";
 
 const validateSchema = Yup.object().shape({
     name: Yup.string()
@@ -16,6 +18,7 @@ const validateSchema = Yup.object().shape({
         .required('Tên không được để trống'),
     email: Yup.string()
         .matches(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/, 'Email không phù hợp')
+        .max(50, 'Email không được quá 50 kí tự')
         .required('Email Không được để trống'),
     phone: Yup.string()
         .matches(/^\d{10}$/, 'Số điện thoại 10 kí tự và không chứa chữ')
@@ -24,7 +27,8 @@ const validateSchema = Yup.object().shape({
 
 
 const UpdateAccount = () => {
-    const [id, setId] = useState(JSON.parse(localStorage.getItem("data")).id);
+    const accountLogin = useSelector(state => state.account);
+    const dispatch = useDispatch();
     const [account, setAccount] = useState({});
 
     const uploadImg = (even) => {
@@ -58,10 +62,10 @@ const UpdateAccount = () => {
 
     useEffect(() => {
         findById();
-    }, [id]);
+    }, []);
 
     const findById = () => {
-        accountService.findById(id)
+        accountService.findById(accountLogin.id)
             .then((acc) => {
                 setAccount(acc.data);
             })
@@ -89,21 +93,23 @@ const UpdateAccount = () => {
                             }}
                             validationSchema={validateSchema}
                             onSubmit={(values) => {
-                                console.log(1)
-                                console.log(values)
-
                                 const data = {...values, img: account.img}
-                                console.log(values)
-                                accountService.updateAccount(id, data).then((response) => {
+                                accountService.updateAccount(accountLogin.id, data).then((response) => {
+
+                                    const dataLogin = {
+                                        ...accountLogin,
+                                        name:response.data.name,
+                                        img:response.data.img,
+                                        phone:response.data.phone
+                                    }
+                                    dispatch(editAccount(dataLogin));
                                     toast.success('Cập nhật thành công');
-                                    // navigate("/");
                                 }).catch((error) => {
                                     toast.error('Cập nhật thất bại');
                                 })
                             }}>
                             <Form>
-
-                                <div className="hero" style={{backgroundImage: "url(images/banner/event.jpg)"}}></div>
+                                <div className="hero" style={{backgroundImage: "url(../../images/banner/event.jpg)"}}></div>
                                 <div className="under-hero container">
                                     <div className="section">
                                         <div className="plan bg-light">
@@ -130,6 +136,18 @@ const UpdateAccount = () => {
                                                                 </div>
                                                                 <div className="col-sm-12 inputEdit mb-3">
                                                                     <div className="text-lable">
+                                                                        <label htmlFor="l_name"
+                                                                               className="form-label fw-medium">Email</label>
+                                                                    </div>
+                                                                    <Field type="email" id="l_name" name={"email"}
+                                                                           className="form-control"
+                                                                           onInput={ChangeInputAccountEdit}
+                                                                           value={account.email} readOnly />
+                                                                    <span style={{color: "red"}}><ErrorMessage
+                                                                        name={'email'}></ErrorMessage></span>
+                                                                </div>
+                                                                <div className="col-sm-12 inputEdit mb-3">
+                                                                    <div className="text-lable">
                                                                     <label htmlFor="name"
                                                                            className="form-label fw-medium">Tên</label>
                                                                     </div>
@@ -139,18 +157,6 @@ const UpdateAccount = () => {
                                                                            value={account.name}/>
                                                                     <span style={{color: "red"}}><ErrorMessage
                                                                         name={'name'}></ErrorMessage></span>
-                                                                </div>
-                                                                <div className="col-sm-12 inputEdit mb-3">
-                                                                    <div className="text-lable">
-                                                                    <label htmlFor="l_name"
-                                                                           className="form-label fw-medium">Email</label>
-                                                                    </div>
-                                                                    <Field type="email" id="l_name" name={"email"}
-                                                                           className="form-control"
-                                                                           onInput={ChangeInputAccountEdit}
-                                                                           value={account.email}/>
-                                                                    <span style={{color: "red"}}><ErrorMessage
-                                                                        name={'email'}></ErrorMessage></span>
                                                                 </div>
                                                                 <div className="col-sm-12 inputEdit mb-3">
                                                                     <div className="text-lable">
@@ -265,15 +271,15 @@ const UpdateAccount = () => {
                                 <button className="btn btn-icon" data-bs-toggle="dropdown" aria-label="Song options"
                                         aria-expanded="false"><i className="ri-more-2-fill fs-5"></i></button>
                                 <ul className="dropdown-menu dropdown-menu-sm" id="player_options">
-                                    <li><a className="dropdown-item" href="javascript:void(0);" role="button"
+                                    <li><a className="dropdown-item" href="#" role="button"
                                            data-favorite-id="1">Favorite</a>
                                     </li>
-                                    <li><a className="dropdown-item" href="javascript:void(0);" role="button"
+                                    <li><a className="dropdown-item" href="#" role="button"
                                            data-playlist-id="1">Add
                                         to playlist</a></li>
                                     <li><a className="dropdown-item" href="audio/ringtone-1.mp3" download>Download</a>
                                     </li>
-                                    <li><a className="dropdown-item" href="javascript:void(0);" role="button">Share</a>
+                                    <li><a className="dropdown-item" href="#" role="button">Share</a>
                                     </li>
                                     <li className="dropdown-divider"></li>
                                     <li><a className="dropdown-item" href="song-details.html">View details</a></li>
@@ -286,7 +292,7 @@ const UpdateAccount = () => {
                                 <div className="dropdown-menu playlist__dropdown">
                                     <div className="playlist__head d-flex align-items-center justify-content-between">
                                         <h6 className="mb-0">
-                                            Next Lineup</h6><a href="javascript:void(0);" role="button"
+                                            Next Lineup</h6><a href="#" role="button"
                                                                id="clear_playlist"
                                                                className="btn btn-link">Clear</a></div>
                                     <div id="playlist" className="list playlist__body" data-scroll="true">

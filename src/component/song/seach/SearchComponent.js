@@ -1,21 +1,30 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Link, useNavigate} from "react-router-dom";
+import {searchListSongByName} from "../../api/songService/SongService";
+import {useSelector} from "react-redux";
+import _ from "lodash";
 
 const SearchComponent = () => {
-    const [account,setAccount] = useState(localStorage.getItem("data"));
-    const loggedIn = isLoggedIn();
+    const accountLogin = useSelector(state => state.account);
     const navigate = useNavigate();
-    function isLoggedIn() {
-        return account ? true : false;
-    }
-    const logOut =()=> {
+    const [searchSong, setSearchSong] = useState([]);
+    const [searchInput, setSearchInput] = useState();
+
+    const logOut = () => {
         localStorage.clear();
         navigate("/");
         window.location.reload()
     }
-    let accounts = null;
-    if (account) {
-        accounts = JSON.parse(account);
+
+    const handleSearchInput = (e) => {
+        setSearchInput(e.target.value);
+    }
+
+    const searchSongName = async (e) => {
+        e.preventDefault();
+        if (searchInput != '') {
+            navigate(`/song/search?q=${searchInput}`)
+        }
     }
 
     return (
@@ -23,33 +32,38 @@ const SearchComponent = () => {
             <header id="header">
                 <div className="container">
                     <div className="header-container">
-                        <div className="d-flex align-items-center"><a href="javascript:void(0);" role="button"
+                        <div className="d-flex align-items-center"><a href="#" role="button"
                                                                       className="header-text sidebar-toggler d-lg-none me-3"
                                                                       aria-label="Sidebar toggler"><i
                             className="ri-menu-3-line"></i></a>
-                            <form action="#" id="search_form" className="me-3"><label for="search_input"><i
-                                className="ri-search-2-line"></i></label> <input type="text"
-                                                                                 placeholder="Type anything to get result..."
-                                                                                 id="search_input"
-                                                                                 className="form-control form-control-sm"/>
+                            <form id="search_form" className="me-3" onSubmit={searchSongName}>
+                                <label for="search_input"><i
+                                    className="ri-search-2-line"></i></label> <input type="text"
+                                                                                     placeholder="Type anything to get result..."
+                                                                                     id="search_input"
+                                                                                     className="form-control form-control-sm"
+                                                                                     value={searchInput}
+                                                                                     onChange={(e) => handleSearchInput(e)}
+                            />
                             </form>
                             <div className="d-flex align-items-center">
-                                {loggedIn ? (
-                                    <div className="dropdown ms-3 ms-sm-4"><a href="javascript:void(0);"
+                                {!_.isEmpty(accountLogin) ? (
+                                    <div className="dropdown ms-3 ms-sm-4"><a href="#"
                                                                               className="avatar header-text"
                                                                               role="button" id="user_menu"
                                                                               data-bs-toggle="dropdown"
                                                                               aria-expanded="false">
-                                        <div className="avatar__image"><img src={accounts.img} alt="user"/>
+                                        <div className="avatar__image"><img src={accountLogin.img} alt="user"/>
                                         </div>
-                                        <span className="ps-2 d-none d-sm-block">{accounts.name}</span></a>
+                                        <span className="ps-2 d-none d-sm-block">{accountLogin.name}</span></a>
                                         <ul className="dropdown-menu dropdown-menu-md dropdown-menu-end"
                                             aria-labelledby="user_menu">
                                             <li>
                                                 <div className="py-2 px-3 avatar avatar--lg">
-                                                    <div className="avatar__image"><img src={accounts.img}
+                                                    <div className="avatar__image"><img src={accountLogin.img}
                                                                                         alt="user"/></div>
-                                                    <div className="avatar__content"><span className="avatar__title">{accounts.name}</span>
+                                                    <div className="avatar__content"><span
+                                                        className="avatar__title">{accountLogin.name}</span>
                                                         <span className="avatar__subtitle">Artist</span></div>
                                                 </div>
                                             </li>
@@ -75,14 +89,19 @@ const SearchComponent = () => {
                                                 className="ri-heart-line fs-5"></i> <span
                                                 className="ps-2">Yêu thích</span></a></li>
                                             <li className="dropdown-divider"></li>
-                                            <li><button
-                                                className="dropdown-item d-flex align-items-center external text-danger" onClick={() => logOut()}><i className="ri-logout-circle-line fs-5"></i> <span
-                                                className="ps-2">Logout</span></button>
+                                            <li>
+                                                <button
+                                                    className="dropdown-item d-flex align-items-center external text-danger"
+                                                    onClick={() => logOut()}><i
+                                                    className="ri-logout-circle-line fs-5"></i> <span
+                                                    className="ps-2">Logout</span></button>
                                             </li>
                                         </ul>
                                     </div>
                                 ) : (
-                                    <Link to={'/login'}><button className="btn btn-primary">Đăng nhập</button></Link>
+                                    <Link to={'/login'}>
+                                        <button className="btn btn-primary">Đăng nhập</button>
+                                    </Link>
                                 )}
 
                             </div>

@@ -1,4 +1,5 @@
 export const SAVE_ACCOUNT = 'SAVE_ACCOUNT';
+export const SAVE_SONGS = 'SAVE_SONGS';
 export const EDIT_ACCOUNT = 'EDIT_ACCOUNT';
 export const DELETE_ACCOUNT = 'DELETE_ACCOUNT';
 
@@ -18,5 +19,12 @@ export const editAccount = (account) => {
 export const deleteAccount = () => {
     return {
         type: DELETE_ACCOUNT,
+    };
+}
+
+export const saveSong = (song) => {
+    return {
+        type: SAVE_SONGS,
+        payload: song
     };
 }

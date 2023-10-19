@@ -8,9 +8,11 @@ import {toast} from "react-toastify";
 const validateSchema = Yup.object().shape({
     password: Yup.string()
         .matches(/^(?=.*[A-Za-z])(?=.*\d).{8,}$/, 'Mật khẩu tối thiểu 8 kí tự. có cả chữ và số')
+        .max(50, 'Mật khẩu không được quá 50 kí tự')
         .required('Mật khẩu không được để trống'),
     confirmPassword: Yup.string()
         .oneOf([Yup.ref('password'), null], 'Mật khẩu xác nhận phải trùng khớp với mật khẩu')
+        .max(50, 'Mật khẩu không được quá 50 kí tự')
         .required('Xác nhận mật khẩu không được để trống'),
 });
 
@@ -57,7 +59,7 @@ const UpdatePassword = () => {
                                 })
                             }}>
                             <Form>
-                                <div className="hero" style={{backgroundImage: "url(images/banner/event.jpg)"}}></div>
+                                <div className="hero" style={{backgroundImage: "url(../../images/banner/event.jpg)"}}></div>
                                 <div className="under-hero container">
                                     <div className="section">
                                         <div className="plan bg-light">
@@ -190,15 +192,15 @@ const UpdatePassword = () => {
                                 <button className="btn btn-icon" data-bs-toggle="dropdown" aria-label="Song options"
                                         aria-expanded="false"><i className="ri-more-2-fill fs-5"></i></button>
                                 <ul className="dropdown-menu dropdown-menu-sm" id="player_options">
-                                    <li><a className="dropdown-item" href="javascript:void(0);" role="button"
+                                    <li><a className="dropdown-item" href="#" role="button"
                                            data-favorite-id="1">Favorite</a>
                                     </li>
-                                    <li><a className="dropdown-item" href="javascript:void(0);" role="button"
+                                    <li><a className="dropdown-item" href="#" role="button"
                                            data-playlist-id="1">Add
                                         to playlist</a></li>
                                     <li><a className="dropdown-item" href="audio/ringtone-1.mp3" download>Download</a>
                                     </li>
-                                    <li><a className="dropdown-item" href="javascript:void(0);" role="button">Share</a>
+                                    <li><a className="dropdown-item" href="#" role="button">Share</a>
                                     </li>
                                     <li className="dropdown-divider"></li>
                                     <li><a className="dropdown-item" href="song-details.html">View details</a></li>
@@ -211,7 +213,7 @@ const UpdatePassword = () => {
                                 <div className="dropdown-menu playlist__dropdown">
                                     <div className="playlist__head d-flex align-items-center justify-content-between">
                                         <h6 className="mb-0">
-                                            Next Lineup</h6><a href="javascript:void(0);" role="button"
+                                            Next Lineup</h6><a href="#" role="button"
                                                                id="clear_playlist"
                                                                className="btn btn-link">Clear</a></div>
                                     <div id="playlist" className="list playlist__body" data-scroll="true">

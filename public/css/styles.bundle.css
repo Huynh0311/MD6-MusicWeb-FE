@@ -278,6 +278,15 @@ a, button, input {
     visibility: hidden
 }
 
+.playing {
+    -webkit-transition: all .15s ease-in-out;
+    transition: all .15s ease-in-out;
+    color: blue;
+    opacity: 1 !important;
+    visibility: unset !important;
+    background-color: #eece8f !important;
+}
+
 .btn.btn-play.active {
     opacity: 1;
     visibility: visible
@@ -980,7 +989,8 @@ a, button, input {
     -ms-flex-align: center;
     align-items: center;
     padding: .5rem;
-    border-radius: .25rem
+    border-radius: .25rem;
+    width: 50%;
 }
 
 .list .list__item:hover {
@@ -1953,7 +1963,7 @@ body[data-sidebar-toggle=true] #sidebar {
 }
 
 .section {
-    margin-bottom: 4rem
+    margin-bottom: 7rem
 }
 
 .section .section__head {
@@ -2011,16 +2021,16 @@ body[data-sidebar-toggle=true] #sidebar {
     display: -ms-flexbox;
     display: flex;
     -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
     -webkit-box-align: center;
     -ms-flex-align: center;
-    align-items: center;
+    /* align-items: center; */
     background-color: #fff;
     position: relative;
-    height: 4.5rem;
-    border-radius: .5rem;
+    height: 5rem;
+    border-radius: 0.5rem;
     -webkit-box-shadow: 0 1px 2rem 0 rgba(0, 0, 0, .3);
-    box-shadow: 0 1px 2rem 0 rgba(0, 0, 0, .3)
+    box-shadow: 0 1px 2rem 0 rgba(0, 0, 0, .3);
 }
 
 #player .btn:not(.btn-default):not(.btn-link) {
@@ -2035,13 +2045,13 @@ body[data-sidebar-toggle=true] #sidebar {
 #player .cover {
     -webkit-box-flex: 1;
     -ms-flex: 1;
-    flex: 1;
+    flex: 0.6;
     min-width: 0
 }
 
 #player .cover .cover__image {
     width: 4.5rem;
-    height: 4.5rem
+    height: 5rem
 }
 
 #player .cover .cover__image img {
@@ -3506,4 +3516,13 @@ body[data-theme=dark] .plan .plan__col {
 .modal-login{
     margin-left: 38%;
     margin-top: 3%;
+}
+
+.playing {
+    -webkit-transition: all .15s ease-in-out;
+    transition: all .15s ease-in-out;
+    color: blue;
+    opacity: 1 !important;
+    visibility: unset !important;
+    background-color: #eece8f !important;
 }

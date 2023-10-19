@@ -13,11 +13,11 @@ const validateSchema = Yup.object().shape({
     nameSong: Yup.string()
         .min(5, 'song name must be at least 5 characters long')
         .max(50, 'song name must be maximum 50 characters long')
-        .required('song name cannot be null'),
+        .required('Tên bài hát không được để trống'),
     nameSinger: Yup.string()
         .min(3, 'Artists name must be at least 3 characters long')
         .max(150, 'Artists name must be maximum 150 characters long')
-        .required('Artists name cannot be null'),
+        .required('Tên ca sĩ không được để trống'),
 });
 
 const CreateSong = () => {
@@ -36,28 +36,61 @@ const CreateSong = () => {
     const [song, setSong] = useState({
         genres: {id: 1}
     });
-    const uploadAudio = async (imgFile) => {
+
+    const [imgUrl,setImgUrl] = useState();
+    const [audioUrl,setAuioUrl] = useState();
+
+    // const uploadAudio = async (imgFile) => {
+    //     if (audioUpload == null) return;
+    //     const audioRef = ref(storage, `audios/${audioUpload.name + v4()}`);
+    //
+    //     try {
+    //         await uploadBytes(audioRef, audioUpload);
+    //         const audioUrl = await getDownloadURL(audioRef);
+    //         addSong(audioUrl, imgFile);
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // }
+
+    const uploadAudio = async (audioUpload) => {
         if (audioUpload == null) return;
         const audioRef = ref(storage, `audios/${audioUpload.name + v4()}`);
 
         try {
             await uploadBytes(audioRef, audioUpload);
             const audioUrl = await getDownloadURL(audioRef);
-            addSong(audioUrl, imgFile);
+            toast.success('Thêm bài hát thành công');
+            setAuioUrl(audioUrl);
         } catch (error) {
             console.error(error);
         }
     }
 
 
-    const uploadImg = async () => {
-        setIsLoading(true);
+    // const uploadImg = async () => {
+    //     setIsLoading(true);
+    //     if (imageUpload == null) return;
+    //     const imgRef = ref(storage, `images/${imageUpload.name + v4()}`);
+    //     try {
+    //         await uploadBytes(imgRef, imageUpload);
+    //         const imgUrl = await getDownloadURL(imgRef);
+    //
+    //         uploadAudio(imgUrl);
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // }
+
+    const uploadImg = async (imageUpload) => {
+        // setIsLoading(true);
         if (imageUpload == null) return;
         const imgRef = ref(storage, `images/${imageUpload.name + v4()}`);
         try {
             await uploadBytes(imgRef, imageUpload);
             const imgUrl = await getDownloadURL(imgRef);
-            uploadAudio(imgUrl);
+            toast.success('Upload ảnh thành công');
+            setImgUrl(imgUrl);
         } catch (error) {
             console.error(error);
         }
@@ -82,13 +115,27 @@ const CreateSong = () => {
     }
 
 
-    const addSong = async (audioUrl, imgUrl) => {
+    // const addSong = async (audioUrl, imgUrl) => {
+    //     if (audioUrl && imgUrl) {
+    //         song.imgSong = imgUrl;
+    //         song.pathSong = audioUrl;
+    //         try {
+    //             const response = await addSongSV(song)
+    //             setIsLoading(false);
+    //             let obj = response.data;
+    //             navigate(`/song/detailSong/${obj.id}`)
+    //         } catch (error) {
+    //             console.log(error)
+    //         }
+    //     }
+    // }
+    const addSong = async () => {
         if (audioUrl && imgUrl) {
             song.imgSong = imgUrl;
             song.pathSong = audioUrl;
             try {
                 const response = await addSongSV(song)
-                setIsLoading(false);
+                // setIsLoading(false);
                 let obj = response.data;
                 navigate(`/song/detailSong/${obj.id}`)
             } catch (error) {
@@ -130,7 +177,8 @@ const CreateSong = () => {
                 }}
                 validationSchema={validateSchema}
                 onSubmit={(values, {resetForm}) => {
-                    uploadImg();
+                    // uploadImg();
+                    addSong();
                     resetForm();
                     document.getElementById("previewImage").value = '';
                 }}>
@@ -176,19 +224,24 @@ const CreateSong = () => {
 
                                                                 <div>
                                                                     <label style={{margin: "5px 10px"}}>Hãy chọn ảnh đại
-                                                                        diện của Bài hát(*)</label>
+                                                                        diện của Bài hát(*)
+                                                                    </label>
                                                                     <div style={{display: "flex"}}>
                                                                         <input type={"file"} style={{flex: "1"}}
                                                                                accept={".jpg,.jpeg,.png,.gif"}
                                                                                className="form-control"
                                                                                id="image" onChange={(event) => {
-                                                                            if (!event.target.files[0].name.match(/\.(jpg|jpeg|png|gif)$/)) {
-                                                                                toast.error('Thêm ảnh thất bại!');
-                                                                                event.target.value = null;
+                                                                            if (event.target.files[0]) {
+                                                                                if (!event.target.files[0].name.match(/\.(jpg|jpeg|png|gif)$/)) {
+                                                                                    toast.error('Thêm ảnh thất bại!');
+                                                                                    event.target.value = null;
+                                                                                } else {
+                                                                                    previewSelectedImage(event.target.files[0])
+                                                                                    uploadImg(event.target.files[0]);
+
+                                                                                }
                                                                             } else {
-                                                                                setImageUpload(event.target.files[0]);
-                                                                                previewSelectedImage(event.target.files[0])
-                                                                                toast.success('Upload ảnh thành công');
+                                                                                event.target.value = null;
                                                                             }
                                                                         }}/>
                                                                     </div>
@@ -205,37 +258,44 @@ const CreateSong = () => {
 
                                                                 </div>
                                                             </div>
-                                                            <span className="fomik-error" style={{color: "red"}}><ErrorMessage
+                                                            <span className="fomik-error"
+                                                                  style={{color: "red"}}><ErrorMessage
                                                                 name={'nameSong'}/></span>
 
                                                             <div className="col-12 mb-4">
-                                                                <label style={{margin: "5px 10px"}}>Hãy chọn file của Bài hát(*)</label>
+                                                                <label style={{margin: "5px 10px"}}>Hãy chọn file của
+                                                                    Bài hát(*)</label>
                                                                 <div className="requiredInput">
                                                                     <input type="file" id="audio"
                                                                            className="form-control"
                                                                            accept={".mp3,.mp4"}
                                                                            onChange={(event) => {
-                                                                               if (!event.target.files[0].name.match(/\.(mp3|mp4)$/)) {
-                                                                                   toast.error('Thêm bài hát thất bại!');
-                                                                                   event.target.value = null;
+                                                                               if (event.target.files[0]) {
+                                                                                   if (!event.target.files[0].name.match(/\.(mp3|mp4)$/)) {
+                                                                                       toast.error('Thêm bài hát thất bại!');
+                                                                                       event.target.value = null;
+                                                                                   } else {
+                                                                                       uploadAudio(event.target.files[0]);
+                                                                                   }
                                                                                } else {
-                                                                                   setAudioUpload(event.target.files[0])
-                                                                                   toast.success('Thêm bài hát thành công');
+                                                                                   event.target.value = null;
                                                                                }
                                                                            }}/>
                                                                 </div>
                                                             </div>
                                                             <div className="col-sm-6 mb-4">
-                                                                <label style={{margin: "5px 10px"}}>Hãy nhập tên của Ca sỹ(*)</label>
+                                                                <label style={{margin: "5px 10px"}}>Hãy nhập tên của Ca sĩ(*)</label>
                                                                 <div className="requiredInput requiredSinger">
                                                                     <Field type="text" id="nameSinger" name="nameSinger"
                                                                            className="form-control"
-                                                                           placeholder="Ca sỹ thực hiện"
+                                                                           placeholder="Ca sĩ thực hiện"
                                                                            onInput={handleInputCreateSong}
-                                                                           />
+                                                                    />
                                                                 </div>
                                                             </div>
-                                                            <span className="fomik-error" style={{color: "red"}}><ErrorMessage name={'nameSinger'}/></span>
+                                                            <span className="fomik-error"
+                                                                  style={{color: "red"}}><ErrorMessage
+                                                                name={'nameSinger'}/></span>
                                                             <div className="col-12 mb-4">
                                                                 <label style={{margin: "5px 10px"}}>Hãy chọn thể loại
                                                                     Bài hát(*)</label>
@@ -254,17 +314,19 @@ const CreateSong = () => {
                                                             </div>
 
                                                             <div className="col-12 mb-4">
-                                                                <label style={{margin: "5px 10px"}}>Hãy nhập tiêu đề Bài hát</label>
+                                                                <label style={{margin: "5px 10px"}}>Hãy nhập tiêu đề Bài
+                                                                    hát</label>
                                                                 <textarea id="description"
                                                                           name="description"
                                                                           cols="30"
                                                                           rows="4"
                                                                           className="form-control requiredDescription"
                                                                           placeholder="Tiêu đề"
-                                                                            style={{whiteSpace: "pre-wrap"}}
+                                                                          style={{whiteSpace: "pre-wrap"}}
                                                                           onChange={handleInputCreateSong}>
                                                                 </textarea>
-                                                                <span className="fomik-error" style={{color: "red"}}><ErrorMessage
+                                                                <span className="fomik-error"
+                                                                      style={{color: "red"}}><ErrorMessage
                                                                     name={'description'}/></span>
                                                             </div>
                                                         </div>
@@ -293,96 +355,6 @@ const CreateSong = () => {
                     </div>
                     <div id="player">
                         <div className="container">
-                            {/*<div className="player-container">*/}
-                            {/*    <div className="player-progress">*/}
-                            {/*        <progress className="amplitude-buffered-progress player-progress__bar"*/}
-                            {/*                  value="0"></progress>*/}
-                            {/*        <progress*/}
-                            {/*            className="amplitude-song-played-progress player-progress__bar"></progress>*/}
-                            {/*        <input type="range" className="amplitude-song-slider player-progress__slider"*/}
-                            {/*               aria-label="Progress slider"/>*/}
-                            {/*    </div>*/}
-                            {/*    <div className="cover d-flex align-items-center">*/}
-                            {/*        <div className="cover__image"><img data-amplitude-song-info="cover_art_url"*/}
-                            {/*                                           src="images/cover/small/1.jpg"*/}
-                            {/*                                           alt=""/></div>*/}
-                            {/*        <div className="cover__content ps-3 d-none d-sm-block"><a href="song-details.html"*/}
-                            {/*                                                                  className="cover__title text-truncate"*/}
-                            {/*                                                                  data-amplitude-song-info="name"></a>*/}
-                            {/*            <a href="artist-details.html" className="cover__subtitle text-truncate"*/}
-                            {/*               data-amplitude-song-info="artist"></a></div>*/}
-                            {/*    </div>*/}
-                            {/*    <div className="player-control">*/}
-                            {/*        <button type="button"*/}
-                            {/*                className="amplitude-repeat btn btn-icon me-4 d-none d-md-block"*/}
-                            {/*                aria-label="Repeat">*/}
-                            {/*            <i className="ri-repeat-2-fill fs-5"></i></button>*/}
-                            {/*        <button type="button" className="amplitude-prev btn btn-icon" aria-label="Backward">*/}
-                            {/*            <i*/}
-                            {/*                className="ri-skip-back-mini-fill"></i></button>*/}
-                            {/*        <button type="button"*/}
-                            {/*                className="amplitude-play-pause btn btn-icon btn-default rounded-pill"*/}
-                            {/*                aria-label="Play pause"><i className="ri-play-fill icon-play"></i> <i*/}
-                            {/*            className="ri-pause-fill icon-pause"></i></button>*/}
-                            {/*        <button type="button" className="amplitude-next btn btn-icon" aria-label="Forward">*/}
-                            {/*            <i*/}
-                            {/*                className="ri-skip-forward-mini-fill"></i></button>*/}
-                            {/*        <button type="button"*/}
-                            {/*                className="amplitude-shuffle amplitude-shuffle-off btn btn-icon ms-4 d-none d-md-block"*/}
-                            {/*                aria-label="Shuffle"><i className="ri-shuffle-fill fs-5"></i></button>*/}
-                            {/*    </div>*/}
-                            {/*    <div className="player-info">*/}
-                            {/*        <div className="me-4 d-none d-xl-block"><span*/}
-                            {/*            className="amplitude-current-minutes"></span>:<span*/}
-                            {/*            className="amplitude-current-seconds"></span> / <span*/}
-                            {/*            className="amplitude-duration-minutes"></span>:<span*/}
-                            {/*            className="amplitude-duration-seconds"></span>*/}
-                            {/*        </div>*/}
-                            {/*        <div className="player-volume dropdown d-none d-md-block">*/}
-                            {/*            <button className="btn btn-icon" data-bs-toggle="dropdown"*/}
-                            {/*                    data-bs-auto-close="outside"*/}
-                            {/*                    aria-label="Volume" aria-expanded="false"><i*/}
-                            {/*                className="ri-volume-mute-fill fs-5 d-none"></i> <i*/}
-                            {/*                className="ri-volume-down-fill fs-5"></i> <i*/}
-                            {/*                className="ri-volume-up-fill fs-5 d-none"></i>*/}
-                            {/*            </button>*/}
-                            {/*            <div className="dropdown-menu prevent-click"><input type="range"*/}
-                            {/*                                                                className="amplitude-volume-slider"*/}
-                            {/*                                                                value="50" min="0" max="100"*/}
-                            {/*                                                                aria-label="Volume slider"/>*/}
-                            {/*            </div>*/}
-                            {/*        </div>*/}
-                            {/*        <div className="dropstart d-none d-md-block">*/}
-                            {/*            <button className="btn btn-icon" data-bs-toggle="dropdown"*/}
-                            {/*                    aria-label="song options"*/}
-                            {/*                    aria-expanded="false"><i className="ri-more-2-fill fs-5"></i></button>*/}
-                            {/*            <ul className="dropdown-menu dropdown-menu-sm" id="player_options">*/}
-                            {/*                <li><a className="dropdown-item" href="javascript:void(0);" role="button"*/}
-                            {/*                       data-favorite-id="1">Favorite</a>*/}
-                            {/*                </li>*/}
-                            {/*                <li><a className="dropdown-item" href="javascript:void(0);" role="button"*/}
-                            {/*                       data-playlist-id="1">Add*/}
-                            {/*                    to playlist</a></li>*/}
-                            {/*                <li><a className="dropdown-item" href="audio/ringtone-1.mp3"*/}
-                            {/*                       download>Download</a>*/}
-                            {/*                </li>*/}
-                            {/*                <li><a className="dropdown-item" href="javascript:void(0);"*/}
-                            {/*                       role="button">Share</a>*/}
-                            {/*                </li>*/}
-                            {/*                <li className="dropdown-divider"></li>*/}
-                            {/*                <li><a className="dropdown-item" href="song-details.html">View details</a>*/}
-                            {/*                </li>*/}
-                            {/*            </ul>*/}
-                            {/*        </div>*/}
-                            {/*        <div className="playlist dropstart me-3">*/}
-                            {/*            <button className="btn btn-icon" data-bs-toggle="dropdown"*/}
-                            {/*                    data-bs-auto-close="outside"*/}
-                            {/*                    aria-label="Playlist" aria-expanded="false"><i*/}
-                            {/*                className="ri-play-list-fill fs-5"></i></button>*/}
-
-                            {/*        </div>*/}
-                            {/*    </div>*/}
-                            {/*</div>*/}
                         </div>
                     </div>
                 </Form>
