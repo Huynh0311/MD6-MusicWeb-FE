@@ -41,9 +41,11 @@ const NavbarComponent = () => {
                             <li className="nav-item nav-item-color"><a href="genres.html"
                                                                        className="nav-link d-flex align-items-center"><i
                                 className="ri-disc-line fs-5"></i> <span className="ps-3">Thể loại</span></a></li>
-                            <li className="nav-item nav-item-color"><a href="albums.html"
-                                                                       className="nav-link d-flex align-items-center"><i
-                                className="ri-album-line fs-5"></i> <span className="ps-3">Albums</span></a></li>
+
+                            <li className="nav-item nav-item-color"><Link to={'/listPlaylist'}
+                                                        className="nav-link d-flex align-items-center"><i
+                                className="ri-album-line fs-5"></i> <span className="ps-3">Albums</span></Link></li>
+
                             <li className="nav-item nav-item-color"><a href="artists.html"
                                                                        className="nav-link d-flex align-items-center"><i
                                 className="ri-mic-line fs-5"></i> <span className="ps-3">Ca sĩ</span></a></li>

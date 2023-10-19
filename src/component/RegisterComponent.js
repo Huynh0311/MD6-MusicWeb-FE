@@ -19,7 +19,7 @@ const RegisterComponent = () => {
         let errorMessage = '';
         if (!value) {
             errorMessage = 'Mật khẩu phải có ít nhất 8 kí tự chữ và ít nhất 1 kí tự số';
-        } else if (!/^(?=.*\d).{8,}$/.test(value)) {
+        } else if (!/^(?=.*\d)[\w\d]{8,}$/.test(value)) {
             errorMessage = 'Mật khẩu phải có ít nhất 8 kí tự chữ và ít nhất 1 kí tự số';
         }
         return errorMessage;

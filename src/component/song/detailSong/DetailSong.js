@@ -68,7 +68,7 @@ const DetailSong = () => {
 
     const getLikeQuantity = () => {
         getSongLikeQuantityAPI(id).then(res => {
-           res.data && setLikedQuantity(res.data);
+           setLikedQuantity(res.data);
         }).catch(error => {
                 console.log(error);
             });

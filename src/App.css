@@ -36,3 +36,19 @@
     transform: rotate(360deg);
   }
 }
+.icon{
+}
+.counter{
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: red;
+  padding: 5px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: -5px;
+  right: -5px;
+}

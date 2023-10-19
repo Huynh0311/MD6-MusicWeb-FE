@@ -45,6 +45,10 @@ const SearchComponent = () => {
                                                                                      onChange={(e) => handleSearchInput(e)}
                             />
                             </form>
+                            <div className="icon" style={{ backgroundColor: 'blue' }}>
+                                <button><i className="fa-solid fa-bell"></i></button>
+                                <div className="counter">2</div>
+                            </div>
                             <div className="d-flex align-items-center">
                                 {!_.isEmpty(accountLogin) ? (
                                     <div className="dropdown ms-3 ms-sm-4">
