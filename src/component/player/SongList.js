@@ -1,5 +1,4 @@
 import React, {useState, useEffect, useContext} from 'react';
-import axiosInstance from '../api/service/axios-instance';
 import {Link} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {saveSong} from "../../redux/actions";
@@ -8,6 +7,7 @@ import {
     useAudioPlayer
 } from "../../redux/playern/ActionsUseContext/AudioPlayerProvider";
 import {BsFillPlayFill, BsPauseFill} from "react-icons/bs";
+import AxiosCustomize from "../api/utils/AxiosCustomize";
 
 function SongList() {
 
@@ -21,7 +21,7 @@ function SongList() {
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await axiosInstance.get('/songs/getall');
+                const response = await AxiosCustomize.get('/songs/getall');
                 const songs = response.data.map((song) => ({
                     ...song,
                     isPlaying: currentSong && currentSong.id === song.id ? isPlaying : false,
@@ -50,24 +50,18 @@ function SongList() {
     const indexOfLastSong = currentPage * songsPerPage;
     const indexOfFirstSong = indexOfLastSong - songsPerPage;
     const currentSongs = songs.slice(indexOfFirstSong, indexOfLastSong);
-
     const pageCount = calculatePageCount();
+
     const handleToggleSongPlay = (songId) => {
-        const updatedSongs = songs.map((song) => {
-            if (song.id === songId) {
-                const newIsPlaying = !song.isPlaying;
-                song.isPlaying = newIsPlaying;
-                if (newIsPlaying) {
-                    handlePlayToggle(true);
-                } else {
-                    handlePlayToggle(false);
-                }
-            } else {
-                song.isPlaying = false;
+        const updateSongs = songs.map((song) => {
+            const newIsPlaying = song.id === songId ? !song.isPlaying : false;
+            return {
+                ...song,
+                isPlaying: newIsPlaying,
             }
-            return song;
-        });
-        setSongs(updatedSongs);
+        })
+        setSongs(updateSongs);
+        handlePlayToggle(updateSongs.some((song) => song.isPlaying));
     };
 
     return (
@@ -84,74 +78,80 @@ function SongList() {
                                                 <span className="badge rounded-pill bg-danger">
                                                     <i className="ri-heart-fill"></i>
                                                 </span>
+                                        </li>
+                                    </ul>
+                                    <div className="cover__options dropstart d-inline-flex ms-auto">
+                                        <div className="dropdown-link"
+                                             role="button"
+                                             data-bs-toggle="dropdown" aria-label="Cover options"
+                                             aria-expanded="false">
+                                            <i className="ri-more-2-fill"></i>
+                                        </div>
+                                        <ul className="dropdown-menu dropdown-menu-sm">
+                                            <li>
+                                                <div className="dropdown-item"
+                                                     role="button"
+                                                     data-favorite-id="1">Favorite
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div className="dropdown-item"
+                                                     role="button"
+                                                     data-playlist-id="1">Add to playlist
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <p className="dropdown-item"
+                                                   role="button"
+                                                    // data-queue-id="1"
+                                                   onClick={() => addToQueue(song)}
+                                                >Add to queue</p>
+                                            </li>
+                                            <li>
+                                                <div className="dropdown-item"
+                                                     role="button"
+                                                     data-next-id="1">Next to play
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div className="dropdown-item"
+                                                     role="button">Share
+                                                </div>
+                                            </li>
+                                            <li className="dropdown-divider"></li>
+                                            <li>
+                                                <div className="dropdown-item"
+                                                     role="button"
+                                                     data-play-id="1">Play
+                                                </div>
                                             </li>
                                         </ul>
-                                        <div className="cover__options dropstart d-inline-flex ms-auto">
-                                            <a className="dropdown-link" href="#"
-                                               role="button"
-                                               data-bs-toggle="dropdown" aria-label="Cover options"
-                                               aria-expanded="false">
-                                                <i className="ri-more-2-fill"></i>
-                                            </a>
-                                            <ul className="dropdown-menu dropdown-menu-sm">
-                                                <li>
-                                                    <a className="dropdown-item" href="#"
-                                                       role="button"
-                                                       data-favorite-id="1">Favorite</a>
-                                                </li>
-                                                <li>
-                                                    <a className="dropdown-item" href="#"
-                                                       role="button"
-                                                       data-playlist-id="1">Add to playlist</a>
-                                                </li>
-                                                <li>
-                                                    <p className="dropdown-item"
-                                                       role="button"
-                                                        // data-queue-id="1"
-                                                       onClick={() => addToQueue(song)}
-                                                    >Add to queue</p>
-                                                </li>
-                                                <li>
-                                                    <a className="dropdown-item" href="#"
-                                                       role="button"
-                                                       data-next-id="1">Next to play</a>
-                                                </li>
-                                                <li>
-                                                    <a className="dropdown-item" href="#"
-                                                       role="button">Share</a>
-                                                </li>
-                                                <li className="dropdown-divider"></li>
-                                                <li>
-                                                    <a className="dropdown-item" href="#"
-                                                       role="button"
-                                                       data-play-id="1">Play</a>
-                                                </li>
-                                            </ul>
-                                        </div>
                                     </div>
+                                </div>
 
-                                    <div className="cover__image">
-                                        <img src={song.imgSong} alt={song.nameSong}/>
-                                        <div className="btn btn-play btn-default btn-icon rounded-pill">
-                                            {song.isPlaying ? (
-                                                <BsPauseFill role='button'
-                                                             onClick={() => {
-                                                                 handleToggleSongPlay(song.id);
-                                                                 updateCurrentSongAndSongs(song, songs);
-                                                             }}
-                                                             style={{fontSize: "30px"}}
-                                                />
-                                            ) : (
-                                                <BsFillPlayFill role='button'
-                                                                onClick={() => {
-                                                                    handleToggleSongPlay(song.id);
-                                                                    updateCurrentSongAndSongs(song, songs);
-                                                                }}
-                                                                style={{fontSize: "30px"}}
-                                                />
-                                            )}
-                                        </div>
-                                    </div>
+                                <div className="cover__image">
+                                    <img src={song.imgSong} alt={song.nameSong}/>
+                                    <button type="button"
+                                            className="btn btn-play btn-default btn-icon rounded-pill">
+                                        {song.isPlaying ? (
+                                            <BsPauseFill role='button'
+                                                         onClick={() => {
+                                                             handleToggleSongPlay(song.id);
+                                                             updateCurrentSongAndSongs(song, songs);
+                                                         }}
+                                                         style={{fontSize: "30px"}}
+                                            />
+                                        ) : (
+                                            <BsFillPlayFill role='button'
+                                                            onClick={() => {
+                                                                handleToggleSongPlay(song.id);
+                                                                updateCurrentSongAndSongs(song, songs);
+                                                            }}
+                                                            style={{fontSize: "30px"}}
+                                            />
+                                        )}
+                                    </button>
+                                </div>
 
                                     <Link to={"/song/detailSong/" + song.id}>
                                         <div className="cover__foot">

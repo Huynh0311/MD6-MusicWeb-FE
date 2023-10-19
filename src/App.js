@@ -17,8 +17,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import Page from "./component/page";
 import Component404 from "./component/Component404";
 import BodySearch from "./component/song/seach/BodySearch";
+
+import DetailPlaylist from "./component/playlist/DetailPlaylist";
+import ListPlaylist from "./component/playlist/ListPlaylist";
 import ListSongFavorite from "./component/song/listSong/ListSongFavorite";
 import {useSelector} from "react-redux";
+import DataTable from "./component/admin/Management";
+
+
 
 
 function App() {
@@ -36,12 +42,15 @@ function App() {
                     <Route path={"/updatePassword"} element={<UpdatePassword/>}/>
                     <Route path="/song/create" element={<CreateSong/>}/>
                     <Route path={"/song/detailSong/:id"} element={<DetailSong/>}/>
+                    <Route path={"/detailPlaylist/:id"} element={<DetailPlaylist/>}/>
+                    <Route path={"/listPlaylist"} element={<ListPlaylist/>}/>
                     <Route path="/register" element={<RegisterComponent/>}/>
                     <Route path="/login" element={<LoginComponent/>}/>
                     <Route path={'/favorite'} element={<ListSongFavorite/>}></Route>
                     <Route path='/song' element={<ListSong/>}></Route>
                     <Route path={"/song/edit/:songid"} element={<EditSong />}></Route>
                     <Route path='/song/search' element={<BodySearch/>}></Route>
+                    <Route path="/admin" element={<DataTable />}></Route>
                 </Route>
                 <Route path={'*'} element={<Component404/>}></Route>
             </Routes>

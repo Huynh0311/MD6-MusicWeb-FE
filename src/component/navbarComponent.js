@@ -38,26 +38,27 @@ const NavbarComponent = () => {
                                     </p>
                                 </Link>
                             </li>
-                            <li className="nav-item nav-item-color"><div
+                            <li className="nav-item nav-item-color"><a href="genres.html"
                                                                        className="nav-link d-flex align-items-center"><i
-                                className="ri-disc-line fs-5"></i> <span className="ps-3">Thể loại</span></div></li>
-                            <li className="nav-item nav-item-color"><div
+                                className="ri-disc-line fs-5"></i> <span className="ps-3">Thể loại</span></a></li>
+
+                            <li className="nav-item nav-item-color"><Link to={'/listPlaylist'}
+                                                        className="nav-link d-flex align-items-center"><i
+                                className="ri-album-line fs-5"></i> <span className="ps-3">Albums</span></Link></li>
+
+                            <li className="nav-item nav-item-color"><a href="artists.html"
                                                                        className="nav-link d-flex align-items-center"><i
-                                className="ri-album-line fs-5"></i> <span className="ps-3">Albums</span></div></li>
-                            <li className="nav-item nav-item-color"><div
-                                                                       className="nav-link d-flex align-items-center"><i
-                                className="ri-mic-line fs-5"></i> <span className="ps-3">Ca sĩ</span></div></li>
+                                className="ri-mic-line fs-5"></i> <span className="ps-3">Ca sĩ</span></a></li>
                             <li className="nav-item nav-item-color nav-item nav-item-color--head"><span
-                                className="nav-item nav-item-color--head__text">Music</span> <span
-                                className="nav-item nav-item-color--head__dots">...</span></li>
-                            <li className="nav-item nav-item-color"><div
+                                className="nav-item nav-item-color--head__text" style={{marginLeft:"5px"}}>Bài hát</span></li>
+                            <li className="nav-item nav-item-color"><a href="analytics.html"
                                                                        className="nav-link d-flex align-items-center"><i
-                                className="ri-pie-chart-line fs-5"></i> <span className="ps-3">Thịnh hành</span></div>
+                                className="ri-pie-chart-line fs-5"></i> <span className="ps-3">Thịnh hành</span></a>
                             </li>
-                            <li className="nav-item nav-item-color"><div
+                            <li className="nav-item nav-item-color"><a href="analytics.html"
                                                                        className="nav-link d-flex align-items-center">
                                 <i className="ri-music-2-line"></i>
-                                <span className="ps-3">Bài hát mới</span></div>
+                                <span className="ps-3">Bài hát mới</span></a>
                             </li>
                             {loggedIn ? (
                                 <>
@@ -97,7 +98,7 @@ const NavbarComponent = () => {
                     <div className="sidebar-foot">
                         <Link to={"/song/create"}>
                             <div className="btn btn-primary d-flex">
-                                <div className="btn__wrap"><i className="ri-music-fill"></i> <span>Add Music</span></div>
+                                <div className="btn__wrap"><i className="ri-music-fill"></i> <span>Tạo bài hát</span></div>
                             </div>
                         </Link>
                     </div>

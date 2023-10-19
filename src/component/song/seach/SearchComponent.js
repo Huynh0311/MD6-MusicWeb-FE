@@ -24,10 +24,6 @@ const SearchComponent = () => {
             navigate(`/song/search?q=${searchInput}`)
         }
     }
-    useEffect( () => {
-        console.log(accountLogin)
-    },[accountLogin])
-
     return (
         <div>
             <header id="header">
@@ -38,23 +34,28 @@ const SearchComponent = () => {
                                                                       aria-label="Sidebar toggler"><i
                             className="ri-menu-3-line"></i></div>
                             <form id="search_form" className="me-3" onSubmit={searchSongName}>
-                                <label htmlFor="search_input"><i
-                                    className="ri-search-2-line"></i></label> <input type="text"
-                                                                                     placeholder="Type anything to get result..."
+                                <label htmlFor="search_input">
+                                    <i className="ri-search-2-line" onClick={searchSongName}/></label> <input type="text"
+                                                                                     placeholder="Hãy tìm gì đó ở đây ..."
                                                                                      id="search_input"
                                                                                      className="form-control form-control-sm"
                                                                                      value={searchInput}
                                                                                      onChange={(e) => handleSearchInput(e)}
                             />
                             </form>
+                            <div className="icon" style={{ backgroundColor: 'blue' }}>
+                                <button><i className="fa-solid fa-bell"></i></button>
+                                <div className="counter">2</div>
+                            </div>
                             <div className="d-flex align-items-center">
                                 {!_.isEmpty(accountLogin) ? (
-                                    <div className="dropdown ms-3 ms-sm-4"><div
-                                                                              className="avatar header-text"
-                                                                              role="button" id="user_menu"
-                                                                              data-bs-toggle="dropdown"
-                                                                              aria-expanded="false">
-                                        <div className="avatar__image"><img src={accountLogin.img} alt="user"/>
+                                    <div className="dropdown ms-3 ms-sm-4">
+                                        <div className="avatar header-text"
+                                             role="button" id="user_menu"
+                                             data-bs-toggle="dropdown"
+                                             aria-expanded="false">
+                                        <div className="avatar__image">
+                                            <img src={accountLogin.img} alt="user"/>
                                         </div>
                                         <span className="ps-2 d-none d-sm-block">{accountLogin.name}</span></div>
                                         <ul className="dropdown-menu dropdown-menu-md dropdown-menu-end"
