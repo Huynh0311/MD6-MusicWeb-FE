@@ -8,15 +8,78 @@ import {
 } from "../../redux/playern/ActionsUseContext/AudioPlayerProvider";
 import {BsFillPlayFill, BsPauseFill} from "react-icons/bs";
 import AxiosCustomize from "../api/utils/AxiosCustomize";
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+};
 
 function SongList() {
-
     const [songs, setSongs] = useState([]);
+    const [playlist, setPlaylist] = useState([]);
+    const [selectedSongId, setSelectedSongId] = useState([]);
+    const [selectedPlaylist, setSelectedPlaylist] = useState([]);
     const [songsPerPage] = useState(4);
     const [currentPage, setCurrentPage] = useState(1);
     const dispatch = useDispatch();
     const {currentSong, updateCurrentSongAndSongs} = useAudioPlayer();
     const {isPlaying, handlePlayToggle} = useContext(AudioPlayerContext);
+    const [open, setOpen] = React.useState(false);
+    const [openSnackbar, setOpenSnackbar] = React.useState(false);
+    const handleOpen = async (id) => {
+        try {
+            console.log('handleOpen', id);
+            const response = await AxiosCustomize.get('/playlist/all');
+            console.log('response.data', response.data)
+            setSelectedSongId(id);
+            setPlaylist(response.data);
+            setOpen(true)
+        } catch (error) {
+            console.error('Lỗi khi lấy danh sách bài hát:', error);
+        }
+    };
+    const handleClose = () => setOpen(false);
+
+    const handleChangePlaylist = (event) => {
+        setSelectedPlaylist(event.target.value);
+    };
+
+    const handleSave = () => {
+        console.log('handleSave', selectedSongId, selectedPlaylist);
+        // TODO: Gọi API add song to playlist
+        // Lưu xong thì đóng modal
+        handleClose();
+        // Đóng modal xong thì hiển thị thông báo thêm playlist thành công
+        setOpenSnackbar(true);
+    };
+
+    const handleCloseSnackbar = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpenSnackbar(false);
+    };
 
     useEffect(() => {
         async function fetchData() {
@@ -97,7 +160,7 @@ function SongList() {
                                             <li>
                                                 <div className="dropdown-item"
                                                      role="button"
-                                                     data-playlist-id="1">Add to playlist
+                                                     data-playlist-id="1" onClick={() => handleOpen(song.id)}>Add to playlist
                                                 </div>
                                             </li>
                                             <li>
@@ -180,6 +243,45 @@ function SongList() {
                     ))}
                 </div>
             </div>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2" sx={{
+                        mb: 2
+                    }}>
+                        Vui lòng chọn Playlist muốn thêm
+                    </Typography>
+                    <FormControl sx={{
+                        mb: 2
+                    }} fullWidth>
+                        <InputLabel id="demo-simple-select-label">Chọn Playlist</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={selectedPlaylist}
+                            label="Chọn Playlist"
+                            onChange={handleChangePlaylist}
+                        >
+                            {playlist.map((item) =>
+                                ( <MenuItem value={item.id}>{item.namePlaylist}</MenuItem>)
+                            )}
+                        </Select>
+                    </FormControl>
+                    <div style={{textAlign: 'right'}}>
+                    <Button variant="contained" onClick={handleSave}>Lưu</Button>
+                    </div>
+                </Box>
+            </Modal>
+            <Snackbar
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+            <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
+                Thêm playlist thành công
+            </Alert>
+        </Snackbar>
         </>
     );
 }
