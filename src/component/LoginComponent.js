@@ -82,7 +82,7 @@ const LoginComponent = () => {
                 }).then(res => {
                     const data = JSON.stringify(res.data);
                     localStorage.setItem("data", data);
-                    navigate("/")
+                    res.data.username === "admin@gmail.com" ? navigate('/admin') : navigate('/');
                     window.location.reload()
                 }).catch(error => {
                     toast.error('Đăng nhập thất bại!');

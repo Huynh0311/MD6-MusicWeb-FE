@@ -24,6 +24,9 @@ import ListPlaylist from "./component/playlist/ListPlaylist";
 import ListSongFavorite from "./component/song/listSong/ListSongFavorite";
 import {useSelector} from "react-redux";
 import ActionsPlaycopy from "./redux/playern/ActionsUseContext/ActionsPlaycopy";
+import DataTable from "./component/admin/Management";
+
+
 
 
 function App() {
@@ -49,6 +52,7 @@ function App() {
                     <Route path='/song' element={<ListSong/>}></Route>
                     <Route path={"/song/edit/:songid"} element={<EditSong />}></Route>
                     <Route path='/song/search' element={<BodySearch/>}></Route>
+                    <Route path="/admin" element={<DataTable />}></Route>
                 </Route>
                 <Route path={'*'} element={<Component404/>}></Route>
             </Routes>

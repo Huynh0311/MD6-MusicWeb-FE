@@ -13,11 +13,11 @@ const validateSchema = Yup.object().shape({
     nameSong: Yup.string()
         .min(5, 'song name must be at least 5 characters long')
         .max(50, 'song name must be maximum 50 characters long')
-        .required('song name cannot be null'),
+        .required('Tên bài hát không được để trống'),
     nameSinger: Yup.string()
         .min(3, 'Artists name must be at least 3 characters long')
         .max(150, 'Artists name must be maximum 150 characters long')
-        .required('Artists name cannot be null'),
+        .required('Tên ca sĩ không được để trống'),
 });
 
 const CreateSong = () => {

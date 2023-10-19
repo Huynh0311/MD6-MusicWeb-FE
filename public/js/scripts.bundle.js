@@ -112,16 +112,11 @@ $(document).ready(function () {
 });
 var ChartJs = {
     overrideDefaults() {
-        var e = Chart.defaults,
+        var e = {},
             t = {
-                color: Utils.isDarkMode() ? "#92929F" : Utils.getCSSVarValue("body-color"),
-                borderColor: Utils.isDarkMode() ? "#34343e" : "#EFF2F5",
-                font: { family: Utils.getCSSVarValue("body-font-family"), size: 13 },
-                hover: { intersect: !1, mode: "index" },
+
             };
-        Object.assign(e, t),
-            Object.assign(e.plugins.tooltip, { titleMarginBottom: 6, caretSize: 6, caretPadding: 10, boxWidth: 10, boxHeight: 10, boxPadding: 4, intersect: !1, mode: "index", padding: { top: 8, right: 12, bottom: 8, left: 12 } });
-    },
+        },
 };
 $(() => {
     ChartJs.overrideDefaults();
