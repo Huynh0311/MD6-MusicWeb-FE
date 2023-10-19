@@ -6,6 +6,7 @@ import {getAllCommentBySongIdAPI, sendCommentAPI} from "../../api/commentService
 import {AiOutlinePauseCircle, AiOutlinePlayCircle} from "react-icons/ai";
 import {AudioPlayerContext, useAudioPlayer} from "../../../redux/playern/ActionsUseContext/AudioPlayerProvider";
 import {useContext} from "react";
+import {BsFillPlayFill, BsPauseFill} from "react-icons/bs";
 
 
 const DetailSong = () => {
@@ -202,18 +203,6 @@ const DetailSong = () => {
                     <div className="hero" style={{backgroundImage: "url(../../images/banner/song.jpg)"}}></div>
                     <div className="under-hero container">
                         <div className="section">
-                            {detailSong.isPlaying ? (
-                                <AiOutlinePauseCircle
-                                    onClick={() => handleSongClick(detailSong)}
-                                    style={{fontSize: '30px'}}
-                                />
-                            ) : (
-                                <AiOutlinePlayCircle
-                                    onClick={() => handleSongClick(detailSong)}
-                                    style={{fontSize: '30px'}}
-                                />
-                            )
-                            }
                             <div className="row" data-song-id={currentSongDT.id} data-song-name={currentSongDT.nameSong}
                                  data-song-artist={currentSongDT.nameSinger}
                                  data-song-album="Sadness" data-song-url={currentSongDT.pathSong}
@@ -279,9 +268,21 @@ const DetailSong = () => {
                                             <div className="d-flex align-items-center">
                                                 <button type="button"
                                                         className="btn btn-play btn-default btn-icon rounded-pill playing"
-                                                        data-play-id={currentSongDT.id}>
-                                                    <i className="ri-play-fill icon-play"></i>
-                                                    <i className="ri-pause-fill icon-pause"></i>
+                                                        data-play-id="">
+                                                    {/*<i className="ri-play-fill icon-play"></i>*/}
+                                                    {/*<i className="ri-pause-fill icon-pause"></i>*/}
+                                                    {detailSong.isPlaying ? (
+                                                        <BsPauseFill
+                                                            onClick={() => handleSongClick(detailSong)}
+                                                            style={{fontSize: '30px'}}
+                                                        />
+                                                    ) : (
+                                                        <BsFillPlayFill
+                                                            onClick={() => handleSongClick(detailSong)}
+                                                            style={{fontSize: '30px'}}
+                                                        />
+                                                    )
+                                                    }
                                                 </button>
                                                 <span className="ps-2 fw-semi-bold">{play}</span></div>
                                         </li>
@@ -333,28 +334,7 @@ const DetailSong = () => {
                                     <div className="swiper-wrapper">
                                         {relatedSongs.map((rs) => (
                                             <div className="swiper-slide" key={rs.id}>
-                                                {rs.isPlaying ? (
-                                                    <AiOutlinePauseCircle
-                                                        onClick={() => {
-                                                            handleToggleSongPlay(rs.id);
-                                                            updateCurrentSongAndSongs(rs, songs);
-                                                        }}
-                                                        style={{fontSize: "30px"}}
-                                                    />
-                                                ) : (
-                                                    <AiOutlinePlayCircle
-                                                        onClick={() => {
-                                                            handleToggleSongPlay(rs.id);
-                                                            updateCurrentSongAndSongs(rs, songs);
-                                                        }}
-                                                        style={{fontSize: "30px"}}
-                                                    />
-                                                )}
-                                                <div className="cover cover--round" data-song-id={rs.id}
-                                                     data-song-name={rs.nameSong}
-                                                     data-song-artist={rs.nameSinger} data-song-album="Mummy"
-                                                     data-song-url={rs.pathSong}
-                                                     data-song-cover={rs.imgSong}>
+                                                <div className="cover cover--round">
                                                     <div className="cover__head">
                                                         <ul className="cover__label d-flex">
                                                             <li><span className="badge rounded-pill bg-danger"><i
@@ -411,16 +391,30 @@ const DetailSong = () => {
                                                         </div>
                                                     </div>
                                                     <div className="cover__image"><img src={rs.imgSong}
-                                                                                       alt="I love you mummy"
-                                                                                       style={{
-                                                                                           width: "180px",
-                                                                                           height: "180px"
-                                                                                       }}/>
+                                                                                       alt={rs.nameSong} />
                                                         <button type="button"
                                                                 className="btn btn-play btn-default btn-icon rounded-pill"
-                                                                data-play-id={rs.id}><i
-                                                            className="ri-play-fill icon-play"/> <i
-                                                            className="ri-pause-fill icon-pause"/></button>
+                                                                data-play-id="">
+                                                            {/*<i className="ri-play-fill icon-play"/> */}
+                                                            {/*<i className="ri-pause-fill icon-pause"/>*/}
+                                                            {rs.isPlaying ? (
+                                                                <AiOutlinePauseCircle
+                                                                    onClick={() => {
+                                                                        handleToggleSongPlay(rs.id);
+                                                                        updateCurrentSongAndSongs(rs, songs);
+                                                                    }}
+                                                                    style={{fontSize: "30px"}}
+                                                                />
+                                                            ) : (
+                                                                <AiOutlinePlayCircle
+                                                                    onClick={() => {
+                                                                        handleToggleSongPlay(rs.id);
+                                                                        updateCurrentSongAndSongs(rs, songs);
+                                                                    }}
+                                                                    style={{fontSize: "30px"}}
+                                                                />
+                                                            )}
+                                                        </button>
                                                     </div>
                                                     <div className="cover__foot">
                                                         <div className="cover__title text-truncate">{rs.nameSong}</div>

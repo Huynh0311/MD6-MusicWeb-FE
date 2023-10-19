@@ -3,6 +3,8 @@ import H5AudioPlayer from "react-h5-audio-player";
 import 'react-h5-audio-player/lib/styles.css';
 import {BiSkipNext, BiSkipPrevious} from "react-icons/bi";
 import {useAudioPlayer} from "./AudioPlayerProvider";
+import './ActionPlay.css';
+import _ from "lodash";
 
 const ActionPlay = () => {
         const {currentSong, songs, updateCurrentSongAndSongs, isPlaying, handlePlayToggle} = useAudioPlayer();
@@ -35,29 +37,35 @@ const ActionPlay = () => {
         }
 
         useEffect(() => {
-            isPlaying ? player.current.audio.current.play() : player.current.audio.current.pause();
+            if (currentSong) {
+                isPlaying ? player.current.audio.current.play() : player.current.audio.current.pause();
+            }
+            console.log(currentSong)
         }, [isPlaying]);
 
         const nextSong = () => {
             let currentSongIndex = songs.findIndex((song) => song.id === currentSong.id);
             let currentListSong = songs.slice(currentSongIndex);
             currentListSong.shift();
-            updateCurrentSongAndSongs(currentListSong[0],songs);
+            updateCurrentSongAndSongs(currentListSong[0], songs);
         }
         return (
-            <div>
+            <>
+                {!_.isEmpty(currentSong) ? (
                     <div id="player">
                         <div className="container" style={{maxWidth: "1200px"}}>
                             <div className="player-container">
                                 <div className="cover d-flex align-items-center">
                                     <div className="cover__image">
-                                        <img src="../../images/cover/small/1.jpg"
+                                        <img src={currentSong.imgSong}
                                              alt="" style={{height: "100%"}}/>
                                     </div>
                                     <div className="cover__content ps-3 d-none d-sm-block">
-                                        <div className="cover__title text-truncate"></div>
-                                        <div className="cover__subtitle text-truncate"
-                                           data-amplitude-song-info="artist">
+                                        <div className="cover__title text-truncate">
+                                            {currentSong.nameSong}
+                                        </div>
+                                        <div className="cover__subtitle text-truncate">
+                                            {currentSong.nameSinger}
                                         </div>
                                     </div>
                                 </div>
@@ -79,7 +87,13 @@ const ActionPlay = () => {
                             </div>
                         </div>
                     </div>
-            </div>
+                ) : (
+                    <div>
+                    </div>
+                )
+                }
+
+            </>
         );
     }
 ;

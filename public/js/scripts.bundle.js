@@ -63,13 +63,13 @@ var Base = (function () {
                         var e = $(this).find(".nav-link.active").outerWidth();
                         i.stop().css({ width: e }), i.appendTo(this);
                     }),
-                    r.on("click", function () {
-                        var e = $(this);
-                        e.closest(".mat-tabs")
-                            .find("." + a)
-                            .stop()
-                            .css({ left: e.position().left, width: e.outerWidth() });
-                    }),
+                    // r.on("click", function () {
+                    //     var e = $(this);
+                    //     e.closest(".mat-tabs")
+                    //         .find("." + a)
+                    //         .stop()
+                    //         .css({ left: e.position().left, width: e.outerWidth() });
+                    // }),
                     (l = !1),
                     $(".sidebar-toggler").on("click", function () {
                         (l = !l), $(this).toggleClass(e), t.attr("data-sidebar-toggle", l ? "true" : null);
@@ -281,8 +281,8 @@ var Player = (function () {
             a.html(u(n)), p(!1), m(), t && (Amplitude.play(), g(), v()), d(n);
         },
         s = function (e) {
-            var t = $(e).closest("[data-song-id]");
-            return { id: parseInt(t.data("song-id")), name: t.data("song-name"), artist: t.data("song-artist"), album: t.data("song-album"), url: t.data("song-url"), cover_art_url: t.data("song-cover") };
+            var t = $(e).closest("[data-]");
+            return { id: parseInt(t.data("")), name: t.data(""), artist: t.data(""), album: t.data(""), url: t.data(""), cover_art_url: t.data("") };
         },
         d = function (e) {
             var t = $("#player_options");
@@ -293,17 +293,17 @@ var Player = (function () {
         },
         u = function (e) {
             var t = Amplitude.getActiveSongMetadata();
-            return `<div class="list__item"\n        data-song-id="${e.id}"\n        data-song-name="${e.name}"\n        data-song-artist="${e.artist}"\n        data-song-album="${e.album}"\n        data-song-url="${
+            return `<div class=""\n        data-="${e.id}"\n        data-="${e.name}"\n        data-="${e.artist}"\n        data-="${e.album}"\n        data-="${
                 e.url
-            }"\n        data-song-cover="${e.cover_art_url}">\n            <div class="list__cover">\n                <img src="${e.cover_art_url}" alt="${
+            }"\n        data-="${e.cover_art_url}">\n            <div class="list__cover">\n                <img src="${e.cover_art_url}" alt="${
                 e.name
-            }">\n                <a href="javascript:void(0);" class="btn btn-play btn-sm btn-default btn-icon rounded-pill ${e.id === t.id ? "active" : ""}" data-play-id="${
+            }">\n                <a href="javascript:void(0);" class=""${
                 e.id
-            }">\n                    <i class="ri-play-fill icon-play"></i>\n                    <i class="ri-pause-fill icon-pause"></i>\n                </a>\n            </div>\n            <div class="list__content">\n                <a href="song-details.html" class="list__title text-truncate">${
+            }">\n                    <i class=""></i>\n                    <i class=""></i>\n                </a>\n            </div>\n            <div class="list__content">\n                <a href="song-details.html" class="list__title text-truncate">${
                 e.name
             }</a>\n                <p class="list__subtitle text-truncate">\n                    <a href="artist-details.html">${
                 e.artist
-            }</a>\n                </p>\n            </div>\n            <ul class="list__option">\n                <li class="list__icon-hover">\n                    <a href="javascript:void(0);" role="button" class="d-inline-flex" data-remove-song-id="${
+            }</a>\n                </p>\n            </div>\n            <ul class="list__option">\n                <li class="list__icon-hover">\n                    <a href="javascript:void(0);" role="button" class="d-inline-flex" data-remove-="${
                 e.id
             }">\n                        <i class="ri-close-line fs-6"></i>\n                    </a>\n                </li>\n                <li>\n                    <a href="javascript:void(0);" role="button" class="d-inline-flex" data-favorite-id="${
                 e.id
@@ -322,34 +322,34 @@ var Player = (function () {
         },
         g = function () {
             var t = Amplitude.getActiveSongMetadata();
-            $("[data-play-id]").removeClass(e), $("[data-play-id=" + t.id + "]").addClass(e);
+            $("[data-play-id]").removeClass(e), $("").addClass(e);
         },
         m = function () {
-            $(".amplitude-play-pause").removeClass("amplitude-paused").addClass("amplitude-playing");
+            $(".amplitude-play-pause").removeClass("").addClass("");
         },
         h = function () {
-            $(".amplitude-play-pause").removeClass("amplitude-playing").addClass("amplitude-paused"), $("[data-play-id]").removeClass(e);
+            $(".amplitude-play-pause").removeClass("").addClass(""), $("[data-play-id]").removeClass(e);
         },
         v = function () {
             var e = Amplitude.getActiveSongMetadata(),
                 t = Amplitude.getActivePlaylist() ? Amplitude.getActivePlaylist() : "";
             if ("mediaSession" in navigator) {
                 var a = navigator.mediaSession;
-                (a.metadata = new MediaMetadata({
-                    title: e.name,
-                    artist: e.artist,
-                    album: e.album,
-                    artwork: [
-                        { src: e.cover_art_url, sizes: "96x96", type: "image/jpg" },
-                        { src: e.cover_art_url, sizes: "128x128", type: "image/jpg" },
-                        { src: e.cover_art_url, sizes: "192x192", type: "image/jpg" },
-                        { src: e.cover_art_url, sizes: "256x256", type: "image/jpg" },
-                        { src: e.cover_art_url, sizes: "384x384", type: "image/jpg" },
-                        { src: e.cover_art_url, sizes: "512x512", type: "image/jpg" },
-                    ],
-                })),
-                i.length >= 1 && !r.playPause && ((r.playPause = !0), a.setActionHandler("play", () => (Amplitude.play(), m(), void g())), a.setActionHandler("pause", () => (Amplitude.pause(), void h()))),
-                i.length >= 2 && !r.nextPrev && ((r.nextPrev = !0), a.setActionHandler("previoustrack", () => Amplitude.prev(t)), a.setActionHandler("nexttrack", () => Amplitude.next(t)));
+                // (a.metadata = new MediaMetadata({
+                //     title: e.name,
+                //     artist: e.artist,
+                //     album: e.album,
+                //     artwork: [
+                //         { src: e.cover_art_url, sizes: "96x96", type: "image/jpg" },
+                //         { src: e.cover_art_url, sizes: "128x128", type: "image/jpg" },
+                //         { src: e.cover_art_url, sizes: "192x192", type: "image/jpg" },
+                //         { src: e.cover_art_url, sizes: "256x256", type: "image/jpg" },
+                //         { src: e.cover_art_url, sizes: "384x384", type: "image/jpg" },
+                //         { src: e.cover_art_url, sizes: "512x512", type: "image/jpg" },
+                //     ],
+                // })),
+                // i.length >= 1 && !r.playPause && ((r.playPause = !0), a.setActionHandler("play", () => (Amplitude.play(), m(), void g())), a.setActionHandler("pause", () => (Amplitude.pause(), void h()))),
+                // i.length >= 2 && !r.nextPrev && ((r.nextPrev = !0), a.setActionHandler("previoustrack", () => Amplitude.prev(t)), a.setActionHandler("nexttrack", () => Amplitude.next(t)));
             }
         };
     return {
@@ -386,7 +386,7 @@ var Player = (function () {
                 }),
                 t.on("click", "[data-collection-play-id]", function () {
                     var e = $(this).attr("data-collection-play-id"),
-                        t = $("[data-collection-song-id=" + e + "]").find("[data-song-id]"),
+                        t = $("[data-collection-=" + e + "]").find("[data-]"),
                         n = [],
                         r = 0;
                     t.each(function () {
@@ -397,10 +397,10 @@ var Player = (function () {
                     for (let e = r; e < n.length; e++) a.append(u(n[e]));
                     Utils.setLocalItem("songs", i);
                 }),
-                t.on("click", "[data-remove-song-id]", function (e) {
+                t.on("click", "[data-remove-]", function (e) {
                     e.stopPropagation();
-                    var t = parseInt($(this).data("remove-song-id")),
-                        a = $(this).closest("[data-song-id"),
+                    var t = parseInt($(this).data("remove-")),
+                        a = $(this).closest("[data-"),
                         n = i.findIndex((e) => e.id === t);
                     n > -1 && (a.remove(), Amplitude.removeSong(n), 0 === i.length && c()), Utils.setLocalItem("songs", i);
                 }),
