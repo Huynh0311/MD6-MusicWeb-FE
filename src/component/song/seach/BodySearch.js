@@ -158,7 +158,7 @@ const BodySearch = () => {
                                                                     {song.nameSong}
                                                                 </Link>
                                                                 <p className="list__subtitle text-truncate">
-                                                                    <div>{song.nameSinger}</div>
+                                                                    {song.nameSinger}
                                                                 </p>
                                                             </div>
                                                             <ul className="list__option">
