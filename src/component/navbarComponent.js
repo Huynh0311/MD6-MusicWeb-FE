@@ -16,9 +16,9 @@ const NavbarComponent = () => {
             <aside id="sidebar">
                 <div className="sidebar-head d-flex align-items-center justify-content-between">
                     <Link to={"/"}>
-                        <p className="brand external">
+                        <div className="brand external">
                             <img src="../../images/logos/logo.svg" alt="Listen app"/>
-                        </p>
+                        </div>
                     </Link>
                     <div role="button" className="sidebar-toggler" aria-label="Sidebar toggler">
                         <div className="d-none d-lg-block"><i className="ri-menu-3-line sidebar-menu-1"></i>
@@ -44,7 +44,7 @@ const NavbarComponent = () => {
 
                             <li className="nav-item nav-item-color"><Link to={'/listPlaylist'}
                                                         className="nav-link d-flex align-items-center"><i
-                                className="ri-album-line fs-5"></i> <span className="ps-3">Albums</span></Link></li>
+                                className="ri-album-line fs-5"></i> <span className="ps-3">Danh sách phát</span></Link></li>
 
                             <li className="nav-item nav-item-color"><a href="artists.html"
                                                                        className="nav-link d-flex align-items-center"><i
@@ -74,7 +74,7 @@ const NavbarComponent = () => {
                                         <li className="nav-item nav-item-color">
                                             <p  className="nav-link d-flex align-items-center">
                                                 <i className="fa-solid fa-list-music" style={{fontSize: "20px"}}></i>
-                                                <span className="ps-3">Danh sách bài hát</span></p>
+                                                <span className="ps-3">Danh sách bài hát đã tạo</span></p>
                                         </li>
                                     </Link>
                                 </>

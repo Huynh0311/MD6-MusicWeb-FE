@@ -88,7 +88,7 @@ function Top5Songs() {
                                 </Link>
                                 <Link to={"/song/detailSong/" + song.id}>
                                     <p className="list__subtitle text-truncate">
-                                        <p>{song.description}</p>
+                                        {song.description}
                                     </p>
                                 </Link>
                             </div>
