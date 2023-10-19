@@ -36,7 +36,7 @@ const SearchComponent = () => {
                                                                       aria-label="Sidebar toggler"><i
                             className="ri-menu-3-line"></i></div>
                             <form id="search_form" className="me-3" onSubmit={searchSongName}>
-                                <label for="search_input">
+                                <label htmlFor="search_input">
                                     <i className="ri-search-2-line" onClick={searchSongName}/></label> <input type="text"
                                                                                      placeholder="Hãy tìm gì đó ở đây ..."
                                                                                      id="search_input"

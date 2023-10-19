@@ -96,7 +96,7 @@ function Top5Songs() {
                                     {song.nameSong}
                                 </Link>
                                 <p className="list__subtitle text-truncate">
-                                    <div>{song.description}</div>
+                                    {song.description}
                                 </p>
                             </div>
                             <ul className="list__option">
