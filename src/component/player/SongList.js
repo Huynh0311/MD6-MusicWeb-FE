@@ -75,7 +75,8 @@ function SongList() {
                 {currentSongs.map((song) => (
                     <div className="col-lg-3 col-md-4 col-sm-6" key={song.id}>
                         <div className="song-card">
-                            <div className="cover cover--round" data-song-id={song.id}
+                            <div className="cover cover--round"
+                                 data-song-id={song.id}
                                  data-song-name={song.nameSong}
                                  data-song-url={song.pathSong}
                                  data-song-cover={song.imgSong}>
