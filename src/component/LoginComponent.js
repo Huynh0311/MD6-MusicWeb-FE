@@ -32,6 +32,7 @@ const LoginComponent = () => {
                 dispatch(saveAccount(re.data));
                 navigate('/')
                 window.location.reload()
+                console.log(data)
             }).catch(er=>{
                axios.post('http://localhost:8080/api/auth/register', er.response.data)
                     .then(response => {

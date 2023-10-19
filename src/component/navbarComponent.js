@@ -38,26 +38,26 @@ const NavbarComponent = () => {
                                     </p>
                                 </Link>
                             </li>
-                            <li className="nav-item nav-item-color"><a href="genres.html"
+                            <li className="nav-item nav-item-color"><div
                                                                        className="nav-link d-flex align-items-center"><i
-                                className="ri-disc-line fs-5"></i> <span className="ps-3">Thể loại</span></a></li>
-                            <li className="nav-item nav-item-color"><a href="albums.html"
+                                className="ri-disc-line fs-5"></i> <span className="ps-3">Thể loại</span></div></li>
+                            <li className="nav-item nav-item-color"><div
                                                                        className="nav-link d-flex align-items-center"><i
-                                className="ri-album-line fs-5"></i> <span className="ps-3">Albums</span></a></li>
-                            <li className="nav-item nav-item-color"><a href="artists.html"
+                                className="ri-album-line fs-5"></i> <span className="ps-3">Albums</span></div></li>
+                            <li className="nav-item nav-item-color"><div
                                                                        className="nav-link d-flex align-items-center"><i
-                                className="ri-mic-line fs-5"></i> <span className="ps-3">Ca sĩ</span></a></li>
+                                className="ri-mic-line fs-5"></i> <span className="ps-3">Ca sĩ</span></div></li>
                             <li className="nav-item nav-item-color nav-item nav-item-color--head"><span
                                 className="nav-item nav-item-color--head__text">Music</span> <span
                                 className="nav-item nav-item-color--head__dots">...</span></li>
-                            <li className="nav-item nav-item-color"><a href="analytics.html"
+                            <li className="nav-item nav-item-color"><div
                                                                        className="nav-link d-flex align-items-center"><i
-                                className="ri-pie-chart-line fs-5"></i> <span className="ps-3">Thịnh hành</span></a>
+                                className="ri-pie-chart-line fs-5"></i> <span className="ps-3">Thịnh hành</span></div>
                             </li>
-                            <li className="nav-item nav-item-color"><a href="analytics.html"
+                            <li className="nav-item nav-item-color"><div
                                                                        className="nav-link d-flex align-items-center">
                                 <i className="ri-music-2-line"></i>
-                                <span className="ps-3">Bài hát mới</span></a>
+                                <span className="ps-3">Bài hát mới</span></div>
                             </li>
                             {loggedIn ? (
                                 <>
@@ -90,38 +90,6 @@ const NavbarComponent = () => {
                                     </div>
                                 </li>
                             )}
-
-                            {/*<li className="nav-item nav-item-color"><a href="history.html"*/}
-                            {/*                            className="nav-link d-flex align-items-center"><i*/}
-                            {/*    className="ri-history-line fs-5"></i> <span className="ps-3">Lịch sử</span></a></li>*/}
-                            {/*<li className="nav-item nav-item-color nav-item nav-item-color--head"><span*/}
-                            {/*    className="nav-item nav-item-color--head__text">Events</span> <span*/}
-                            {/*    className="nav-item nav-item-color--head__dots">...</span></li>*/}
-                            {/*<li className="nav-item nav-item-color">*/}
-                            {/*    <a href="events.html" className="nav-link d-flex align-items-center">*/}
-                            {/*        <i className="ri-calendar-event-line fs-5"></i>*/}
-                            {/*        <span className="ps-3">Bài hát mới</span>*/}
-                            {/*</a>*/}
-                            {/*</li>*/}
-                            {/*<li className="nav-item nav-item-color"><a href="event-details.html"*/}
-                            {/*                            className="nav-link d-flex align-items-center"><i*/}
-                            {/*    className="ri-newspaper-line fs-5"></i> <span className="ps-3">Event Details</span></a>*/}
-                            {/*</li>*/}
-                            {/*<li className="nav-item nav-item-color"><a href="add-event.html"*/}
-                            {/*                            className="nav-link d-flex align-items-center"><i*/}
-                            {/*    className="ri-add-circle-line fs-5"></i> <span className="ps-3">Add Event</span></a>*/}
-                            {/*</li>*/}
-                            {/*<li className="nav-item nav-item-color nav-item nav-item-color--head"><span*/}
-                            {/*    className="nav-item nav-item-color--head__text">Extra</span> <span*/}
-                            {/*    className="nav-item nav-item-color--head__dots">...</span></li>*/}
-                            {/*<li className="nav-item nav-item-color"><a href="404.html"*/}
-                            {/*                            className="nav-link d-flex align-items-center external"><i*/}
-                            {/*    className="ri-error-warning-line fs-5"></i> <span*/}
-                            {/*    className="ps-3">404 Page</span></a></li>*/}
-                            {/*<li className="nav-item nav-item-color"><a href="blank.html"*/}
-                            {/*                            className="nav-link d-flex align-items-center"><i*/}
-                            {/*    className="ri-file-line fs-5"></i> <span className="ps-3">Blank Template</span></a>*/}
-                            {/*</li>*/}
                         </ul>
                     </nav>
                 </div>

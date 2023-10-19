@@ -1,7 +1,7 @@
 export const SAVE_ACCOUNT = 'SAVE_ACCOUNT';
-export const SAVE_SONGS = 'SAVE_SONGS';
 export const EDIT_ACCOUNT = 'EDIT_ACCOUNT';
 export const DELETE_ACCOUNT = 'DELETE_ACCOUNT';
+export const SAVE_SONGS = 'SAVE_SONGS';
 
 export const saveAccount = (account) => {
     return {

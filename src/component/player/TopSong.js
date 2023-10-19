@@ -6,6 +6,7 @@ import {
     useAudioPlayer
 } from '../../redux/playern/ActionsUseContext/AudioPlayerProvider';
 import {BsFillPlayFill, BsPauseFill} from "react-icons/bs";
+import {Link} from "react-router-dom";
 
 function Top5Songs() {
     const {currentSong, updateCurrentSongAndSongs} = useAudioPlayer();
@@ -26,6 +27,7 @@ function Top5Songs() {
         }
 
         fetchData();
+        console.log(songs)
     }, [updateCurrentSongAndSongs, currentSong]);
     const handleToggleSongPlay = (songId) => {
         const updatedSongs = songs.map((song) => {
@@ -50,19 +52,10 @@ function Top5Songs() {
             <ul>
                 {songs.map((song) => (
                     <div className="list" key={song.id}>
-                        <div
-                            className="list__item"
-                            data-song-id={song.id}
-                            data-song-name="Shack your butty"
-                            data-song-artist={song.nameSong}
-                            data-song-album="Hot shot"
-                            data-song-url={song.pathSong}
-                            data-song-cover={song.imgSong}
-                        >
+                        <div className="list__item">
                             <div className="list__cover">
-                                <img src={song.imgSong} alt="Shack your butty"/>
-                                <div  className="btn btn-play btn-sm btn-default btn-icon rounded-pill"
-                                    data-play-id="" aria-label="Play pause" >
+                                <img src={song.imgSong} alt={song.nameSong}/>
+                                <div className="btn btn-play btn-sm btn-default btn-icon rounded-pill">
                                     {song.isPlaying ? (
                                         <BsPauseFill role='button'
                                                      onClick={() => {
@@ -82,20 +75,20 @@ function Top5Songs() {
                                     )}
                                 </div>
                             </div>
+
                             <div className="list__content">
-                                <a href="song-details.html" className="list__title text-truncate">
-                                    {song.nameSong}
-                                </a>
-                                <p className="list__subtitle text-truncate">
-                                    <a href="artist-details.html">{song.description}</a>
-                                </p>
+                                <Link to={"/song/detailSong/" + song.id}>
+                                    <p className="list__title text-truncate">
+                                        {song.nameSong}
+                                    </p>
+                                </Link>
+                                <Link to={"/song/detailSong/" + song.id}>
+                                    <p className="list__subtitle text-truncate">
+                                        <p>{song.description}</p>
+                                    </p>
+                                </Link>
                             </div>
                             <ul className="list__option">
-                                <li>
-                                    <span className="badge rounded-pill bg-info">
-                                        <i className="ri-vip-crown-fill"></i>
-                                    </span>
-                                </li>
                                 <li>
                                     <a
                                         href="#"
