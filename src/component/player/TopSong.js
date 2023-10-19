@@ -28,7 +28,6 @@ function Top5Songs() {
             }
         }
         fetchData();
-        console.log(songs)
     }, [updateCurrentSongAndSongs, currentSong,isLike]);
 
 
