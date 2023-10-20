@@ -209,11 +209,8 @@ const DetailSong = () => {
                                  data-song-cover={currentSongDT.imgSong}>
                                 <div className="col-xl-3 col-md-4">
                                     <div className="cover cover--round">
-                                        <div className="cover__image"><img src={currentSongDT.imgSong}
-                                                                           alt="Treasure face" style={{
-                                            marginLeft: "30px",
-                                            marginTop: "10px"
-                                        }}/></div>
+                                        <div className="cover__image">
+                                            <img src={currentSongDT.imgSong} alt="Treasure face" style={{marginLeft: "30px", marginTop: "10px"}}/></div>
                                     </div>
                                 </div>
                                 <div className="col-1 d-none d-xl-block"></div>

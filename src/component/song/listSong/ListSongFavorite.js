@@ -29,8 +29,6 @@ const ListSongFavorite = () => {
                         <div className="section__head"><h3 className="mb-0">Favorite Songs</h3></div>
                         <div className="list list--order">
                             <div className="row">
-
-                                {/*<div className="col-xl-12">*/}
                                 {listSong.map((song) => (
                                     <div className="list__item" data-song-id="" data-song-name={song.nameSong}
                                          data-song-artist={song.nameSinger} data-song-album="Mummy"
@@ -56,18 +54,25 @@ const ListSongFavorite = () => {
                                             </p>
                                         </div>
                                         <ul className="list__option">
-                                            <li><a href="javascript:void(0);" role="button"
+                                            <li>
+                                                <a href="javascript:void(0);" role="button"
                                                    className="d-inline-flex active"
                                                    aria-label="Favorite" data-favorite-id="1"><i
-                                                className="ri-heart-line heart-empty"></i>
-                                                <i className="ri-heart-fill heart-fill"></i></a></li>
-                                            <li className="dropstart d-inline-flex"><a className="dropdown-link"
-                                                                                       href="javascript:void(0);"
-                                                                                       role="button"
-                                                                                       data-bs-toggle="dropdown"
-                                                                                       aria-label="Cover options"
-                                                                                       aria-expanded="false"><i
-                                                className="ri-more-fill"></i></a>
+                                                    className="ri-heart-line heart-empty"></i>
+                                                    <i className="ri-heart-fill heart-fill"></i>
+                                                </a>
+                                            </li>
+                                            <li className="dropstart d-inline-flex">
+                                                <a className="dropdown-link"
+                                                   href="javascript:void(0);"
+                                                   role="button"
+                                                   data-bs-toggle="dropdown"
+                                                   aria-label="Cover options"
+                                                   aria-expanded="false"><i
+                                                    className="ri-more-fill">
+
+                                                </i>
+                                                </a>
                                                 <ul className="dropdown-menu dropdown-menu-sm">
                                                     <li><a className="dropdown-item" href="javascript:void(0);"
                                                            role="button"

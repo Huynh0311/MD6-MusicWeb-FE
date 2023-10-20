@@ -29,10 +29,11 @@ const SearchComponent = () => {
             <header id="header">
                 <div className="container">
                     <div className="header-container">
-                        <div className="d-flex align-items-center"><div role="button"
-                                                                      className="header-text sidebar-toggler d-lg-none me-3"
-                                                                      aria-label="Sidebar toggler"><i
-                            className="ri-menu-3-line"></i></div>
+                        <div className="d-flex align-items-center">
+                            <div role="button"
+                                 className="header-text sidebar-toggler d-lg-none me-3"
+                                 aria-label="Sidebar toggler"><i
+                                className="ri-menu-3-line"></i></div>
                             <form id="search_form" className="me-3" onSubmit={searchSongName}>
                                 <label htmlFor="search_input">
                                     <i className="ri-search-2-line" onClick={searchSongName}/></label> <input type="text"

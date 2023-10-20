@@ -40,7 +40,6 @@ const ActionPlay = () => {
             if (currentSong) {
                 isPlaying ? player.current.audio.current.play() : player.current.audio.current.pause();
             }
-            console.log(currentSong)
         }, [isPlaying]);
 
         const nextSong = () => {
