@@ -8,55 +8,66 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import './Management.css';
+import _ from 'lodash';
+import Tooltip from "@mui/material/Tooltip";
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Slide from '@mui/material/Slide';
 
-const columns = [
-
-    {
-        id: 'name',
-        label: 'Tên',
-        minWidth: 150,
-        align: 'center',
-    },
-    {
-        id: 'phone',
-        label: 'Điện thoại',
-        minWidth: 250,
-        align: 'center',
-    },
-    {
-        id: 'email',
-        label: 'Email',
-        minWidth: 250,
-        align: 'center',
-    },
-    {
-        id: 'auth',
-        label: 'Kích hoạt',
-        minWidth: 170,
-        align: 'center',
-    },
+const userColumns = [
+    {id: 'name', label: 'Tên', minWidth: 150,maxHeight:50, align: 'center',},
+    {id: 'phone', label: 'Điện thoại', minWidth: 250, align: 'center',},
+    {id: 'email', label: 'Email', minWidth: 250, align: 'center',},
+    {id: 'auth', label: 'Kích hoạt', minWidth: 170, align: 'center',},
 ];
 
+const singerColumns = [
+    {id: 'id', label: 'STT', minWidth: 100, align: 'center',},
+    {id: 'nameSinger', label: 'Ca sĩ ', minWidth: 200, align: 'center',},
+];
 
-function CreateData() {
-    const [rows, setRows] = useState([]);
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
+
+function GetUserList() {
+    const [userRows, setUserRows] = useState([]);
 
     useEffect(() => {
         fetch("http://localhost:8080/apiAccount/all")
             .then((res) => res.json())
             .then((data) => {
-                setRows(data);
+                setUserRows(data);
             })
             .catch((err) => {
                 console.error(err.message);
             });
     }, []);
-    console.log(rows);
-    return rows; // Return the fetched data
+    return userRows; // Return the fetched data
 }
 
-function GetUserQuantity(){
+function GetSingerList() {
+    const [rows, setRows] = useState([]);
+    useEffect(() => {
+        fetch("http://localhost:8080/admin/singerquantity")
+            .then((res) => res.json())
+            .then((data) => {
+                setRows(data);
+                console.log(data)
+            })
+            .catch((err) => {
+                console.error(err.message);
+            });
+    }, []);
+    return rows;
+}
+
+function GetUserQuantity() {
     const [userQuantity, setUserQuantity] = useState(0);
 
     useEffect(() => {
@@ -69,9 +80,10 @@ function GetUserQuantity(){
                 console.error(err.message);
             });
     }, 0);
-return userQuantity;}
+    return userQuantity;
+}
 
-function GetSongQuantity(){
+function GetSongQuantity() {
     const [songQuantity, setSongQuantity] = useState(0);
 
     useEffect(() => {
@@ -84,24 +96,44 @@ function GetSongQuantity(){
                 console.error(err.message);
             });
     }, 0);
-    return songQuantity;}
+    return songQuantity;
+}
 
 
 export default function DataTable() {
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
-    const data = CreateData(); // Fetch data using CreateData function
+    const [pageUser, setPageUser] = useState(0);
+    const [rowsPerPageUser, setRowsPerPageUser] = useState(10);
+    const [pageSinger, setPageSinger] = useState(0);
+    const [rowsPerPageSinger, setRowsPerPageSinger] = useState(10);
+    const data = GetUserList(); // Fetch data using CreateData function
     const dataUser = GetUserQuantity();
     const dataSong = GetSongQuantity();
+    const dataSinger = GetSingerList();
 
-
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+    const handleClose = () => {
+        setOpen(false);
     };
 
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(+event.target.value);
-        setPage(0);
+    const handleChangePageUser = (event, newPage) => {
+        setPageUser(newPage);
+    };
+
+    const handleChangeRowsPerPageUser = (event) => {
+        setRowsPerPageUser(+event.target.value);
+        setPageUser(0);
+    };
+
+    const handleChangePageSinger = (event, newPage) => {
+        setPageUser(newPage);
+    };
+
+    const handleChangeRowsPerPageSinger = (event) => {
+        setRowsPerPageSinger(+event.target.value);
+        setPageSinger(0);
     };
 
 
@@ -146,7 +178,7 @@ export default function DataTable() {
                                                         {<p className="fw-medium ps-2">{dataUser}</p>}</div>
                                                 </div>
                                                 <div style={{height: 160 + 'px'}}>
-                                                    <canvas id="total_user" ></canvas>
+                                                    <canvas id="total_user"></canvas>
                                                 </div>
                                             </div>
                                         </div>
@@ -188,7 +220,7 @@ export default function DataTable() {
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead>
                                 <TableRow>
-                                    {columns.map((column) => (
+                                    {userColumns.map((column) => (
                                         <TableCell
                                             key={column.id}
                                             align={column.align}
@@ -201,10 +233,87 @@ export default function DataTable() {
                             </TableHead>
                             <TableBody>
                                 {data
-                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                    .slice(pageUser * rowsPerPageUser, pageUser * rowsPerPageUser + rowsPerPageUser)
                                     .map((row) => (
                                         <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                                            {columns.map((column) => (
+                                            {userColumns.map((column) => (
+                                                <TableCell key={column.id} align={column.align}>
+                                                    {column.id === 'auth' ? (row[column.id] ?
+                                                        <a className="fa-sharp fa-solid fa-circle-check fa-2xl"
+                                                           style={{color: '#12f34a'}}>
+                                                        </a> :
+                                                        <Button className="auth-button"
+                                                           style={{color: '#da1010'}} onClick={handleClickOpen}>
+                                                            <i className="fa-solid fa-circle-xmark fa-2xl"></i>
+                                                        </Button>) : row[column.id]}
+                                                    <Dialog
+                                                        open={open}
+                                                        TransitionComponent={Transition}
+                                                        keepMounted
+                                                        onClose={handleClose}
+                                                        aria-describedby="alert-dialog-slide-description"
+                                                    >
+                                                        <DialogTitle>{"Use Google's location service?"}</DialogTitle>
+                                                        <DialogContent>
+                                                            <DialogContentText id="alert-dialog-slide-description">
+                                                                Let Google help apps determine location. This means sending anonymous
+                                                                location data to Google, even when no apps are running.
+                                                            </DialogContentText>
+                                                        </DialogContent>
+                                                        <DialogActions>
+                                                            <Button onClick={handleClose}>Disagree</Button>
+                                                            <Button onClick={handleClose}>Agree</Button>
+                                                        </DialogActions>
+                                                    </Dialog>
+                                                </TableCell>
+                                            ))}
+                                        </TableRow>
+                                    ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                    <TablePagination
+                        rowsPerPageOptions={[5, 10, 25]}
+                        component="div"
+                        count={data.length}
+                        rowsPerPage={rowsPerPageUser}
+                        page={pageUser}
+                        onPageChange={handleChangePageUser}
+                        onRowsPerPageChange={handleChangeRowsPerPageUser}
+                    />
+                </Paper>
+            </span>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-md-4">
+                                    <div className="card h-100">
+                                        <div className="card-header"><h5 className="mb-0">Danh sách ca sĩ</h5></div>
+                                        <div className="card-body">
+                                            <span className="border">
+                <Paper sx={{width: '100%', overflow: 'hidden'}}>
+                    <TableContainer sx={{minHeight: 440,maxWidth: 350}}>
+                        <Table stickyHeader aria-label="sticky table">
+                            <TableHead>
+                                <TableRow>
+                                    {singerColumns.map((column) => (
+                                        <TableCell
+                                            key={column.id}
+                                            align={column.align}
+                                            style={{minWidth: column.minWidth}}
+                                        >
+                                            {column.label}
+                                        </TableCell>
+                                    ))}
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {dataSinger
+                                    .slice(pageSinger * rowsPerPageSinger, pageSinger * rowsPerPageSinger + rowsPerPageSinger)
+                                    .map((row) => (
+                                        <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                            {singerColumns.map((column) => (
                                                 <TableCell key={column.id} align={column.align}>
                                                     {column.id === 'auth' ? (row[column.id] ?
                                                         <a className="fa-sharp fa-solid fa-circle-check fa-2xl"
@@ -223,68 +332,16 @@ export default function DataTable() {
                     <TablePagination
                         rowsPerPageOptions={[5, 10, 25]}
                         component="div"
-                        count={data.length}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
+                        count={dataSinger.length}
+                        rowsPerPage={rowsPerPageSinger}
+                        page={pageSinger}
+                        onPageChange={handleChangePageSinger}
+                        onRowsPerPageChange={handleChangeRowsPerPageSinger}
                     />
                 </Paper>
             </span>
 
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-md-4">
-                                    <div className="card h-100">
-                                        <div className="card-header"><h5 className="mb-0">Danh sách ca sỹ</h5></div>
-                                        <div className="card-body">
-                                            <ul className="list-group list-group-flush">
-                                                <li className="list-group-item border-0 px-0 py-3"><p
-                                                    className="fs-4 mb-1 fw-semi-bold">
-                                                    3421</p>
-                                                    <p className="mb-2 fw-medium">Visits from Facebook</p>
-                                                    <div className="progress" style={{height: .25 + 'rem'}}>
-                                                        <div className="progress-bar bg-primary" role="progressbar"
-                                                             style={{width: 80 + '%'}}
-                                                             aria-valuenow="25" aria-valuemin="0"
-                                                             aria-valuemax="100"></div>
-                                                    </div>
-                                                </li>
-                                                <li className="list-group-item border-0 px-0 py-3"><p
-                                                    className="fs-4 mb-1 fw-semi-bold">
-                                                    2401</p>
-                                                    <p className="mb-2 fw-medium">Visits from Instagram</p>
-                                                    <div className="progress" style={{height: .25 + 'rem'}}>
-                                                        <div className="progress-bar bg-danger" role="progressbar"
-                                                             style={{width: 67 + '%'}}
-                                                             aria-valuenow="25" aria-valuemin="0"
-                                                             aria-valuemax="100"></div>
-                                                    </div>
-                                                </li>
-                                                <li className="list-group-item border-0 px-0 py-3"><p
-                                                    className="fs-4 mb-1 fw-semi-bold">
-                                                    975</p>
-                                                    <p className="mb-2 fw-medium">Visits from Twitter</p>
-                                                    <div className="progress" style={{height: .25 + 'rem'}}>
-                                                        <div className="progress-bar bg-info" role="progressbar"
-                                                             style={{width: 31 + '%'}}
-                                                             aria-valuenow="25" aria-valuemin="0"
-                                                             aria-valuemax="100"></div>
-                                                    </div>
-                                                </li>
-                                                <li className="list-group-item border-0 px-0 py-3"><p
-                                                    className="fs-4 mb-1 fw-semi-bold">
-                                                    1672</p>
-                                                    <p className="mb-2 fw-medium">Visits from Affiliates</p>
-                                                    <div className="progress" style={{height: .25 + 'rem'}}>
-                                                        <div className="progress-bar bg-success" role="progressbar"
-                                                             style={{width: 52 + '%'}}
-                                                             aria-valuenow="25" aria-valuemin="0"
-                                                             aria-valuemax="100"></div>
-                                                    </div>
-                                                </li>
-                                            </ul>
+
                                         </div>
                                     </div>
                                 </div>
