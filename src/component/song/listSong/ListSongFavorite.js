@@ -30,13 +30,12 @@ const ListSongFavorite = () => {
                         <div className="list list--order">
                             <div className="row">
                                 {listSong.map((song) => (
-                                    <div className="list__item" data-song-id="" data-song-name={song.nameSong}
-                                         data-song-artist={song.nameSinger} data-song-album="Mummy"
-                                         data-song-url={song.pathSong}
-                                         data-song-cover={song.imgSong}>
+                                    <div className="list__item"
+                                         style={{width: "60%"}}
+                                         >
                                         <div className="list__cover"><img src={song.imgSong}
                                                                           alt="ảnh"/>
-                                            <a href="javascript:void(0);"
+                                            <a href=""
                                                className="btn btn-play btn-sm btn-default btn-icon rounded-pill"
                                                data-play-id="1"
                                                aria-label="Play pause"><i className="ri-play-fill icon-play"></i>
@@ -55,7 +54,7 @@ const ListSongFavorite = () => {
                                         </div>
                                         <ul className="list__option">
                                             <li>
-                                                <a href="javascript:void(0);" role="button"
+                                                <a href="" role="button"
                                                    className="d-inline-flex active"
                                                    aria-label="Favorite" data-favorite-id="1"><i
                                                     className="ri-heart-line heart-empty"></i>
@@ -64,7 +63,7 @@ const ListSongFavorite = () => {
                                             </li>
                                             <li className="dropstart d-inline-flex">
                                                 <a className="dropdown-link"
-                                                   href="javascript:void(0);"
+                                                   href=""
                                                    role="button"
                                                    data-bs-toggle="dropdown"
                                                    aria-label="Cover options"
@@ -74,19 +73,19 @@ const ListSongFavorite = () => {
                                                 </i>
                                                 </a>
                                                 <ul className="dropdown-menu dropdown-menu-sm">
-                                                    <li><a className="dropdown-item" href="javascript:void(0);"
+                                                    <li><a className="dropdown-item" href=""
                                                            role="button"
                                                            data-playlist-id="1">Add to playlist</a></li>
-                                                    <li><a className="dropdown-item" href="javascript:void(0);"
+                                                    <li><a className="dropdown-item" href=""
                                                            role="button"
                                                            data-queue-id="1">Add to queue</a></li>
-                                                    <li><a className="dropdown-item" href="javascript:void(0);"
+                                                    <li><a className="dropdown-item" href=""
                                                            role="button"
                                                            data-next-id="1">Next to play</a></li>
-                                                    <li><a className="dropdown-item" href="javascript:void(0);"
+                                                    <li><a className="dropdown-item" href=""
                                                            role="button">Share</a></li>
                                                     <li className="dropdown-divider"></li>
-                                                    <li><a className="dropdown-item" href="javascript:void(0);"
+                                                    <li><a className="dropdown-item" href=""
                                                            role="button"
                                                            data-play-id="1">Play</a></li>
                                                 </ul>
@@ -111,20 +110,20 @@ const ListSongFavorite = () => {
                                         </ul>
                                         <div className="cover__options dropstart d-inline-flex ms-auto"><a
                                             className="dropdown-link"
-                                            href="javascript:void(0);"
+                                            href=""
                                             role="button"
                                             data-bs-toggle="dropdown"
                                             aria-label="Cover options"
                                             aria-expanded="false"><i
                                             className="ri-more-2-fill"></i></a>
                                             <ul className="dropdown-menu dropdown-menu-sm">
-                                                <li><a className="dropdown-item" href="javascript:void(0);"
+                                                <li><a className="dropdown-item" href=""
                                                        role="button"
                                                        data-favorite-id="100">Favorite</a></li>
                                                 <li><a className="dropdown-item" href="audio/ringtone-1.mp3"
                                                        download>Download</a>
                                                 </li>
-                                                <li><a className="dropdown-item" href="javascript:void(0);"
+                                                <li><a className="dropdown-item" href=""
                                                        role="button">Share</a>
                                                 </li>
                                                 <li className="dropdown-divider"></li>
@@ -153,20 +152,20 @@ const ListSongFavorite = () => {
                                         </ul>
                                         <div className="cover__options dropstart d-inline-flex ms-auto"><a
                                             className="dropdown-link"
-                                            href="javascript:void(0);"
+                                            href=""
                                             role="button"
                                             data-bs-toggle="dropdown"
                                             aria-label="Cover options"
                                             aria-expanded="false"><i
                                             className="ri-more-2-fill"></i></a>
                                             <ul className="dropdown-menu dropdown-menu-sm">
-                                                <li><a className="dropdown-item" href="javascript:void(0);"
+                                                <li><a className="dropdown-item" href=""
                                                        role="button"
                                                        data-favorite-id="102">Favorite</a></li>
                                                 <li><a className="dropdown-item" href="audio/ringtone-3.mp3"
                                                        download>Download</a>
                                                 </li>
-                                                <li><a className="dropdown-item" href="javascript:void(0);"
+                                                <li><a className="dropdown-item" href=""
                                                        role="button">Share</a>
                                                 </li>
                                                 <li className="dropdown-divider"></li>
@@ -198,20 +197,20 @@ const ListSongFavorite = () => {
                                         </ul>
                                         <div className="cover__options dropstart d-inline-flex ms-auto"><a
                                             className="dropdown-link"
-                                            href="javascript:void(0);"
+                                            href=""
                                             role="button"
                                             data-bs-toggle="dropdown"
                                             aria-label="Cover options"
                                             aria-expanded="false"><i
                                             className="ri-more-2-fill"></i></a>
                                             <ul className="dropdown-menu dropdown-menu-sm">
-                                                <li><a className="dropdown-item" href="javascript:void(0);"
+                                                <li><a className="dropdown-item" href=""
                                                        role="button"
                                                        data-favorite-id="103">Favorite</a></li>
                                                 <li><a className="dropdown-item" href="audio/ringtone-4.mp3"
                                                        download>Download</a>
                                                 </li>
-                                                <li><a className="dropdown-item" href="javascript:void(0);"
+                                                <li><a className="dropdown-item" href=""
                                                        role="button">Share</a>
                                                 </li>
                                                 <li className="dropdown-divider"></li>
@@ -243,20 +242,20 @@ const ListSongFavorite = () => {
                                         </ul>
                                         <div className="cover__options dropstart d-inline-flex ms-auto"><a
                                             className="dropdown-link"
-                                            href="javascript:void(0);"
+                                            href=""
                                             role="button"
                                             data-bs-toggle="dropdown"
                                             aria-label="Cover options"
                                             aria-expanded="false"><i
                                             className="ri-more-2-fill"></i></a>
                                             <ul className="dropdown-menu dropdown-menu-sm">
-                                                <li><a className="dropdown-item" href="javascript:void(0);"
+                                                <li><a className="dropdown-item" href=""
                                                        role="button"
                                                        data-favorite-id="105">Favorite</a></li>
                                                 <li><a className="dropdown-item" href="audio/ringtone-6.mp3"
                                                        download>Download</a>
                                                 </li>
-                                                <li><a className="dropdown-item" href="javascript:void(0);"
+                                                <li><a className="dropdown-item" href=""
                                                        role="button">Share</a>
                                                 </li>
                                                 <li className="dropdown-divider"></li>

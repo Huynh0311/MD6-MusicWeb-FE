@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useNavigate, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {getAllSongByGenresIDAPI, getSongByID, playSong} from "../../api/songService/SongService";
 import {getSongLikeQuantityAPI, isLikedAPI, likeClickAPI} from "../../api/LikesService/LikesService";
 import {getAllCommentBySongIdAPI, sendCommentAPI} from "../../api/commentService/CommentService";
@@ -49,7 +49,7 @@ const DetailSong = () => {
         getLikeQuantity();
         getAllCommentBySongID(id)
         getAllSongByGenres();
-    }, [updateCurrentSongAndSongs, currentSong])
+    }, [updateCurrentSongAndSongs, currentSong, id])
 
     const checkLike = () => {
         if (like.account.name != null && like.song.nameSong != null) {
@@ -235,7 +235,7 @@ const DetailSong = () => {
                                                 <li>
                                                     <div className="dropdown-item"
                                                          role="button"
-                                                         >Thêm vào danh sách phát
+                                                    >Thêm vào danh sách phát
                                                     </div>
                                                 </li>
                                                 {/*<li>*/}
@@ -259,7 +259,7 @@ const DetailSong = () => {
                                                 <li>
                                                     <div className="dropdown-item"
                                                          role="button"
-                                                         >Phát
+                                                    >Phát
                                                     </div>
                                                 </li>
                                             </ul>
@@ -306,12 +306,11 @@ const DetailSong = () => {
                                             {isLiked === 1 ?
                                                 (<div role="button"
                                                       className="text-dark d-flex align-items-center"
-                                                      aria-label="Favorite" >
+                                                      aria-label="Favorite">
                                                     <i className="fa-sharp fa-solid fa-heart"
                                                        style={{color: "#ff0000", fontSize: "24px"}}
                                                        onClick={likeClick}>
                                                     </i>
-                                                    <i className="ri-heart-fill heart-fill"></i>
                                                     <span
                                                         className="ps-2 fw-medium">{
                                                         likedQuantity != null ? likedQuantity : ''
@@ -411,12 +410,9 @@ const DetailSong = () => {
                                                     <div className="cover__image"><img src={rs.imgSong}
                                                                                        alt={rs.nameSong}/>
                                                         <button type="button"
-                                                                className="btn btn-play btn-default btn-icon rounded-pill"
-                                                                data-play-id="">
-                                                            {/*<i className="ri-play-fill icon-play"/> */}
-                                                            {/*<i className="ri-pause-fill icon-pause"/>*/}
+                                                                className="btn btn-play btn-default btn-icon rounded-pill">
                                                             {rs.isPlaying ? (
-                                                                <AiOutlinePauseCircle
+                                                                <BsPauseFill
                                                                     onClick={() => {
                                                                         handleToggleSongPlay(rs.id);
                                                                         updateCurrentSongAndSongs(rs, songs);
@@ -424,7 +420,7 @@ const DetailSong = () => {
                                                                     style={{fontSize: "30px"}}
                                                                 />
                                                             ) : (
-                                                                <AiOutlinePlayCircle
+                                                                <BsFillPlayFill
                                                                     onClick={() => {
                                                                         handleToggleSongPlay(rs.id);
                                                                         updateCurrentSongAndSongs(rs, songs);
@@ -434,15 +430,16 @@ const DetailSong = () => {
                                                             )}
                                                         </button>
                                                     </div>
-                                                    <div className="cover__foot">
-                                                        <div className="cover__title text-truncate">{rs.nameSong}</div>
-                                                        <p className="cover__subtitle text-truncate">
-                                                            <div>{rs.nameSinger}</div>
-                                                        </p>
-                                                    </div>
+                                                    <Link to={"/song/detailSong/" + rs.id}>
+                                                        <div className="cover__foot">
+                                                            <div
+                                                                className="cover__title text-truncate">{rs.nameSong}</div>
+                                                            <p className="cover__subtitle text-truncate">
+                                                                <div>{rs.nameSinger}</div>
+                                                            </p>
+                                                        </div>
+                                                    </Link>
                                                 </div>
-
-
                                             </div>
 
                                         ))}
