@@ -5,8 +5,9 @@ import {
     AudioPlayerContext,
     useAudioPlayer
 } from '../../redux/playern/ActionsUseContext/AudioPlayerProvider';
-import AxiosCustomize from "../api/utils/AxiosCustomize";
+import {BsFillPlayFill, BsPauseFill} from "react-icons/bs";
 import {Link} from "react-router-dom";
+import AxiosCustomize from "../api/utils/AxiosCustomize";
 import {likeClickAPI} from "../api/LikesService/LikesService";
 
 function Top5Songs() {
@@ -54,49 +55,41 @@ function Top5Songs() {
             <ul>
                 {songs.map((song) => (
                     <div className="list" key={song.id}>
-                        {song.isPlaying ? (
-                            <AiOutlinePauseCircle
-                                onClick={() => {
-                                    handleToggleSongPlay(song.id);
-                                    updateCurrentSongAndSongs(song, songs);
-                                }}
-                                style={{fontSize: "30px"}}
-                            />
-                        ) : (
-                            <AiOutlinePlayCircle
-                                onClick={() => {
-                                    handleToggleSongPlay(song.id);
-                                    updateCurrentSongAndSongs(song, songs);
-                                }}
-                                style={{fontSize: "30px"}}
-                            />
-                        )}
-                        <div
-                            className="list__item"
-                            data-song-id={song.id}
-                            data-song-name="Shack your butty"
-                            data-song-artist={song.nameSong}
-                            data-song-album="Hot shot"
-                            data-song-url={song.pathSong}
-                            data-song-cover={song.imgSong}
-                        >
+                        <div className="list__item">
                             <div className="list__cover">
-                                <img src={song.imgSong} alt="Shack your butty"/>
-                                <div
-                                    className="btn btn-play btn-sm btn-default btn-icon rounded-pill"
-                                    data-play-id={song.id}
-                                    aria-label="Play pause">
-                                    <i className="ri-play-fill icon-play"></i>{' '}<i
-                                    className="ri-pause-fill icon-pause"></i>
+                                <img src={song.imgSong} alt={song.nameSong}/>
+                                <div className="btn btn-play btn-sm btn-default btn-icon rounded-pill">
+                                    {song.isPlaying ? (
+                                        <BsPauseFill role='button'
+                                                     onClick={() => {
+                                                         handleToggleSongPlay(song.id);
+                                                         updateCurrentSongAndSongs(song, songs);
+                                                     }}
+                                                     style={{fontSize: "30px"}}
+                                        />
+                                    ) : (
+                                        <BsFillPlayFill role='button'
+                                                        onClick={() => {
+                                                            handleToggleSongPlay(song.id);
+                                                            updateCurrentSongAndSongs(song, songs);
+                                                        }}
+                                                        style={{fontSize: "30px"}}
+                                        />
+                                    )}
                                 </div>
                             </div>
+
                             <div className="list__content">
-                                <Link to={"/song/detailSong/" + song.id} className="list__title text-truncate">
-                                    {song.nameSong}
+                                <Link to={"/song/detailSong/" + song.id}>
+                                    <p className="list__title text-truncate">
+                                        {song.nameSong}
+                                    </p>
                                 </Link>
-                                <p className="list__subtitle text-truncate">
-                                    <div>{song.description}</div>
-                                </p>
+                                <Link to={"/song/detailSong/" + song.id}>
+                                    <p className="list__subtitle text-truncate">
+                                        {song.description}
+                                    </p>
+                                </Link>
                             </div>
                             <ul className="list__option">
                                 <li>
@@ -139,14 +132,14 @@ function Top5Songs() {
                                             <div
                                                 className="dropdown-item"
                                                 role="button"
-                                                data-play-id={song.id}>
+                                                >
                                                 Add to playlist
                                             </div>
                                         </li>
                                         <li><div
                                             className="dropdown-item"
                                             role="button"
-                                            data-play-id={song.id}>
+                                            >
                                             Add to queue
                                         </div>
                                         </li>
@@ -154,7 +147,7 @@ function Top5Songs() {
                                             <div
                                                 className="dropdown-item"
                                                 role="button"
-                                                data-play-id={song.id}>
+                                                >
                                                 Next to play
                                             </div>
                                         </li>
@@ -171,7 +164,7 @@ function Top5Songs() {
                                             <div
                                                 className="dropdown-item"
                                                 role="button"
-                                                data-play-id={song.id}>
+                                                >
                                                 Play
                                             </div>
                                         </li>
