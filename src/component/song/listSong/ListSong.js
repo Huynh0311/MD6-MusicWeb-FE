@@ -27,6 +27,7 @@ const ListSong = () => {
 
     const DetailFunction = (id) => {
         navigate("/song/detailSong/" +id);
+        navigate(0);
     }
 
     const RemoveFunction = (id) => {
@@ -67,7 +68,7 @@ const ListSong = () => {
 
         <main id="page_content">
             <div className="hero" style={{ backgroundImage: 'url(../images/banner/event.jpg)' }}></div>
-            <div className="col-md-10">
+            <div className="col-md-10" style={{left: "130px"}}>
                 <div className="card">
                     <div className="card-body">
                         <h4 className="card-title">Danh sách bài hát</h4>

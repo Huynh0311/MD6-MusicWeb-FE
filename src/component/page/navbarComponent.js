@@ -16,9 +16,9 @@ const NavbarComponent = () => {
             <aside id="sidebar">
                 <div className="sidebar-head d-flex align-items-center justify-content-between">
                     <Link to={"/"}>
-                        <p className="brand external">
+                        <div className="brand external">
                             <img src="../../images/logos/logo.svg" alt="Listen app"/>
-                        </p>
+                        </div>
                     </Link>
                     <div role="button" className="sidebar-toggler" aria-label="Sidebar toggler">
                         <div className="d-none d-lg-block"><i className="ri-menu-3-line sidebar-menu-1"></i>
@@ -44,14 +44,13 @@ const NavbarComponent = () => {
 
                             <li className="nav-item nav-item-color"><Link to={'/listPlaylist'}
                                                         className="nav-link d-flex align-items-center"><i
-                                className="ri-album-line fs-5"></i> <span className="ps-3">Albums</span></Link></li>
+                                className="ri-album-line fs-5"></i> <span className="ps-3">Danh sách phát</span></Link></li>
 
                             <li className="nav-item nav-item-color"><a href="artists.html"
                                                                        className="nav-link d-flex align-items-center"><i
                                 className="ri-mic-line fs-5"></i> <span className="ps-3">Ca sĩ</span></a></li>
                             <li className="nav-item nav-item-color nav-item nav-item-color--head"><span
-                                className="nav-item nav-item-color--head__text">Music</span> <span
-                                className="nav-item nav-item-color--head__dots">...</span></li>
+                                className="nav-item nav-item-color--head__text" style={{marginLeft:"5px"}}>Bài hát</span></li>
                             <li className="nav-item nav-item-color"><a href="analytics.html"
                                                                        className="nav-link d-flex align-items-center"><i
                                 className="ri-pie-chart-line fs-5"></i> <span className="ps-3">Thịnh hành</span></a>
@@ -75,7 +74,7 @@ const NavbarComponent = () => {
                                         <li className="nav-item nav-item-color">
                                             <p  className="nav-link d-flex align-items-center">
                                                 <i className="fa-solid fa-list-music" style={{fontSize: "20px"}}></i>
-                                                <span className="ps-3">Danh sách bài hát</span></p>
+                                                <span className="ps-3">Danh sách bài hát đã tạo</span></p>
                                         </li>
                                     </Link>
                                 </>
@@ -92,38 +91,6 @@ const NavbarComponent = () => {
                                     </div>
                                 </li>
                             )}
-
-                            {/*<li className="nav-item nav-item-color"><a href="history.html"*/}
-                            {/*                            className="nav-link d-flex align-items-center"><i*/}
-                            {/*    className="ri-history-line fs-5"></i> <span className="ps-3">Lịch sử</span></a></li>*/}
-                            {/*<li className="nav-item nav-item-color nav-item nav-item-color--head"><span*/}
-                            {/*    className="nav-item nav-item-color--head__text">Events</span> <span*/}
-                            {/*    className="nav-item nav-item-color--head__dots">...</span></li>*/}
-                            {/*<li className="nav-item nav-item-color">*/}
-                            {/*    <a href="events.html" className="nav-link d-flex align-items-center">*/}
-                            {/*        <i className="ri-calendar-event-line fs-5"></i>*/}
-                            {/*        <span className="ps-3">Bài hát mới</span>*/}
-                            {/*</a>*/}
-                            {/*</li>*/}
-                            {/*<li className="nav-item nav-item-color"><a href="event-details.html"*/}
-                            {/*                            className="nav-link d-flex align-items-center"><i*/}
-                            {/*    className="ri-newspaper-line fs-5"></i> <span className="ps-3">Event Details</span></a>*/}
-                            {/*</li>*/}
-                            {/*<li className="nav-item nav-item-color"><a href="add-event.html"*/}
-                            {/*                            className="nav-link d-flex align-items-center"><i*/}
-                            {/*    className="ri-add-circle-line fs-5"></i> <span className="ps-3">Add Event</span></a>*/}
-                            {/*</li>*/}
-                            {/*<li className="nav-item nav-item-color nav-item nav-item-color--head"><span*/}
-                            {/*    className="nav-item nav-item-color--head__text">Extra</span> <span*/}
-                            {/*    className="nav-item nav-item-color--head__dots">...</span></li>*/}
-                            {/*<li className="nav-item nav-item-color"><a href="404.html"*/}
-                            {/*                            className="nav-link d-flex align-items-center external"><i*/}
-                            {/*    className="ri-error-warning-line fs-5"></i> <span*/}
-                            {/*    className="ps-3">404 Page</span></a></li>*/}
-                            {/*<li className="nav-item nav-item-color"><a href="blank.html"*/}
-                            {/*                            className="nav-link d-flex align-items-center"><i*/}
-                            {/*    className="ri-file-line fs-5"></i> <span className="ps-3">Blank Template</span></a>*/}
-                            {/*</li>*/}
                         </ul>
                     </nav>
                 </div>
@@ -131,7 +98,7 @@ const NavbarComponent = () => {
                     <div className="sidebar-foot">
                         <Link to={"/song/create"}>
                             <div className="btn btn-primary d-flex">
-                                <div className="btn__wrap"><i className="ri-music-fill"></i> <span>Add Music</span></div>
+                                <div className="btn__wrap"><i className="ri-music-fill"></i> <span>Tạo bài hát</span></div>
                             </div>
                         </Link>
                     </div>
