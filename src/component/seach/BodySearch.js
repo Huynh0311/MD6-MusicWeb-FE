@@ -5,9 +5,9 @@ import {
     searchListSongByName,
     searchListSongByNamePlaylist,
     searchListSongByNameSinger
-} from "../../api/songService/SongService";
-import {likeClickAPI} from "../../api/LikesService/LikesService";
-import {AudioPlayerContext, useAudioPlayer} from "../../../redux/playern/ActionsUseContext/AudioPlayerProvider";
+} from "../api/songService/SongService";
+import {likeClickAPI} from "../api/LikesService/LikesService";
+import {AudioPlayerContext, useAudioPlayer} from "../../redux/playern/ActionsUseContext/AudioPlayerProvider";
 import {BsFillPlayFill, BsPauseFill} from "react-icons/bs";
 
 const BodySearch = () => {
