@@ -1,26 +1,44 @@
-import React, {useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import React, {useContext, useEffect, useState} from "react";
+import {Link, useParams} from "react-router-dom";
 import {findPlaylistById} from "../api/PlaylistService/PlaylistService";
 import axios from "axios";
+import {AudioPlayerContext, useAudioPlayer} from "../../redux/playern/ActionsUseContext/AudioPlayerProvider";
+import {BsFillPlayFill, BsPauseFill} from "react-icons/bs";
+import {likeClickAPI} from "../api/LikesService/LikesService";
 
 export default function DetailPlaylist() {
     const [playlist, setPlaylist] = useState({})
     const [count, setCount] = useState(0);
     const [songs, setSongs] = useState([]);
     const [account, setAccount] = useState({});
-
-
+    const [isCurrentSongPlayingNow, setIsCurrentSongPlayingNow] = useState(false);
     const {id} = useParams();
+    const [isLike, setIsLike] = useState(false);
+    const {currentSong, updateCurrentSongAndSongs} = useAudioPlayer();
+    const {isPlaying, handlePlayToggle} = useContext(AudioPlayerContext);
+    const [accountLogin, setAccountLogin] = useState(JSON.parse(localStorage.getItem("data")));
 
     useEffect(() => {
         findPlaylistById(id).then(res => {
             setPlaylist(res.data)
-            console.log(res.data)
             fetchPlaylistCount(id);
             fetchSongs(id);
             fetchAccount(id);
         })
-    }, [])
+    }, [updateCurrentSongAndSongs, currentSong, isLike])
+
+    const handleToggleSongPlay = (songId) => {
+        const updateSongs = songs.map((song) => {
+            const newIsPlaying = song.id === songId ? !song.isPlaying : false;
+            return {
+                ...song,
+                isPlaying: newIsPlaying,
+            }
+        })
+        setSongs(updateSongs);
+        setIsCurrentSongPlayingNow(!isCurrentSongPlayingNow);
+        handlePlayToggle(updateSongs.some((song) => song.isPlaying));
+    };
     const fetchPlaylistCount = async (id) => {
         try {
             const res = await axios.get(`http://localhost:8080/playlist/countSong/${id}`);
@@ -32,12 +50,26 @@ export default function DetailPlaylist() {
 
     const fetchSongs = async (id) => {
         try {
-            const res = await axios.get(`http://localhost:8080/playlist/getSongByPlaylist/${id}`);
-            setSongs(res.data);
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${accountLogin.token}`,
+                },
+            };
+            const res = await axios.get(`http://localhost:8080/playlist/getSongByPlaylist/${id}`, config);
+            const songs = res.data.map((song) => ({
+                ...song,
+                isPlaying: currentSong && currentSong.id === song.id ? isPlaying : false,
+            }));
+            setSongs(songs);
         } catch (error) {
             setSongs([]);
         }
     };
+
+    // const isAnySongPlaying = () => {
+    //     const hasAnySongIsPlaying = songs.some((song) => song.isPlaying === true);
+    //     hasAnySongIsPlaying ? setIsCurrentSongPlayingNow(true) : setIsCurrentSongPlayingNow(false);
+    // }
     const fetchAccount = async (id) => {
         try {
             const res = await axios.get(`http://localhost:8080/playlist/getUserByPlaylist/${id}`);
@@ -46,6 +78,13 @@ export default function DetailPlaylist() {
             setAccount({});
         }
     };
+
+    function likeClick(id) {
+        likeClickAPI(id).then(res => {
+            setIsLike(!isLike)
+        })
+    }
+
     return (
         <main id="page_content">
             <div className="hero" style={{backgroundImage: "url(../../images/banner/event.jpg)"}}></div>
@@ -63,56 +102,99 @@ export default function DetailPlaylist() {
                             <div className="d-flex flex-wrap mb-2"><span
                                 className="text-dark fs-4 fw-semi-bold pe-2">{playlist.namePlaylist}</span>
                             </div>
-                            <ul className="info-list info-list--dotted mb-3">
-                                <li>{count} Songs</li>
-                            </ul>
-                            <p className="mb-5">By: <a href="artist-details.html"
-                                                       className="text-dark fw-medium">{account.name}
-                            </a></p>
-                            <ul className="info-list">
+                            <p className="info-list info-list--dotted mb-3" style={{fontWeight: "bolder"}}>
+                                {count} bài hát có trong Playlist
+                            </p>
+                            <p className="mb-5">Tạo bởi:
+                                <a href="artist-details.html" className="text-dark fw-medium">{account.name}
+                                </a>
+                            </p>
+                            <ul className="info-list" style={{marginTop: "-30px", marginLeft: "-5px"}}>
                                 <li>
                                     <div className="d-flex align-items-center">
                                         <button type="button" id="play_all"
-                                                className="btn btn-icon btn-primary rounded-pill"
-                                                data-collection-play-id="1"><i className="ri-play-fill icon-play"></i>
-                                            <i
-                                                className="ri-pause-fill icon-pause"></i></button>
+                                                className="btn btn-icon btn-primary rounded-pill">
+                                            {isPlaying ? (
+                                                <BsPauseFill role='button'
+                                                             onClick={() => {
+                                                                 handleToggleSongPlay(currentSong.id);
+                                                                 updateCurrentSongAndSongs(currentSong, songs);
+                                                             }}
+                                                             style={{fontSize: "30px"}}
+                                                />
+                                            ) : (
+                                                <BsFillPlayFill role='button'
+                                                                onClick={() => {
+                                                                    if (currentSong === null) {
+                                                                        handleToggleSongPlay(songs[0].id);
+                                                                        updateCurrentSongAndSongs(songs[0], songs);
+                                                                    } else {
+                                                                        handleToggleSongPlay(currentSong.id);
+                                                                        updateCurrentSongAndSongs(currentSong, songs);
+                                                                    }
+
+                                                                }}
+                                                                style={{fontSize: "30px"}}
+                                                />
+                                            )}
+                                        </button>
                                         <label htmlFor="play_all" className="ps-2 fw-semi-bold text-primary mb-0"
-                                               style={{cursor: 'pointer'}}>Play all</label></div>
+                                               style={{cursor: 'pointer'}}>Phát Playlist
+                                        </label>
+                                    </div>
                                 </li>
-                                <li><a href="javascript:void(0);" role="button"
+                                <li>
+                                    <a href="javascript:void(0);" role="button"
                                        className="text-dark d-flex align-items-center"
-                                       aria-label="Favorite" data-favorite-id="1"><i
-                                    className="ri-heart-line heart-empty"></i>
-                                    <i className="ri-heart-fill heart-fill"></i> <span
-                                        className="ps-2 fw-medium">121</span></a>
+                                       aria-label="Favorite" data-favorite-id="1">
+                                        <i className="ri-heart-line heart-empty"></i>
+                                        <i className="ri-heart-fill heart-fill"></i>
+                                        <span className="ps-2 fw-medium">121</span>
+                                    </a>
                                 </li>
                             </ul>
                         </div>
                     </div>
 
-                    <div className="section__head"><h3 className="mb-0">Favorite Songs</h3></div>
+                    <div className="section__head"><h3 className="mb-0" style={{marginTop: "30px"}}>Các bài hát có trong
+                        Playlist</h3></div>
                     <div className="list list--order">
                         <div className="row">
                             {songs.map((song) => (
-                                <div className="list__item list__playlist" data-song-id="" data-song-name={song.nameSong}
-                                     data-song-artist={song.nameSinger} data-song-album="Mummy"
-                                     data-song-url={song.pathSong}
-                                     data-song-cover={song.imgSong}
-                                style={{width: "50%"}}>
-                                    <div className="list__cover"><img src={song.imgSong}
-                                                                      alt="ảnh"/>
+                                <div className="list__item list__playlist"
+                                     style={{width: "50%"}}>
+                                    <div className="list__cover">
+                                        <img src={song.imgSong}
+                                             alt="ảnh"/>
                                         <a href="javascript:void(0);"
                                            className="btn btn-play btn-sm btn-default btn-icon rounded-pill"
                                            data-play-id="1"
-                                           aria-label="Play pause"><i className="ri-play-fill icon-play"></i>
-                                            <i className="ri-pause-fill icon-pause"></i>
+                                           aria-label="Play pause">
+                                            {console.log(songs)}
+                                            {song.isPlaying ? (
+                                                <BsPauseFill role='button'
+                                                             onClick={() => {
+                                                                 handleToggleSongPlay(song.id);
+                                                                 updateCurrentSongAndSongs(song, songs);
+                                                             }}
+                                                             style={{fontSize: "30px"}}
+                                                />
+                                            ) : (
+                                                <BsFillPlayFill role='button'
+                                                                onClick={() => {
+                                                                    handleToggleSongPlay(song.id);
+                                                                    updateCurrentSongAndSongs(song, songs);
+                                                                }}
+                                                                style={{fontSize: "30px"}}
+                                                />
+                                            )}
                                         </a>
                                     </div>
+
                                     <div className="list__content">
-                                        <a href="song-details.html" className="list__title text-truncate">
-                                            {song.nameSong}
-                                        </a>
+                                        <Link to={`/song/detailSong/${song.id}`}>
+                                            <div className="list__title text-truncate">{song.nameSong}</div>
+                                        </Link>
                                         <p className="list__subtitle text-truncate">
                                             <a href="artist-details.html">
                                                 {song.nameSinger}
@@ -120,11 +202,27 @@ export default function DetailPlaylist() {
                                         </p>
                                     </div>
                                     <ul className="list__option">
-                                        <li><a href="javascript:void(0);" role="button"
+                                        <li>
+                                            <a href="javascript:void(0);" role="button"
                                                className="d-inline-flex active"
-                                               aria-label="Favorite" data-favorite-id="1"><i
-                                            className="ri-heart-line heart-empty"></i>
-                                            <i className="ri-heart-fill heart-fill"></i></a></li>
+                                               aria-label="Favorite" data-favorite-id="1">
+                                                {/*<i className="ri-heart-line heart-empty"></i>*/}
+                                                {/*<i className="ri-heart-fill heart-fill"></i>*/}
+                                                {console.log(song.isLiked)}
+                                                {song.isLiked === 1 ? (
+                                                    <i className="fa-sharp fa-solid fa-heart"
+                                                       style={{
+                                                           color: "#ff0000",
+                                                           fontSize: "24px"
+                                                       }}
+                                                       onClick={() => likeClick(song.id)}>
+                                                    </i>
+                                                ) : (
+                                                    <i className="fa-sharp fa-regular fa-heart" onClick={() => likeClick(song.id)}
+                                                       style={{color: "#000000", fontSize: "24px"}}></i>
+                                                )}
+                                            </a>
+                                        </li>
                                         <li>
                                             <div className="me-4 d-none d-xl-block"><span
                                                 className="amplitude-current-minutes"></span>:<span

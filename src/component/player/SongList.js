@@ -65,6 +65,7 @@ function SongList() {
 
     const handleChangePlaylist = (event) => {
         setSelectedPlaylist(event.target.value);
+        console.log(event.target.value)
     };
 
     const handleSave = async () => {

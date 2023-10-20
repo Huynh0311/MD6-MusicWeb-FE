@@ -36,7 +36,8 @@ export default function ListPlaylist() {
                                                                        className="list__cover"
                                                                        style={{height: "150px", width: "150px"}}><img
                                             src={item.playlistImg} alt="Luna" style={{height: 200 + 'px'}}/></a>
-                                            <div className="list__content"><Link
+                                            <div className="list__content">
+                                                <Link
                                                 to={`/detailPlaylist/${item.id}`}
                                                 className="list__title text-truncate">{item.namePlaylist}</Link>
                                                 <p className="list__subtitle text-truncate"><Link

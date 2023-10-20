@@ -235,31 +235,31 @@ const DetailSong = () => {
                                                 <li>
                                                     <div className="dropdown-item"
                                                          role="button"
-                                                         data-playlist-id="8">Add to playlist
+                                                         >Thêm vào danh sách phát
                                                     </div>
                                                 </li>
-                                                <li>
-                                                    <div className="dropdown-item"
-                                                         role="button"
-                                                         data-queue-id="8">Add to queue
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div className="dropdown-item"
-                                                         role="button"
-                                                         data-next-id="8">Next to play
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div className="dropdown-item"
-                                                         role="button">Share
-                                                    </div>
-                                                </li>
+                                                {/*<li>*/}
+                                                {/*    <div className="dropdown-item"*/}
+                                                {/*         role="button"*/}
+                                                {/*         >Add to queue*/}
+                                                {/*    </div>*/}
+                                                {/*</li>*/}
+                                                {/*<li>*/}
+                                                {/*    <div className="dropdown-item"*/}
+                                                {/*         role="button"*/}
+                                                {/*         >Next to play*/}
+                                                {/*    </div>*/}
+                                                {/*</li>*/}
+                                                {/*<li>*/}
+                                                {/*    <div className="dropdown-item"*/}
+                                                {/*         role="button">Share*/}
+                                                {/*    </div>*/}
+                                                {/*</li>*/}
                                                 <li className="dropdown-divider"></li>
                                                 <li>
                                                     <div className="dropdown-item"
                                                          role="button"
-                                                         data-play-id="8">Play
+                                                         >Phát
                                                     </div>
                                                 </li>
                                             </ul>
@@ -306,7 +306,7 @@ const DetailSong = () => {
                                             {isLiked === 1 ?
                                                 (<div role="button"
                                                       className="text-dark d-flex align-items-center"
-                                                      aria-label="Favorite" data-favorite-id="1">
+                                                      aria-label="Favorite" >
                                                     <i className="fa-sharp fa-solid fa-heart"
                                                        style={{color: "#ff0000", fontSize: "24px"}}
                                                        onClick={likeClick}>
