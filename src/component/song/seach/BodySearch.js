@@ -77,16 +77,28 @@ const BodySearch = () => {
     }
     const handleToggleSongPlay = (songId) => {
         const updatedSongs = searchList.map((song) => {
-            if (song.id === songId) {
-                const newIsPlaying = !song.isPlaying;
-                song.isPlaying = newIsPlaying;
-                if (newIsPlaying) {
-                    handlePlayToggle(true);
-                } else {
-                    handlePlayToggle(false);
+            if (song instanceof Array) {
+                for (let s of song) {
+                    if (s.id === songId) {
+                        const newIsPlaying = !s.isPlaying;
+                        s.isPlaying = newIsPlaying;
+                        if (newIsPlaying) {
+                            handlePlayToggle(true);
+                        } else {
+                            handlePlayToggle(false);
+                        }
+                    }
                 }
             } else {
-                song.isPlaying = false;
+                if (song.id === songId) {
+                    const newIsPlaying = !song.isPlaying;
+                    song.isPlaying = newIsPlaying;
+                    if (newIsPlaying) {
+                        handlePlayToggle(true);
+                    } else {
+                        handlePlayToggle(false);
+                    }
+                }
             }
             return song;
         });
@@ -158,7 +170,7 @@ const BodySearch = () => {
                                                                     {song.nameSong}
                                                                 </Link>
                                                                 <p className="list__subtitle text-truncate">
-                                                                    <div>{song.nameSinger}</div>
+                                                                    {song.nameSinger}
                                                                 </p>
                                                             </div>
                                                             <ul className="list__option">
@@ -278,11 +290,11 @@ const BodySearch = () => {
                                                                     </div>
                                                                     <div className="list__content">
                                                                         <Link to={`/song/detailSong/${song?.id}`}
-                                                                              className="list__title text-truncate">
-                                                                            {song?.nameSong}
+                                                                              className="list__title text-truncate" title={`isPlaying: ${JSON.stringify(songList[0].isPlaying)}`}>
+                                                                            {song?.nameSong} - {song.isPlaying}
                                                                         </Link>
                                                                         <p className="list__subtitle text-truncate">
-                                                                            <div>{song.nameSinger}</div>
+                                                                            {song.nameSinger}
                                                                         </p>
                                                                     </div>
                                                                     <ul className="list__option">

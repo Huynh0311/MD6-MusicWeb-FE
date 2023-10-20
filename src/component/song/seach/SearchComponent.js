@@ -39,7 +39,7 @@ const SearchComponent = () => {
                                                                                      placeholder="Hãy tìm gì đó ở đây ..."
                                                                                      id="search_input"
                                                                                      className="form-control form-control-sm"
-                                                                                     value={searchInput}
+                                                                                     value={searchInput || ''}
                                                                                      onChange={(e) => handleSearchInput(e)}
                             />
                             </form>

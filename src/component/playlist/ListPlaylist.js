@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {getAllPlaylist} from "../api/PlaylistService/PlaylistService";
 import {Link} from "react-router-dom";
+import "./Playlist.css"
 
 export default function ListPlaylist() {
     const [listPlaylist, setListPlaylist] = useState([]);
@@ -20,15 +21,19 @@ export default function ListPlaylist() {
                             <div className="section__head">
                                 <div className="flex-grow-1">
                                     <h3 className="mb-0">Top <span className="text-primary">Playlist</span></h3></div>
-                                <a type="button" data-toggle="modal" data-target="#exampleModalCenter" className="btn btn-link"><i
-                                    className="fa-sharp fa-light fa-list-music"></i>Add new playlist</a></div>
+                                <a type="button" data-toggle="modal" data-target="#exampleModalCenter"
+                                   className="btn btn-link">
+                                    <i className="fa-sharp fa-light fa-list-music"></i>
+                                    Tạo mới Playlist
+                                </a>
+                            </div>
                             <div className="list list--lg list--order">
                                 <div className="row">
                                     {listPlaylist.map((item) => (
                                         <div className="list__item"><a href="album-details.html"
                                                                        className="list__cover"
-                                                                       style={{height: "150px",width:"150px"}}><img
-                                            src={item.playlistImg} alt="Luna" style={{height:200 +'px'}}/></a>
+                                                                       style={{height: "150px", width: "150px"}}><img
+                                            src={item.playlistImg} alt="Luna" style={{height: 200 + 'px'}}/></a>
                                             <div className="list__content"><Link
                                                 to={`/detailPlaylist/${item.id}`}
                                                 className="list__title text-truncate">{item.namePlaylist}</Link>
@@ -80,15 +85,24 @@ export default function ListPlaylist() {
                 <div className="modal-dialog modal-dialog-centered" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                            <h5 className="modal-title" id="exampleModalLongTitle">Tạo Playlist mới</h5>
                             <button type="button" className="close" data-dismiss="modal"
                                     aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div className="modal-body">
-                            ...
+                            <div className="input-playlist">
+                                <p>Tên Playlist:</p>
+                                <input placeholder={"Hãy nhập tên Playlist"}/>
+                            </div>
+
+                            <div className={"input-playlist"}>
+                                <p>Nhập ảnh Playlist:</p>
+                                <input type={"file"}/>
+                            </div>
                         </div>
+
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary"
                                     data-dismiss="modal">Close
