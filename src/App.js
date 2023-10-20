@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import {Route, Routes} from "react-router-dom";
-import HomeComponent from "./component/HomeComponent";
+import HomeComponent from "./component/page/HomeComponent";
 import UpdateAccount from "./component/account/updateAccount";
 import 'react-toastify/dist/ReactToastify.css';
 import {ToastContainer} from "react-toastify";
@@ -14,9 +14,9 @@ import ListSong from "./component/song/listSong/ListSong";
 import EditSong from "./component/song/editSong/EditSong";
 
 import 'react-toastify/dist/ReactToastify.css';
-import Page from "./component/page";
-import Component404 from "./component/Component404";
-import BodySearch from "./component/song/seach/BodySearch";
+import Page from "./component/page/page";
+import Component404 from "./component/page/Component404";
+import BodySearch from "./component/seach/BodySearch";
 
 import DetailPlaylist from "./component/playlist/DetailPlaylist";
 import ListPlaylist from "./component/playlist/ListPlaylist";

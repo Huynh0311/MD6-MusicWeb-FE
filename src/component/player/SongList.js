@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {Link} from "react-router-dom";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {saveSong} from "../../redux/actions";
 import {
     AudioPlayerContext,
@@ -15,9 +15,10 @@ import Modal from '@mui/material/Modal';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select, {SelectChangeEvent} from '@mui/material/Select';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -35,6 +36,7 @@ const style = {
 };
 
 function SongList() {
+    const accountLogin = useSelector(state => state.account)
     const [songs, setSongs] = useState([]);
     const [playlist, setPlaylist] = useState([]);
     const [selectedSongId, setSelectedSongId] = useState([]);
@@ -47,9 +49,10 @@ function SongList() {
     const [open, setOpen] = React.useState(false);
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
     const handleOpen = async (id) => {
+        console.log(1)
         try {
             console.log('handleOpen', id);
-            const response = await AxiosCustomize.get('/playlist/all');
+            const response = await AxiosCustomize.get('/playlist/findByAccountId/' + accountLogin.id);
             console.log('response.data', response.data)
             setSelectedSongId(id);
             setPlaylist(response.data);
@@ -65,9 +68,16 @@ function SongList() {
         console.log(event.target.value)
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
         console.log('handleSave', selectedSongId, selectedPlaylist);
         // TODO: Gọi API add song to playlist
+        try {
+            let playlistSong = {playlist: {id: selectedPlaylist}, song: {id: selectedSongId}}
+            const response = await AxiosCustomize.post('/playlist/saveToPlaylist', playlistSong);
+
+        } catch (error) {
+            console.error('Lỗi khi lấy danh sách bài hát:', error);
+        }
         // Lưu xong thì đóng modal
         handleClose();
         // Đóng modal xong thì hiển thị thông báo thêm playlist thành công
@@ -138,84 +148,86 @@ function SongList() {
                                 <div className="cover cover--round">
                                     <div className="cover__head">
                                         <ul className="cover__label d-flex">
-                                            <li>
-                                                <span className="badge rounded-pill bg-danger">
-                                                    <i className="ri-heart-fill"></i>
-                                                </span>
-                                        </li>
-                                    </ul>
-                                    <div className="cover__options dropstart d-inline-flex ms-auto">
-                                        <div className="dropdown-link"
-                                             role="button"
-                                             data-bs-toggle="dropdown" aria-label="Cover options"
-                                             aria-expanded="false">
-                                            <i className="ri-more-2-fill"></i>
-                                        </div>
-                                        <ul className="dropdown-menu dropdown-menu-sm">
-                                            <li>
-                                                <div className="dropdown-item"
-                                                     role="button"
-                                                     data-favorite-id="1">Favorite
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div className="dropdown-item"
-                                                     role="button"
-                                                     data-playlist-id="1" onClick={() => handleOpen(song.id)}>Add to playlist
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <p className="dropdown-item"
-                                                   role="button"
-                                                    // data-queue-id="1"
-                                                   onClick={() => addToQueue(song)}
-                                                >Add to queue</p>
-                                            </li>
-                                            <li>
-                                                <div className="dropdown-item"
-                                                     role="button"
-                                                     data-next-id="1">Next to play
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div className="dropdown-item"
-                                                     role="button">Share
-                                                </div>
-                                            </li>
-                                            <li className="dropdown-divider"></li>
-                                            <li>
-                                                <div className="dropdown-item"
-                                                     role="button"
-                                                     data-play-id="1">Play
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
 
-                                <div className="cover__image">
-                                    <img src={song.imgSong} alt={song.nameSong}/>
-                                    <button type="button"
-                                            className="btn btn-play btn-default btn-icon rounded-pill">
-                                        {song.isPlaying ? (
-                                            <BsPauseFill role='button'
+                                        </ul>
+                                        <div className="cover__options dropstart d-inline-flex ms-auto">
+                                            <div className="dropdown-link"
+                                                 role="button"
+                                                 data-bs-toggle="dropdown" aria-label="Cover options"
+                                                 aria-expanded="false">
+                                                <i className="ri-more-2-fill"></i>
+                                            </div>
+                                            <ul className="dropdown-menu dropdown-menu-sm">
+                                                {/*<li>*/}
+                                                {/*    <div className="dropdown-item"*/}
+                                                {/*         role="button"*/}
+                                                {/*         >Favorite*/}
+                                                {/*    </div>*/}
+                                                {/*</li>*/}
+                                                <li>
+                                                    <div className="dropdown-item"
+                                                         role="button"
+                                                         data-playlist-id="1" onClick={() => {
+                                                        handleOpen(song.id)
+                                                    }}>Add to playlist
+                                                    </div>
+                                                </li>
+                                                {/*<li>*/}
+                                                {/*    <p className="dropdown-item"*/}
+                                                {/*       role="button"*/}
+                                                {/*        // data-queue-id="1"*/}
+                                                {/*       onClick={() => addToQueue(song)}*/}
+                                                {/*    >Add to queue</p>*/}
+                                                {/*</li>*/}
+                                                {/*<li>*/}
+                                                {/*    <div className="dropdown-item"*/}
+                                                {/*         role="button"*/}
+                                                {/*         data-next-id="1">Next to play*/}
+                                                {/*    </div>*/}
+                                                {/*</li>*/}
+                                                {/*<li>*/}
+                                                {/*    <div className="dropdown-item"*/}
+                                                {/*         role="button">Share*/}
+                                                {/*    </div>*/}
+                                                {/*</li>*/}
+                                                <li className="dropdown-divider"></li>
+                                                <li>
+                                                    <div className="dropdown-item"
+                                                         role="button"
                                                          onClick={() => {
                                                              handleToggleSongPlay(song.id);
                                                              updateCurrentSongAndSongs(song, songs);
                                                          }}
-                                                         style={{fontSize: "30px"}}
-                                            />
-                                        ) : (
-                                            <BsFillPlayFill role='button'
-                                                            onClick={() => {
-                                                                handleToggleSongPlay(song.id);
-                                                                updateCurrentSongAndSongs(song, songs);
-                                                            }}
-                                                            style={{fontSize: "30px"}}
-                                            />
-                                        )}
-                                    </button>
-                                </div>
+                                                    >Play
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div className="cover__image">
+                                        <img src={song.imgSong} alt={song.nameSong}/>
+                                        <button type="button"
+                                                className="btn btn-play btn-default btn-icon rounded-pill">
+                                            {song.isPlaying ? (
+                                                <BsPauseFill role='button'
+                                                             onClick={() => {
+                                                                 handleToggleSongPlay(song.id);
+                                                                 updateCurrentSongAndSongs(song, songs);
+                                                             }}
+                                                             style={{fontSize: "30px"}}
+                                                />
+                                            ) : (
+                                                <BsFillPlayFill role='button'
+                                                                onClick={() => {
+                                                                    handleToggleSongPlay(song.id);
+                                                                    updateCurrentSongAndSongs(song, songs);
+                                                                }}
+                                                                style={{fontSize: "30px"}}
+                                                />
+                                            )}
+                                        </button>
+                                    </div>
 
                                     <Link to={"/song/detailSong/" + song.id}>
                                         <div className="cover__foot">
@@ -268,21 +280,22 @@ function SongList() {
                             onChange={handleChangePlaylist}
                         >
                             {playlist.map((item) =>
-                                ( <MenuItem value={item.id}>{item.namePlaylist}</MenuItem>)
+                                (<MenuItem key={item.id} value={item.id}>{item.namePlaylist}</MenuItem>)
                             )}
                         </Select>
                     </FormControl>
                     <div style={{textAlign: 'right'}}>
-                    <Button variant="contained" onClick={handleSave}>Lưu</Button>
+                        <Button variant="contained" onClick={handleSave}>Lưu</Button>
                     </div>
                 </Box>
             </Modal>
             <Snackbar
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
-            <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
-                Thêm playlist thành công
-            </Alert>
-        </Snackbar>
+                anchorOrigin={{vertical: 'bottom', horizontal: 'right'}} open={openSnackbar} autoHideDuration={6000}
+                onClose={handleCloseSnackbar}>
+                <Alert onClose={handleCloseSnackbar} severity="success" sx={{width: '100%'}}>
+                    Thêm vào playlist thành công
+                </Alert>
+            </Snackbar>
         </>
     );
 }

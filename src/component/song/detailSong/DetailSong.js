@@ -69,19 +69,19 @@ const DetailSong = () => {
 
     const getLikeQuantity = () => {
         getSongLikeQuantityAPI(id).then(res => {
-           setLikedQuantity(res.data);
+            setLikedQuantity(res.data);
         }).catch(error => {
-                console.log(error);
-            });
+            console.log(error);
+        });
     }
 
     const getAllSongByGenres = () => {
         getAllSongByGenresIDAPI(id).then(res => {
-                const songs = res.data?.map((song) => ({
-                    ...song,
-                    isPlaying: currentSong && currentSong.id === song.id ? isPlaying : false,
-                }));
-                setrelatedSongs(songs);
+            const songs = res.data?.map((song) => ({
+                ...song,
+                isPlaying: currentSong && currentSong.id === song.id ? isPlaying : false,
+            }));
+            setrelatedSongs(songs);
         })
     }
 
@@ -152,7 +152,8 @@ const DetailSong = () => {
 
 
     const getAllCommentBySongID = (id) => {
-        getAllCommentBySongIdAPI(id).then(res => setAllComments(res.data))}
+        getAllCommentBySongIdAPI(id).then(res => setAllComments(res.data))
+    }
 
     const handleToggleSongPlay = (songId) => {
         const updatedSongs = relatedSongs.map((song) => {
@@ -210,7 +211,13 @@ const DetailSong = () => {
                                 <div className="col-xl-3 col-md-4">
                                     <div className="cover cover--round">
                                         <div className="cover__image">
-                                            <img src={currentSongDT.imgSong} alt="Treasure face" style={{marginLeft: "30px", marginTop: "10px"}}/></div>
+                                            <img src={currentSongDT.imgSong}
+                                                 alt="Treasure face"
+                                                 style={{
+                                                     marginLeft: "30px",
+                                                     marginTop: "10px"
+                                                 }}/>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="col-1 d-none d-xl-block"></div>
@@ -225,21 +232,36 @@ const DetailSong = () => {
                                                  aria-expanded="false"><i
                                                 className="ri-more-fill"></i></div>
                                             <ul className="dropdown-menu dropdown-menu-sm">
-                                                <li><div className="dropdown-item"
-                                                       role="button"
-                                                       data-playlist-id="8">Add to playlist</div></li>
-                                                <li><div className="dropdown-item"
-                                                       role="button"
-                                                       data-queue-id="8">Add to queue</div></li>
-                                                <li><div className="dropdown-item"
-                                                       role="button"
-                                                       data-next-id="8">Next to play</div></li>
-                                                <li><div className="dropdown-item"
-                                                       role="button">Share</div></li>
+                                                <li>
+                                                    <div className="dropdown-item"
+                                                         role="button"
+                                                         >Thêm vào danh sách phát
+                                                    </div>
+                                                </li>
+                                                {/*<li>*/}
+                                                {/*    <div className="dropdown-item"*/}
+                                                {/*         role="button"*/}
+                                                {/*         >Add to queue*/}
+                                                {/*    </div>*/}
+                                                {/*</li>*/}
+                                                {/*<li>*/}
+                                                {/*    <div className="dropdown-item"*/}
+                                                {/*         role="button"*/}
+                                                {/*         >Next to play*/}
+                                                {/*    </div>*/}
+                                                {/*</li>*/}
+                                                {/*<li>*/}
+                                                {/*    <div className="dropdown-item"*/}
+                                                {/*         role="button">Share*/}
+                                                {/*    </div>*/}
+                                                {/*</li>*/}
                                                 <li className="dropdown-divider"></li>
-                                                <li><div className="dropdown-item"
-                                                       role="button"
-                                                       data-play-id="8">Play</div></li>
+                                                <li>
+                                                    <div className="dropdown-item"
+                                                         role="button"
+                                                         >Phát
+                                                    </div>
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>
@@ -264,10 +286,7 @@ const DetailSong = () => {
                                         <li>
                                             <div className="d-flex align-items-center">
                                                 <button type="button"
-                                                        className="btn btn-play btn-default btn-icon rounded-pill playing"
-                                                        data-play-id="">
-                                                    {/*<i className="ri-play-fill icon-play"></i>*/}
-                                                    {/*<i className="ri-pause-fill icon-pause"></i>*/}
+                                                        className="btn btn-play btn-default btn-icon rounded-pill playing">
                                                     {detailSong.isPlaying ? (
                                                         <BsPauseFill
                                                             onClick={() => handleSongClick(detailSong)}
@@ -286,8 +305,8 @@ const DetailSong = () => {
                                         <li>
                                             {isLiked === 1 ?
                                                 (<div role="button"
-                                                    className="text-dark d-flex align-items-center"
-                                                    aria-label="Favorite" data-favorite-id="1">
+                                                      className="text-dark d-flex align-items-center"
+                                                      aria-label="Favorite" >
                                                     <i className="fa-sharp fa-solid fa-heart"
                                                        style={{color: "#ff0000", fontSize: "24px"}}
                                                        onClick={likeClick}>
@@ -309,13 +328,15 @@ const DetailSong = () => {
                                                 }</span></div>)}
 
                                         </li>
-                                        <li><div role="button"
-                                               className="text-dark d-flex align-items-center"
-                                               aria-label="Download"><i className="ri-download-2-line"></i> <span
-                                            className="ps-2 fw-medium">24</span></div></li>
-                                        <li><span className="text-dark d-flex align-items-center"><i
-                                            className="ri-star-fill text-warning"></i> <span
-                                            className="ps-2 fw-medium">4.5</span></span></li>
+                                        <li>
+                                            <div role="button"
+                                                 className="text-dark d-flex align-items-center"
+                                                 aria-label="Download"><i className="ri-download-2-line"></i> <span
+                                                className="ps-2 fw-medium">24</span></div>
+                                        </li>
+                                        {/*<li><span className="text-dark d-flex align-items-center"><i*/}
+                                        {/*    className="ri-star-fill text-warning"></i> <span*/}
+                                        {/*    className="ps-2 fw-medium">4.5</span></span></li>*/}
                                     </ul>
                                     <div className="mt-2"><span
                                         className="d-block text-dark fs-6 fw-semi-bold mb-3">Mô tả</span>
@@ -388,7 +409,7 @@ const DetailSong = () => {
                                                         </div>
                                                     </div>
                                                     <div className="cover__image"><img src={rs.imgSong}
-                                                                                       alt={rs.nameSong} />
+                                                                                       alt={rs.nameSong}/>
                                                         <button type="button"
                                                                 className="btn btn-play btn-default btn-icon rounded-pill"
                                                                 data-play-id="">
