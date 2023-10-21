@@ -87,7 +87,7 @@ export default function DetailPlaylist() {
 
     return (
         <main id="page_content">
-            <div className="hero"></div>
+            <div className="hero" style={{backgroundImage: "url(../../images/banner/event.jpg)"}}></div>
             <div className="under-hero container">
                 <div className="section">
                     <div className="row align-items-center">

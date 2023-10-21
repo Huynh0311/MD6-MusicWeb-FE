@@ -1,10 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import SongList from "./player/SongList";
-import TopSong from "./player/TopSong";
-import accountService from "./api/AccountService/AccountService";
-import {Link} from "react-router-dom";
-import MusicPlayer from "./player/MusicPlayer";
-import TopPlaylist from "./playlist/TopPlaylist";
+import SongList from "../player/SongList";
+import TopSong from "../player/TopSong";
+import accountService from "../api/AccountService/AccountService";
+import TopPlaylist from "../playlist/TopPlaylist";
 
 
 const HomeComponent = () => {
@@ -18,7 +16,6 @@ const HomeComponent = () => {
     return (
         <div>
             <div id="wrapper">
-                {console.log(listAuthAccount)}
                 <main id="page_content">
                     <div className="hero" style={{backgroundImage: "url(../../images/banner/home.jpg"}}></div>
                     <div className="under-hero container">

@@ -1,11 +1,14 @@
 import React, {useEffect, useState} from "react";
 import {getAllPlaylist} from "../api/PlaylistService/PlaylistService";
 import {Link} from "react-router-dom";
+import "./Playlist.css"
+import {useSelector} from "react-redux";
 
 export default function ListPlaylist() {
+    const accountLogin = useSelector(state => state.account)
     const [listPlaylist, setListPlaylist] = useState([]);
     useEffect(() => {
-        getAllPlaylist().then(res => {
+        getAllPlaylist(accountLogin.id).then(res => {
             console.log(res.data)
             setListPlaylist(res.data)
         })
@@ -14,7 +17,7 @@ export default function ListPlaylist() {
         <div>
             <div id="wrapper">
                 <main id="page_content">
-                    <div className="hero" style={{backgroundImage: "url(images/banner/home.jpg"}}></div>
+                    <div className="hero" style={{backgroundImage: "url(../../images/banner/home.jpg"}}></div>
                     <div className="under-hero container">
                         <div className="section">
                             <div className="section__head">

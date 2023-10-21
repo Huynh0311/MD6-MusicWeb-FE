@@ -36,17 +36,30 @@ const SearchComponent = () => {
                                 className="ri-menu-3-line"></i></div>
                             <form id="search_form" className="me-3" onSubmit={searchSongName}>
                                 <label htmlFor="search_input">
-                                    <i className="ri-search-2-line" onClick={searchSongName}/></label> <input type="text"
-                                                                                     placeholder="Hãy tìm gì đó ở đây ..."
-                                                                                     id="search_input"
-                                                                                     className="form-control form-control-sm"
-                                                                                     value={searchInput || ''}
-                                                                                     onChange={(e) => handleSearchInput(e)}
+                                    <i className="ri-search-2-line" onClick={searchSongName}/></label> <input
+                                type="text"
+                                placeholder="Hãy tìm gì đó ở đây ..."
+                                id="search_input"
+                                className="form-control form-control-sm"
+                                value={searchInput || ''}
+                                onChange={(e) => handleSearchInput(e)}
                             />
                             </form>
-                            <div className="icon" style={{ backgroundColor: 'blue' }}>
-                                <button><i className="fa-solid fa-bell"></i></button>
-                                <div className="counter">2</div>
+                            <div className="icon" style={{
+                                width: '34px',
+                                height: '34px',
+                                background: '#196EED',
+                                borderRadius: '50%',
+                                MozBorderRadius: '50%',
+                                WebkitBorderRadius: '50%',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}>
+                                <button style={{color: '#ffffff', border: "none", display: 'contents'}}>
+                                    <i className="fa-regular fa-bell" style={{fontSize: '20px'}}></i>
+                                    <span className={"notify-text"}>2</span>
+                                </button>
                             </div>
                             <div className="d-flex align-items-center">
                                 {!_.isEmpty(accountLogin) ? (
@@ -55,10 +68,10 @@ const SearchComponent = () => {
                                              role="button" id="user_menu"
                                              data-bs-toggle="dropdown"
                                              aria-expanded="false">
-                                        <div className="avatar__image">
-                                            <img src={accountLogin.img} alt="user"/>
-                                        </div>
-                                        <span className="ps-2 d-none d-sm-block">{accountLogin.name}</span></div>
+                                            <div className="avatar__image">
+                                                <img src={accountLogin.img} alt="user"/>
+                                            </div>
+                                            <span className="ps-2 d-none d-sm-block">{accountLogin.name}</span></div>
                                         <ul className="dropdown-menu dropdown-menu-md dropdown-menu-end"
                                             aria-labelledby="user_menu">
                                             <li>
@@ -88,10 +101,12 @@ const SearchComponent = () => {
                                                 </Link>
                                             </li>
                                             <li>
-                                                <div className="dropdown-item d-flex align-items-center">
-                                                    <i className="ri-heart-line fs-5"></i>
-                                                    <span className="ps-2">Yêu thích</span>
-                                                </div>
+                                                <Link to={"/favorite"}>
+                                                    <div className="dropdown-item d-flex align-items-center">
+                                                        <i className="ri-heart-line fs-5"></i>
+                                                        <span className="ps-2">Yêu thích</span>
+                                                    </div>
+                                                </Link>
                                             </li>
                                             <li className="dropdown-divider"></li>
                                             <li>

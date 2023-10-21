@@ -62,7 +62,7 @@ const DetailSong = () => {
     }
 
     useEffect(() => {
-            checkLike();
+        checkLike();
     }, [like.account, like.song]);
 
     const getLikeQuantity = () => {
@@ -166,7 +166,6 @@ const DetailSong = () => {
 
 
     const handleSongClick = (song) => {
-        console.log(song);
         const newIsPlaying = !song.isPlaying;
         song.isPlaying = newIsPlaying;
         if (newIsPlaying) {
@@ -212,31 +211,31 @@ const DetailSong = () => {
                                                 <li>
                                                     <div className="dropdown-item"
                                                          role="button"
-                                                         data-playlist-id="8">Add to playlist
+                                                    >Thêm vào danh sách phát
                                                     </div>
                                                 </li>
-                                                <li>
-                                                    <div className="dropdown-item"
-                                                         role="button"
-                                                         data-queue-id="8">Add to queue
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div className="dropdown-item"
-                                                         role="button"
-                                                         data-next-id="8">Next to play
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div className="dropdown-item"
-                                                         role="button">Share
-                                                    </div>
-                                                </li>
+                                                {/*<li>*/}
+                                                {/*    <div className="dropdown-item"*/}
+                                                {/*         role="button"*/}
+                                                {/*         >Add to queue*/}
+                                                {/*    </div>*/}
+                                                {/*</li>*/}
+                                                {/*<li>*/}
+                                                {/*    <div className="dropdown-item"*/}
+                                                {/*         role="button"*/}
+                                                {/*         >Next to play*/}
+                                                {/*    </div>*/}
+                                                {/*</li>*/}
+                                                {/*<li>*/}
+                                                {/*    <div className="dropdown-item"*/}
+                                                {/*         role="button">Share*/}
+                                                {/*    </div>*/}
+                                                {/*</li>*/}
                                                 <li className="dropdown-divider"></li>
                                                 <li>
                                                     <div className="dropdown-item"
                                                          role="button"
-                                                         data-play-id="8">Play
+                                                    >Phát
                                                     </div>
                                                 </li>
                                             </ul>
@@ -284,26 +283,27 @@ const DetailSong = () => {
                                             {isLiked === 1 ?
                                                 (<div role="button"
                                                       className="text-dark d-flex align-items-center"
-                                                      aria-label="Favorite" data-favorite-id="1">
-                                                    <i className="fa-sharp fa-solid fa-heart"
-                                                       style={{color: "#ff0000", fontSize: "24px"}}
-                                                       onClick={likeClick}>
-                                                    </i>
-                                                    <i className="ri-heart-fill heart-fill"></i>
-                                                    <span
-                                                        className="ps-2 fw-medium">{
-                                                        likedQuantity != null ? likedQuantity : ''
-                                                    }</span>
-                                                </div>) :
-                                                (<div role="button"
-                                                      className="text-dark d-flex align-items-center"
-                                                      aria-label="Favorite" data-favorite-id="1"
-                                                      onClick={likeClick}>
-                                                    <i className="ri-heart-line heart-empty"></i>
-                                                    <i className="ri-heart-fill heart-fill"></i> <span
-                                                    className="ps-2 fw-medium">{
-                                                    likedQuantity != null ? likedQuantity : ''
-                                                }</span></div>)}
+                                                      aria-label="Favorite">
+                                                        <i className="fa-sharp fa-solid fa-heart"
+                                                           style={{color: "#ff0000", fontSize: "24px"}}
+                                                           onClick={likeClick}>
+                                                        </i>
+                                                        <span
+                                                            className="ps-2 fw-medium">{
+                                                            likedQuantity != null ? likedQuantity : ''
+                                                        }
+                                                        </span>
+                                                    </div>
+                                                ) : (
+                                                    <div role="button"
+                                                         className="text-dark d-flex align-items-center"
+                                                         aria-label="Favorite" data-favorite-id="1"
+                                                         onClick={likeClick}>
+                                                        <i className="ri-heart-line heart-empty"></i>
+                                                        <span
+                                                            className="ps-2 fw-medium">{
+                                                            likedQuantity != null ? likedQuantity : ''
+                                                        }</span></div>)}
 
                                         </li>
                                         <li>
@@ -312,9 +312,9 @@ const DetailSong = () => {
                                                  aria-label="Download"><i className="ri-download-2-line"></i> <span
                                                 className="ps-2 fw-medium">24</span></div>
                                         </li>
-                                        <li><span className="text-dark d-flex align-items-center"><i
-                                            className="ri-star-fill text-warning"></i> <span
-                                            className="ps-2 fw-medium">4.5</span></span></li>
+                                        {/*<li><span className="text-dark d-flex align-items-center"><i*/}
+                                        {/*    className="ri-star-fill text-warning"></i> <span*/}
+                                        {/*    className="ps-2 fw-medium">4.5</span></span></li>*/}
                                     </ul>
                                     <div className="mt-2"><span
                                         className="d-block text-dark fs-6 fw-semi-bold mb-3">Mô tả</span>

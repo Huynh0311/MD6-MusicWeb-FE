@@ -1,0 +1,14 @@
+.input-playlist {
+    display: flex;
+    align-content: center;
+}
+
+.input-playlist p {
+    min-width: 130px;
+}
+
+.input-playlist input {
+    flex: 1;
+    height: 30px;
+}
+
