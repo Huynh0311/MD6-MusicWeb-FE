@@ -6,7 +6,7 @@ import {
     useAudioPlayer
 } from '../../redux/playern/ActionsUseContext/AudioPlayerProvider';
 import {BsFillPlayFill, BsPauseFill} from "react-icons/bs";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import AxiosCustomize from "../api/utils/AxiosCustomize";
 import {likeClickAPI} from "../api/LikesService/LikesService";
 
@@ -15,6 +15,8 @@ function Top5Songs() {
     const {isPlaying, handlePlayToggle} = useContext(AudioPlayerContext);
     const [songs, setSongs] = useState([]);
     const [isLike, setIsLike] = useState(false);
+    const [account, setAccount] = useState(JSON.parse(localStorage.getItem("data")));
+    const navigate = useNavigate();
     useEffect(() => {
         async function fetchData() {
             try {
@@ -28,8 +30,9 @@ function Top5Songs() {
                 console.error('Lỗi khi lấy danh sách bài hát:', error);
             }
         }
+
         fetchData();
-    }, [updateCurrentSongAndSongs, currentSong,isLike]);
+    }, [updateCurrentSongAndSongs, currentSong, isLike]);
 
 
     const handleToggleSongPlay = (songId) => {
@@ -40,15 +43,20 @@ function Top5Songs() {
                 isPlaying: newIsPlaying
             }
         })
-            setSongs(updatedSongs);
-            handlePlayToggle(updatedSongs.some((song) => song.isPlaying));
-        };
+        setSongs(updatedSongs);
+        handlePlayToggle(updatedSongs.some((song) => song.isPlaying));
+    };
 
     function likeClick(id) {
+        if (!account) {
+            navigate("/login");
+            return;
+        }
         likeClickAPI(id).then(res => {
             setIsLike(!isLike)
         })
     }
+
 
     return (
         <div>
@@ -132,22 +140,23 @@ function Top5Songs() {
                                             <div
                                                 className="dropdown-item"
                                                 role="button"
-                                                >
+                                            >
                                                 Add to playlist
                                             </div>
-                                        </li>
-                                        <li><div
-                                            className="dropdown-item"
-                                            role="button"
-                                            >
-                                            Add to queue
-                                        </div>
                                         </li>
                                         <li>
                                             <div
                                                 className="dropdown-item"
                                                 role="button"
-                                                >
+                                            >
+                                                Add to queue
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div
+                                                className="dropdown-item"
+                                                role="button"
+                                            >
                                                 Next to play
                                             </div>
                                         </li>
@@ -164,7 +173,7 @@ function Top5Songs() {
                                             <div
                                                 className="dropdown-item"
                                                 role="button"
-                                                >
+                                            >
                                                 Play
                                             </div>
                                         </li>

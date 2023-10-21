@@ -6,8 +6,9 @@ import {AudioPlayerContext, useAudioPlayer} from "../../redux/playern/ActionsUse
 import {BsFillPlayFill, BsPauseFill} from "react-icons/bs";
 import {likeClickAPI} from "../api/LikesService/LikesService";
 
+
 export default function DetailPlaylist() {
-    const [playlist, setPlaylist] = useState({})
+    const [playlist, setPlaylist] = useState({ isPlaying: false})
     const [count, setCount] = useState(0);
     const [songs, setSongs] = useState([]);
     const [account, setAccount] = useState({});
@@ -20,12 +21,12 @@ export default function DetailPlaylist() {
 
     useEffect(() => {
         findPlaylistById(id).then(res => {
-            setPlaylist(res.data)
+            setPlaylist({...res.data,isPlaying});
             fetchPlaylistCount(id);
             fetchSongs(id);
             fetchAccount(id);
         })
-    }, [updateCurrentSongAndSongs, currentSong, isLike])
+    }, [isPlaying,currentSong,updateCurrentSongAndSongs,isLike])
 
     const handleToggleSongPlay = (songId) => {
         const updateSongs = songs.map((song) => {
@@ -35,10 +36,13 @@ export default function DetailPlaylist() {
                 isPlaying: newIsPlaying,
             }
         })
+        setPlaylist({...playlist,isPlaying:!isPlaying});
         setSongs(updateSongs);
         setIsCurrentSongPlayingNow(!isCurrentSongPlayingNow);
         handlePlayToggle(updateSongs.some((song) => song.isPlaying));
     };
+
+
     const fetchPlaylistCount = async (id) => {
         try {
             const res = await axios.get(`http://localhost:8080/playlist/countSong/${id}`);
@@ -66,10 +70,6 @@ export default function DetailPlaylist() {
         }
     };
 
-    // const isAnySongPlaying = () => {
-    //     const hasAnySongIsPlaying = songs.some((song) => song.isPlaying === true);
-    //     hasAnySongIsPlaying ? setIsCurrentSongPlayingNow(true) : setIsCurrentSongPlayingNow(false);
-    // }
     const fetchAccount = async (id) => {
         try {
             const res = await axios.get(`http://localhost:8080/playlist/getUserByPlaylist/${id}`);
@@ -114,7 +114,7 @@ export default function DetailPlaylist() {
                                     <div className="d-flex align-items-center">
                                         <button type="button" id="play_all"
                                                 className="btn btn-icon btn-primary rounded-pill">
-                                            {isPlaying ? (
+                                            {playlist.isPlaying ? (
                                                 <BsPauseFill role='button'
                                                              onClick={() => {
                                                                  handleToggleSongPlay(currentSong.id);
@@ -132,7 +132,6 @@ export default function DetailPlaylist() {
                                                                         handleToggleSongPlay(currentSong.id);
                                                                         updateCurrentSongAndSongs(currentSong, songs);
                                                                     }
-
                                                                 }}
                                                                 style={{fontSize: "30px"}}
                                                 />
@@ -156,8 +155,7 @@ export default function DetailPlaylist() {
                         </div>
                     </div>
 
-                    <div className="section__head"><h3 className="mb-0" style={{marginTop: "30px"}}>Các bài hát có trong
-                        Playlist</h3></div>
+                    <div className="section__head"><h3 className="mb-0" style={{marginTop: "30px"}}>Các bài hát có trong Playlist</h3></div>
                     <div className="list list--order">
                         <div className="row">
                             {songs.map((song) => (
@@ -170,7 +168,6 @@ export default function DetailPlaylist() {
                                            className="btn btn-play btn-sm btn-default btn-icon rounded-pill"
                                            data-play-id="1"
                                            aria-label="Play pause">
-                                            {console.log(songs)}
                                             {song.isPlaying ? (
                                                 <BsPauseFill role='button'
                                                              onClick={() => {
@@ -206,9 +203,6 @@ export default function DetailPlaylist() {
                                             <a href="javascript:void(0);" role="button"
                                                className="d-inline-flex active"
                                                aria-label="Favorite" data-favorite-id="1">
-                                                {/*<i className="ri-heart-line heart-empty"></i>*/}
-                                                {/*<i className="ri-heart-fill heart-fill"></i>*/}
-                                                {console.log(song.isLiked)}
                                                 {song.isLiked === 1 ? (
                                                     <i className="fa-sharp fa-solid fa-heart"
                                                        style={{
@@ -231,13 +225,15 @@ export default function DetailPlaylist() {
                                                 <span className="amplitude-duration-seconds"></span>
                                             </div>
                                         </li>
-                                        <li className="dropstart d-inline-flex"><a className="dropdown-link"
+                                        <li className="dropstart d-inline-flex">
+                                            <a className="dropdown-link"
                                                                                    href="javascript:void(0);"
                                                                                    role="button"
                                                                                    data-bs-toggle="dropdown"
                                                                                    aria-label="Cover options"
                                                                                    aria-expanded="false"><i
-                                            className="ri-more-fill"></i></a>
+                                            className="ri-more-fill"></i>
+                                            </a>
                                             <ul className="dropdown-menu dropdown-menu-sm">
                                                 <li><a className="dropdown-item" href="javascript:void(0);"
                                                        role="button"

@@ -31,11 +31,11 @@ const DetailSong = () => {
     const {id} = useParams();
     const [relatedSongs, setrelatedSongs] = useState([]);
     const [isPlay, setIsPlay] = useState(false);
-    const [detailSong, setDetailSong] = useState({});
+    const [detailSong, setDetailSong] = useState({genres: {}});
     useEffect(() => {
         getSongByID(id)
             .then(res => {
-                setCurrentSongDT(res.data);
+                setDetailSong({...res.data, isPlaying: isPlaying});
                 getSongCreatedDate(res.data.timeCreate)
                 setPlay(res.data.plays)
                 setLike({
@@ -62,9 +62,7 @@ const DetailSong = () => {
     }
 
     useEffect(() => {
-        if (like.account && like.song) {
-            checkLike();
-        }
+        checkLike();
     }, [like.account, like.song]);
 
     const getLikeQuantity = () => {
@@ -150,38 +148,22 @@ const DetailSong = () => {
 
     }
 
-
     const getAllCommentBySongID = (id) => {
         getAllCommentBySongIdAPI(id).then(res => setAllComments(res.data))
     }
 
     const handleToggleSongPlay = (songId) => {
         const updatedSongs = relatedSongs.map((song) => {
-            if (song.id === songId) {
-                const newIsPlaying = !song.isPlaying;
-                song.isPlaying = newIsPlaying;
-                if (newIsPlaying) {
-                    handlePlayToggle(true);
-                } else {
-                    handlePlayToggle(false);
-                }
-            } else {
-                song.isPlaying = false;
+            const newIsPlaying = song.id === songId ? !song.isPlaying : false;
+            return {
+                ...song,
+                isPlaying: newIsPlaying,
             }
-            return song;
         });
         setSongs(updatedSongs);
+        handlePlayToggle(updatedSongs.some((song) => song.isPlaying));
     };
 
-    useEffect(() => {
-        getSongByID(id)
-            .then(res => {
-                setDetailSong(res.data)
-            })
-            .catch(error => {
-                console.log(error);
-            })
-    }, [])
 
     const handleSongClick = (song) => {
         const newIsPlaying = !song.isPlaying;
@@ -196,7 +178,6 @@ const DetailSong = () => {
         setIsPlaying();
     };
 
-
     return (
         <div>
             <div id="wrapper">
@@ -204,26 +185,21 @@ const DetailSong = () => {
                     <div className="hero" style={{backgroundImage: "url(../../images/banner/song.jpg)"}}></div>
                     <div className="under-hero container">
                         <div className="section">
-                            <div className="row" data-song-id={currentSongDT.id} data-song-name={currentSongDT.nameSong}
-                                 data-song-artist={currentSongDT.nameSinger}
-                                 data-song-album="Sadness" data-song-url={currentSongDT.pathSong}
-                                 data-song-cover={currentSongDT.imgSong}>
+                            <div className="row" data-song-id={detailSong.id} data-song-name={detailSong.nameSong}
+                                 data-song-artist={detailSong.nameSinger}
+                                 data-song-album="Sadness" data-song-url={detailSong.pathSong}
+                                 data-song-cover={detailSong.imgSong}>
                                 <div className="col-xl-3 col-md-4">
                                     <div className="cover cover--round">
                                         <div className="cover__image">
-                                            <img src={currentSongDT.imgSong}
-                                                 alt="Treasure face"
-                                                 style={{
-                                                     marginLeft: "30px",
-                                                     marginTop: "10px"
-                                                 }}/>
-                                        </div>
+                                            <img src={detailSong.imgSong} alt="Treasure face"
+                                                 style={{marginLeft: "30px", marginTop: "10px"}}/></div>
                                     </div>
                                 </div>
                                 <div className="col-1 d-none d-xl-block"></div>
                                 <div className="col-md-8 mt-5 mt-md-0">
                                     <div className="d-flex flex-wrap mb-2"><span
-                                        className="text-dark fs-4 fw-semi-bold pe-2">{currentSongDT && currentSongDT.nameSong}</span>
+                                        className="text-dark fs-4 fw-semi-bold pe-2">{detailSong && detailSong.nameSong}</span>
                                         <div className="dropstart d-inline-flex ms-auto">
                                             <div className="dropdown-link"
                                                  role="button"
@@ -235,7 +211,7 @@ const DetailSong = () => {
                                                 <li>
                                                     <div className="dropdown-item"
                                                          role="button"
-                                                         >Thêm vào danh sách phát
+                                                    >Thêm vào danh sách phát
                                                     </div>
                                                 </li>
                                                 {/*<li>*/}
@@ -259,23 +235,23 @@ const DetailSong = () => {
                                                 <li>
                                                     <div className="dropdown-item"
                                                          role="button"
-                                                         >Phát
+                                                    >Phát
                                                     </div>
                                                 </li>
                                             </ul>
                                         </div>
                                     </div>
                                     <ul className="info-list info-list--dotted mb-3">
-                                        <li>Thể loại: {currentSongDT.genres.name}</li>
+                                        <li>Thể loại: {detailSong.genres.name}</li>
                                         <li>Đăng ngày: {
                                             songCreateDate.day + '-' + songCreateDate.month + '-' + songCreateDate.year}
                                         </li>
                                     </ul>
                                     <div className="mb-4"><p className="mb-2">Người đăng: <span
-                                        className="text-dark fw-medium">{currentSongDT.accountName}</span></p>
+                                        className="text-dark fw-medium">{detailSong.accountName}</span></p>
                                         <p className="mb-2">Ca sỹ: <span className="text-dark fw-medium">
-                                           {currentSongDT && currentSongDT.nameSinger}
-                                            {currentSongDT.auth === true &&
+                                           {detailSong && detailSong.nameSinger}
+                                            {detailSong.auth === true &&
                                                 <i className="fa-sharp fa-solid fa-circle-check"
                                                    style={{color: "#005eff", marginLeft: "5px"}}></i>
                                             }
@@ -286,7 +262,8 @@ const DetailSong = () => {
                                         <li>
                                             <div className="d-flex align-items-center">
                                                 <button type="button"
-                                                        className="btn btn-play btn-default btn-icon rounded-pill playing">
+                                                        className="btn btn-play btn-default btn-icon rounded-pill playing"
+                                                        data-play-id="">
                                                     {detailSong.isPlaying ? (
                                                         <BsPauseFill
                                                             onClick={() => handleSongClick(detailSong)}
@@ -306,26 +283,27 @@ const DetailSong = () => {
                                             {isLiked === 1 ?
                                                 (<div role="button"
                                                       className="text-dark d-flex align-items-center"
-                                                      aria-label="Favorite" >
-                                                    <i className="fa-sharp fa-solid fa-heart"
-                                                       style={{color: "#ff0000", fontSize: "24px"}}
-                                                       onClick={likeClick}>
-                                                    </i>
-                                                    <i className="ri-heart-fill heart-fill"></i>
-                                                    <span
-                                                        className="ps-2 fw-medium">{
-                                                        likedQuantity != null ? likedQuantity : ''
-                                                    }</span>
-                                                </div>) :
-                                                (<div role="button"
-                                                      className="text-dark d-flex align-items-center"
-                                                      aria-label="Favorite" data-favorite-id="1"
-                                                      onClick={likeClick}>
-                                                    <i className="ri-heart-line heart-empty"></i>
-                                                    <i className="ri-heart-fill heart-fill"></i> <span
-                                                    className="ps-2 fw-medium">{
-                                                    likedQuantity != null ? likedQuantity : ''
-                                                }</span></div>)}
+                                                      aria-label="Favorite">
+                                                        <i className="fa-sharp fa-solid fa-heart"
+                                                           style={{color: "#ff0000", fontSize: "24px"}}
+                                                           onClick={likeClick}>
+                                                        </i>
+                                                        <span
+                                                            className="ps-2 fw-medium">{
+                                                            likedQuantity != null ? likedQuantity : ''
+                                                        }
+                                                        </span>
+                                                    </div>
+                                                ) : (
+                                                    <div role="button"
+                                                         className="text-dark d-flex align-items-center"
+                                                         aria-label="Favorite" data-favorite-id="1"
+                                                         onClick={likeClick}>
+                                                        <i className="ri-heart-line heart-empty"></i>
+                                                        <span
+                                                            className="ps-2 fw-medium">{
+                                                            likedQuantity != null ? likedQuantity : ''
+                                                        }</span></div>)}
 
                                         </li>
                                         <li>
@@ -340,7 +318,7 @@ const DetailSong = () => {
                                     </ul>
                                     <div className="mt-2"><span
                                         className="d-block text-dark fs-6 fw-semi-bold mb-3">Mô tả</span>
-                                        <p dangerouslySetInnerHTML={{__html: currentSongDT.description}}></p></div>
+                                        <p dangerouslySetInnerHTML={{__html: detailSong.description}}></p></div>
                                 </div>
                             </div>
                         </div>
@@ -411,10 +389,7 @@ const DetailSong = () => {
                                                     <div className="cover__image"><img src={rs.imgSong}
                                                                                        alt={rs.nameSong}/>
                                                         <button type="button"
-                                                                className="btn btn-play btn-default btn-icon rounded-pill"
-                                                                data-play-id="">
-                                                            {/*<i className="ri-play-fill icon-play"/> */}
-                                                            {/*<i className="ri-pause-fill icon-pause"/>*/}
+                                                                className="btn btn-play btn-default btn-icon rounded-pill">
                                                             {rs.isPlaying ? (
                                                                 <AiOutlinePauseCircle
                                                                     onClick={() => {
@@ -437,7 +412,7 @@ const DetailSong = () => {
                                                     <div className="cover__foot">
                                                         <div className="cover__title text-truncate">{rs.nameSong}</div>
                                                         <p className="cover__subtitle text-truncate">
-                                                            <div>{rs.nameSinger}</div>
+                                                            {rs.nameSinger}
                                                         </p>
                                                     </div>
                                                 </div>
