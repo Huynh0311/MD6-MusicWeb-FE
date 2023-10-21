@@ -1,15 +1,24 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {toast} from "react-toastify";
 import {findListSongFavorite} from "../../api/songService/SongService";
+import {BsFillPlayFill, BsPauseFill} from "react-icons/bs";
+import {AudioPlayerContext, useAudioPlayer} from "../../../redux/playern/ActionsUseContext/AudioPlayerProvider";
+import {likeClickAPI} from "../../api/LikesService/LikesService";
 
 const ListSongFavorite = () => {
 
     const [listSong, setListSong] = useState([]);
-
+    const {currentSong, updateCurrentSongAndSongs} = useAudioPlayer();
+    const [isLike, setIsLike] = useState();
+    const {isPlaying, handlePlayToggle} = useContext(AudioPlayerContext);
     const findById = () => {
         findListSongFavorite()
             .then((list) => {
-                setListSong(list.data);
+                const songs = list.data.map((song) => ({
+                    ...song,
+                    isPlaying: currentSong && currentSong.id === song.id ? isPlaying : false,
+                }));
+                setListSong(songs);
             })
             .catch((error) => {
                 toast.error('Lỗi không có dữ liệu');
@@ -18,7 +27,28 @@ const ListSongFavorite = () => {
 
     useEffect(() => {
         findById()
-    }, []);
+    }, [updateCurrentSongAndSongs, currentSong,isLike]);
+
+    function likeClick(id) {
+        likeClickAPI(id).then(res => {
+            setIsLike(res.data);
+            toast.success("Đã bỏ thích")
+            findById();
+        })
+
+    }
+
+    const handleToggleSongPlay = (songId) => {
+        const updatedSongs = listSong.map((song) => {
+            const newIsPlaying = song.id === songId ? !song.isPlaying : false;
+            return {
+                ...song,
+                isPlaying: newIsPlaying
+            }
+        })
+        setListSong(updatedSongs);
+        handlePlayToggle(updatedSongs.some((song) => song.isPlaying));
+    };
 
     return (
         <div>
@@ -26,45 +56,65 @@ const ListSongFavorite = () => {
                 <div className="hero" style={{backgroundImage: "url(../../images/banner/song.jpg)"}}></div>
                 <div className="under-hero container">
                     <div className="section">
-                        <div className="section__head"><h3 className="mb-0">Favorite Songs</h3></div>
+                        <div className="section__head"><h3 className="mb-0">Bài hát yêu thích của bạn</h3></div>
+                        {listSong.length === 0 ? (
+                            <p>Không còn bài hát yêu thích</p>
+                        ) : (
                         <div className="list list--order">
                             <div className="row">
                                 {listSong.map((song) => (
-                                    <div className="list__item" data-song-id="" data-song-name={song.nameSong}
-                                         data-song-artist={song.nameSinger} data-song-album="Mummy"
-                                         data-song-url={song.pathSong}
-                                         data-song-cover={song.imgSong}>
-                                        <div className="list__cover"><img src={song.imgSong}
+                                    <div className="list__item" key={song.id}>
+                                        <div className="list__cover">
+                                            <img src={song.imgSong}
                                                                           alt="ảnh"/>
-                                            <a href="javascript:void(0);"
+                                            <div
                                                className="btn btn-play btn-sm btn-default btn-icon rounded-pill"
-                                               data-play-id="1"
-                                               aria-label="Play pause"><i className="ri-play-fill icon-play"></i>
-                                                <i className="ri-pause-fill icon-pause"></i>
-                                            </a>
+
+                                               aria-label="Play pause">
+                                                {song.isPlaying ? (
+                                                    <BsPauseFill
+                                                        onClick={() => {
+                                                            handleToggleSongPlay(song.id);
+                                                            updateCurrentSongAndSongs(song, listSong);
+                                                        }}
+                                                        style={{fontSize: "30px"}}
+                                                    />
+                                                ) : (
+                                                    <BsFillPlayFill
+                                                        onClick={() => {
+                                                            handleToggleSongPlay(song.id);
+                                                            updateCurrentSongAndSongs(song, listSong);
+                                                        }}
+                                                        style={{fontSize: "30px"}}
+                                                    />
+                                                )}
+                                            </div>
                                         </div>
                                         <div className="list__content">
-                                            <a href="song-details.html" className="list__title text-truncate">
+                                            <div className="list__title text-truncate">
                                                 {song.nameSong}
-                                            </a>
+                                            </div>
                                             <p className="list__subtitle text-truncate">
-                                                <a href="artist-details.html">
                                                     {song.nameSinger}
-                                                </a>
                                             </p>
                                         </div>
                                         <ul className="list__option">
                                             <li>
-                                                <a href="javascript:void(0);" role="button"
+                                                <div role="button"
                                                    className="d-inline-flex active"
-                                                   aria-label="Favorite" data-favorite-id="1"><i
-                                                    className="ri-heart-line heart-empty"></i>
-                                                    <i className="ri-heart-fill heart-fill"></i>
-                                                </a>
+                                                   aria-label="Favorite" data-favorite-id="1">
+                                                        <i className="fa-sharp fa-solid fa-heart"
+                                                           style={{
+                                                               color: "#ff0000",
+                                                               fontSize: "24px"
+                                                           }}
+                                                           onClick={() => likeClick(song?.id)}
+                                                        />
+
+                                                </div>
                                             </li>
                                             <li className="dropstart d-inline-flex">
-                                                <a className="dropdown-link"
-                                                   href="javascript:void(0);"
+                                                <div className="dropdown-link"
                                                    role="button"
                                                    data-bs-toggle="dropdown"
                                                    aria-label="Cover options"
@@ -72,23 +122,23 @@ const ListSongFavorite = () => {
                                                     className="ri-more-fill">
 
                                                 </i>
-                                                </a>
+                                                </div>
                                                 <ul className="dropdown-menu dropdown-menu-sm">
-                                                    <li><a className="dropdown-item" href="javascript:void(0);"
+                                                    <li><div className="dropdown-item"
                                                            role="button"
-                                                           data-playlist-id="1">Add to playlist</a></li>
-                                                    <li><a className="dropdown-item" href="javascript:void(0);"
+                                                           data-playlist-id="1">Add to playlist</div></li>
+                                                    <li><div className="dropdown-item"
                                                            role="button"
-                                                           data-queue-id="1">Add to queue</a></li>
-                                                    <li><a className="dropdown-item" href="javascript:void(0);"
+                                                           data-queue-id="1">Add to queue</div></li>
+                                                    <li><div className="dropdown-item"
                                                            role="button"
-                                                           data-next-id="1">Next to play</a></li>
-                                                    <li><a className="dropdown-item" href="javascript:void(0);"
-                                                           role="button">Share</a></li>
+                                                           data-next-id="1">Next to play</div></li>
+                                                    <li><div className="dropdown-item"
+                                                           role="button">Share</div></li>
                                                     <li className="dropdown-divider"></li>
-                                                    <li><a className="dropdown-item" href="javascript:void(0);"
+                                                    <li><div className="dropdown-item"
                                                            role="button"
-                                                           data-play-id="1">Play</a></li>
+                                                           data-play-id="1">Play</div></li>
                                                 </ul>
                                             </li>
                                         </ul>
@@ -97,202 +147,9 @@ const ListSongFavorite = () => {
                                 {/*</div>*/}
                             </div>
                         </div>
-                    </div>
-                    <div className="section">
-                        <div className="section__head"><h3 className="mb-0">Albums</h3></div>
-                        <div className="row g-4">
-                            <div className="col-6 col-xl-2 col-md-3 col-sm-4">
-                                <div className="cover cover--round">
-                                    <div className="cover__head">
-                                        <ul className="cover__label d-flex">
-                                            <li><span className="badge rounded-pill bg-danger"><i
-                                                className="ri-heart-fill"></i></span>
-                                            </li>
-                                        </ul>
-                                        <div className="cover__options dropstart d-inline-flex ms-auto"><a
-                                            className="dropdown-link"
-                                            href="javascript:void(0);"
-                                            role="button"
-                                            data-bs-toggle="dropdown"
-                                            aria-label="Cover options"
-                                            aria-expanded="false"><i
-                                            className="ri-more-2-fill"></i></a>
-                                            <ul className="dropdown-menu dropdown-menu-sm">
-                                                <li><a className="dropdown-item" href="javascript:void(0);"
-                                                       role="button"
-                                                       data-favorite-id="100">Favorite</a></li>
-                                                <li><a className="dropdown-item" href="audio/ringtone-1.mp3"
-                                                       download>Download</a>
-                                                </li>
-                                                <li><a className="dropdown-item" href="javascript:void(0);"
-                                                       role="button">Share</a>
-                                                </li>
-                                                <li className="dropdown-divider"></li>
-                                                <li><a className="dropdown-item" href="album-details.html">View
-                                                    details</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <a href="album-details.html" className="cover__image"><img
-                                        src="images/cover/large/1.jpg"
-                                        alt="Mummy"/></a>
-                                    <div className="cover__foot"><a href="album-details.html"
-                                                                    className="cover__title text-truncate">Mummy</a>
-                                        <p className="cover__subtitle text-truncate"><a href="artist-details.html">Arebica
-                                            Luna</a>
-                                        </p></div>
-                                </div>
-                            </div>
-                            <div className="col-6 col-xl-2 col-md-3 col-sm-4">
-                                <div className="cover cover--round">
-                                    <div className="cover__head">
-                                        <ul className="cover__label d-flex">
-                                            <li><span className="badge rounded-pill bg-danger"><i
-                                                className="ri-heart-fill"></i></span>
-                                            </li>
-                                        </ul>
-                                        <div className="cover__options dropstart d-inline-flex ms-auto"><a
-                                            className="dropdown-link"
-                                            href="javascript:void(0);"
-                                            role="button"
-                                            data-bs-toggle="dropdown"
-                                            aria-label="Cover options"
-                                            aria-expanded="false"><i
-                                            className="ri-more-2-fill"></i></a>
-                                            <ul className="dropdown-menu dropdown-menu-sm">
-                                                <li><a className="dropdown-item" href="javascript:void(0);"
-                                                       role="button"
-                                                       data-favorite-id="102">Favorite</a></li>
-                                                <li><a className="dropdown-item" href="audio/ringtone-3.mp3"
-                                                       download>Download</a>
-                                                </li>
-                                                <li><a className="dropdown-item" href="javascript:void(0);"
-                                                       role="button">Share</a>
-                                                </li>
-                                                <li className="dropdown-divider"></li>
-                                                <li><a className="dropdown-item" href="album-details.html">View
-                                                    details</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <a href="album-details.html" className="cover__image"><img
-                                        src="images/cover/large/3.jpg"
-                                        alt="Own way"/></a>
-                                    <div className="cover__foot"><a href="album-details.html"
-                                                                    className="cover__title text-truncate">Own
-                                        way</a>
-                                        <p className="cover__subtitle text-truncate"><a href="artist-details.html">Zunira
-                                            Willy</a>,
-                                            <a href="artist-details.html">Nutty Nina</a></p></div>
-                                </div>
-                            </div>
-                            <div className="col-6 col-xl-2 col-md-3 col-sm-4">
-                                <div className="cover cover--round">
-                                    <div className="cover__head">
-                                        <ul className="cover__label d-flex">
-                                            <li><span className="badge rounded-pill bg-danger"><i
-                                                className="ri-heart-fill"></i></span>
-                                            </li>
-                                            <li><span className="badge rounded-pill bg-info"><i
-                                                className="ri-vip-crown-fill"></i></span></li>
-                                        </ul>
-                                        <div className="cover__options dropstart d-inline-flex ms-auto"><a
-                                            className="dropdown-link"
-                                            href="javascript:void(0);"
-                                            role="button"
-                                            data-bs-toggle="dropdown"
-                                            aria-label="Cover options"
-                                            aria-expanded="false"><i
-                                            className="ri-more-2-fill"></i></a>
-                                            <ul className="dropdown-menu dropdown-menu-sm">
-                                                <li><a className="dropdown-item" href="javascript:void(0);"
-                                                       role="button"
-                                                       data-favorite-id="103">Favorite</a></li>
-                                                <li><a className="dropdown-item" href="audio/ringtone-4.mp3"
-                                                       download>Download</a>
-                                                </li>
-                                                <li><a className="dropdown-item" href="javascript:void(0);"
-                                                       role="button">Share</a>
-                                                </li>
-                                                <li className="dropdown-divider"></li>
-                                                <li><a className="dropdown-item" href="album-details.html">View
-                                                    details</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <a href="album-details.html" className="cover__image"><img
-                                        src="images/cover/large/4.jpg"
-                                        alt="Say yes"/></a>
-                                    <div className="cover__foot"><a href="album-details.html"
-                                                                    className="cover__title text-truncate">Say
-                                        yes</a>
-                                        <p className="cover__subtitle text-truncate"><a href="artist-details.html">Johnny
-                                            Marro</a>
-                                        </p></div>
-                                </div>
-                            </div>
-                            <div className="col-6 col-xl-2 col-md-3 col-sm-4">
-                                <div className="cover cover--round">
-                                    <div className="cover__head">
-                                        <ul className="cover__label d-flex">
-                                            <li><span className="badge rounded-pill bg-danger"><i
-                                                className="ri-heart-fill"></i></span>
-                                            </li>
-                                            <li><span className="badge rounded-pill bg-info"><i
-                                                className="ri-vip-crown-fill"></i></span></li>
-                                        </ul>
-                                        <div className="cover__options dropstart d-inline-flex ms-auto"><a
-                                            className="dropdown-link"
-                                            href="javascript:void(0);"
-                                            role="button"
-                                            data-bs-toggle="dropdown"
-                                            aria-label="Cover options"
-                                            aria-expanded="false"><i
-                                            className="ri-more-2-fill"></i></a>
-                                            <ul className="dropdown-menu dropdown-menu-sm">
-                                                <li><a className="dropdown-item" href="javascript:void(0);"
-                                                       role="button"
-                                                       data-favorite-id="105">Favorite</a></li>
-                                                <li><a className="dropdown-item" href="audio/ringtone-6.mp3"
-                                                       download>Download</a>
-                                                </li>
-                                                <li><a className="dropdown-item" href="javascript:void(0);"
-                                                       role="button">Share</a>
-                                                </li>
-                                                <li className="dropdown-divider"></li>
-                                                <li><a className="dropdown-item" href="album-details.html">View
-                                                    details</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <a href="album-details.html" className="cover__image"><img
-                                        src="images/cover/large/6.jpg"
-                                        alt="Find soul"/></a>
-                                    <div className="cover__foot"><a href="album-details.html"
-                                                                    className="cover__title text-truncate">Find
-                                        soul</a>
-                                        <p className="cover__subtitle text-truncate"><a href="artist-details.html">Rasomi
-                                            Pelina</a>
-                                        </p></div>
-                                </div>
-                            </div>
-                        </div>
+                        )}
                     </div>
                 </div>
-                <footer id="footer">
-                    <div className="container">
-                        <div className="text-center mb-4"><a href="mailto:info@listenapp.com"
-                                                             className="display-5 email">info@listenapp.com</a>
-                        </div>
-                        <div className="app-btn-group pt-2"><a href="#" className="btn btn-lg btn-primary">
-                            <div className="btn__wrap"><i className="ri-google-play-fill"></i> <span className="ms-2">Google Play</span>
-                            </div>
-                        </a><a href="#" className="btn btn-lg btn-primary">
-                            <div className="btn__wrap"><i className="ri-app-store-fill"></i> <span className="ms-2">App Store</span>
-                            </div>
-                        </a></div>
-                    </div>
-                </footer>
             </main>
         </div>
     );

@@ -31,11 +31,11 @@ const DetailSong = () => {
     const {id} = useParams();
     const [relatedSongs, setrelatedSongs] = useState([]);
     const [isPlay, setIsPlay] = useState(false);
-    const [detailSong, setDetailSong] = useState({});
+    const [detailSong, setDetailSong] = useState({genres: {}});
     useEffect(() => {
         getSongByID(id)
             .then(res => {
-                setCurrentSongDT(res.data);
+                setDetailSong({...res.data, isPlaying: isPlaying});
                 getSongCreatedDate(res.data.timeCreate)
                 setPlay(res.data.plays)
                 setLike({
@@ -62,26 +62,24 @@ const DetailSong = () => {
     }
 
     useEffect(() => {
-        if (like.account && like.song) {
             checkLike();
-        }
     }, [like.account, like.song]);
 
     const getLikeQuantity = () => {
         getSongLikeQuantityAPI(id).then(res => {
-           setLikedQuantity(res.data);
+            setLikedQuantity(res.data);
         }).catch(error => {
-                console.log(error);
-            });
+            console.log(error);
+        });
     }
 
     const getAllSongByGenres = () => {
         getAllSongByGenresIDAPI(id).then(res => {
-                const songs = res.data?.map((song) => ({
-                    ...song,
-                    isPlaying: currentSong && currentSong.id === song.id ? isPlaying : false,
-                }));
-                setrelatedSongs(songs);
+            const songs = res.data?.map((song) => ({
+                ...song,
+                isPlaying: currentSong && currentSong.id === song.id ? isPlaying : false,
+            }));
+            setrelatedSongs(songs);
         })
     }
 
@@ -150,39 +148,25 @@ const DetailSong = () => {
 
     }
 
-
     const getAllCommentBySongID = (id) => {
-        getAllCommentBySongIdAPI(id).then(res => setAllComments(res.data))}
+        getAllCommentBySongIdAPI(id).then(res => setAllComments(res.data))
+    }
 
     const handleToggleSongPlay = (songId) => {
         const updatedSongs = relatedSongs.map((song) => {
-            if (song.id === songId) {
-                const newIsPlaying = !song.isPlaying;
-                song.isPlaying = newIsPlaying;
-                if (newIsPlaying) {
-                    handlePlayToggle(true);
-                } else {
-                    handlePlayToggle(false);
-                }
-            } else {
-                song.isPlaying = false;
+            const newIsPlaying = song.id === songId ? !song.isPlaying : false;
+            return {
+                ...song,
+                isPlaying: newIsPlaying,
             }
-            return song;
         });
         setSongs(updatedSongs);
+        handlePlayToggle(updatedSongs.some((song) => song.isPlaying));
     };
 
-    useEffect(() => {
-        getSongByID(id)
-            .then(res => {
-                setDetailSong(res.data)
-            })
-            .catch(error => {
-                console.log(error);
-            })
-    }, [])
 
     const handleSongClick = (song) => {
+        console.log(song);
         const newIsPlaying = !song.isPlaying;
         song.isPlaying = newIsPlaying;
         if (newIsPlaying) {
@@ -195,7 +179,6 @@ const DetailSong = () => {
         setIsPlaying();
     };
 
-
     return (
         <div>
             <div id="wrapper">
@@ -203,20 +186,21 @@ const DetailSong = () => {
                     <div className="hero" style={{backgroundImage: "url(../../images/banner/song.jpg)"}}></div>
                     <div className="under-hero container">
                         <div className="section">
-                            <div className="row" data-song-id={currentSongDT.id} data-song-name={currentSongDT.nameSong}
-                                 data-song-artist={currentSongDT.nameSinger}
-                                 data-song-album="Sadness" data-song-url={currentSongDT.pathSong}
-                                 data-song-cover={currentSongDT.imgSong}>
+                            <div className="row" data-song-id={detailSong.id} data-song-name={detailSong.nameSong}
+                                 data-song-artist={detailSong.nameSinger}
+                                 data-song-album="Sadness" data-song-url={detailSong.pathSong}
+                                 data-song-cover={detailSong.imgSong}>
                                 <div className="col-xl-3 col-md-4">
                                     <div className="cover cover--round">
                                         <div className="cover__image">
-                                            <img src={currentSongDT.imgSong} alt="Treasure face" style={{marginLeft: "30px", marginTop: "10px"}}/></div>
+                                            <img src={detailSong.imgSong} alt="Treasure face"
+                                                 style={{marginLeft: "30px", marginTop: "10px"}}/></div>
                                     </div>
                                 </div>
                                 <div className="col-1 d-none d-xl-block"></div>
                                 <div className="col-md-8 mt-5 mt-md-0">
                                     <div className="d-flex flex-wrap mb-2"><span
-                                        className="text-dark fs-4 fw-semi-bold pe-2">{currentSongDT && currentSongDT.nameSong}</span>
+                                        className="text-dark fs-4 fw-semi-bold pe-2">{detailSong && detailSong.nameSong}</span>
                                         <div className="dropstart d-inline-flex ms-auto">
                                             <div className="dropdown-link"
                                                  role="button"
@@ -225,35 +209,50 @@ const DetailSong = () => {
                                                  aria-expanded="false"><i
                                                 className="ri-more-fill"></i></div>
                                             <ul className="dropdown-menu dropdown-menu-sm">
-                                                <li><div className="dropdown-item"
-                                                       role="button"
-                                                       data-playlist-id="8">Add to playlist</div></li>
-                                                <li><div className="dropdown-item"
-                                                       role="button"
-                                                       data-queue-id="8">Add to queue</div></li>
-                                                <li><div className="dropdown-item"
-                                                       role="button"
-                                                       data-next-id="8">Next to play</div></li>
-                                                <li><div className="dropdown-item"
-                                                       role="button">Share</div></li>
+                                                <li>
+                                                    <div className="dropdown-item"
+                                                         role="button"
+                                                         data-playlist-id="8">Add to playlist
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div className="dropdown-item"
+                                                         role="button"
+                                                         data-queue-id="8">Add to queue
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div className="dropdown-item"
+                                                         role="button"
+                                                         data-next-id="8">Next to play
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div className="dropdown-item"
+                                                         role="button">Share
+                                                    </div>
+                                                </li>
                                                 <li className="dropdown-divider"></li>
-                                                <li><div className="dropdown-item"
-                                                       role="button"
-                                                       data-play-id="8">Play</div></li>
+                                                <li>
+                                                    <div className="dropdown-item"
+                                                         role="button"
+                                                         data-play-id="8">Play
+                                                    </div>
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>
                                     <ul className="info-list info-list--dotted mb-3">
-                                        <li>Thể loại: {currentSongDT.genres.name}</li>
+                                        <li>Thể loại: {detailSong.genres.name}</li>
                                         <li>Đăng ngày: {
                                             songCreateDate.day + '-' + songCreateDate.month + '-' + songCreateDate.year}
                                         </li>
                                     </ul>
                                     <div className="mb-4"><p className="mb-2">Người đăng: <span
-                                        className="text-dark fw-medium">{currentSongDT.accountName}</span></p>
+                                        className="text-dark fw-medium">{detailSong.accountName}</span></p>
                                         <p className="mb-2">Ca sỹ: <span className="text-dark fw-medium">
-                                           {currentSongDT && currentSongDT.nameSinger}
-                                            {currentSongDT.auth === true &&
+                                           {detailSong && detailSong.nameSinger}
+                                            {detailSong.auth === true &&
                                                 <i className="fa-sharp fa-solid fa-circle-check"
                                                    style={{color: "#005eff", marginLeft: "5px"}}></i>
                                             }
@@ -266,8 +265,6 @@ const DetailSong = () => {
                                                 <button type="button"
                                                         className="btn btn-play btn-default btn-icon rounded-pill playing"
                                                         data-play-id="">
-                                                    {/*<i className="ri-play-fill icon-play"></i>*/}
-                                                    {/*<i className="ri-pause-fill icon-pause"></i>*/}
                                                     {detailSong.isPlaying ? (
                                                         <BsPauseFill
                                                             onClick={() => handleSongClick(detailSong)}
@@ -286,8 +283,8 @@ const DetailSong = () => {
                                         <li>
                                             {isLiked === 1 ?
                                                 (<div role="button"
-                                                    className="text-dark d-flex align-items-center"
-                                                    aria-label="Favorite" data-favorite-id="1">
+                                                      className="text-dark d-flex align-items-center"
+                                                      aria-label="Favorite" data-favorite-id="1">
                                                     <i className="fa-sharp fa-solid fa-heart"
                                                        style={{color: "#ff0000", fontSize: "24px"}}
                                                        onClick={likeClick}>
@@ -309,17 +306,19 @@ const DetailSong = () => {
                                                 }</span></div>)}
 
                                         </li>
-                                        <li><div role="button"
-                                               className="text-dark d-flex align-items-center"
-                                               aria-label="Download"><i className="ri-download-2-line"></i> <span
-                                            className="ps-2 fw-medium">24</span></div></li>
+                                        <li>
+                                            <div role="button"
+                                                 className="text-dark d-flex align-items-center"
+                                                 aria-label="Download"><i className="ri-download-2-line"></i> <span
+                                                className="ps-2 fw-medium">24</span></div>
+                                        </li>
                                         <li><span className="text-dark d-flex align-items-center"><i
                                             className="ri-star-fill text-warning"></i> <span
                                             className="ps-2 fw-medium">4.5</span></span></li>
                                     </ul>
                                     <div className="mt-2"><span
                                         className="d-block text-dark fs-6 fw-semi-bold mb-3">Mô tả</span>
-                                        <p dangerouslySetInnerHTML={{__html: currentSongDT.description}}></p></div>
+                                        <p dangerouslySetInnerHTML={{__html: detailSong.description}}></p></div>
                                 </div>
                             </div>
                         </div>
@@ -388,12 +387,9 @@ const DetailSong = () => {
                                                         </div>
                                                     </div>
                                                     <div className="cover__image"><img src={rs.imgSong}
-                                                                                       alt={rs.nameSong} />
+                                                                                       alt={rs.nameSong}/>
                                                         <button type="button"
-                                                                className="btn btn-play btn-default btn-icon rounded-pill"
-                                                                data-play-id="">
-                                                            {/*<i className="ri-play-fill icon-play"/> */}
-                                                            {/*<i className="ri-pause-fill icon-pause"/>*/}
+                                                                className="btn btn-play btn-default btn-icon rounded-pill">
                                                             {rs.isPlaying ? (
                                                                 <AiOutlinePauseCircle
                                                                     onClick={() => {
@@ -416,7 +412,7 @@ const DetailSong = () => {
                                                     <div className="cover__foot">
                                                         <div className="cover__title text-truncate">{rs.nameSong}</div>
                                                         <p className="cover__subtitle text-truncate">
-                                                            <div>{rs.nameSinger}</div>
+                                                            {rs.nameSinger}
                                                         </p>
                                                     </div>
                                                 </div>
