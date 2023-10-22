@@ -7,11 +7,13 @@ import {useSelector} from "react-redux";
 export default function ListPlaylist() {
     const accountLogin = useSelector(state => state.account)
     const [listPlaylist, setListPlaylist] = useState([]);
+    const [account, setAccount] = useState(JSON.parse(localStorage.getItem("data")));
     useEffect(() => {
-        getAllPlaylist(accountLogin.id).then(res => {
-            console.log(res.data)
-            setListPlaylist(res.data)
-        })
+        if(account!=null) {
+            getAllPlaylist(accountLogin.id).then(res => {
+                setListPlaylist(res.data)
+            })
+        }
     }, [])
     return (
         <div>

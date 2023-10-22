@@ -24,7 +24,7 @@ const HomeComponent = () => {
                                 <div className="flex-grow-1"><span
                                     className="section__subtitle"></span>
                                     <h3 className="mb-0"><span className="text-primary">Mới phát hành</span></h3></div>
-                                <a href="songs.html" className="btn btn-link">View All</a></div>
+                               </div>
                             <div className="swiper-carousel swiper-carousel-button"
                                  style={{display: 'flex', flexWrap: 'nowrap'}}>
                                 <SongList/>
@@ -197,7 +197,7 @@ const HomeComponent = () => {
                                 <div className="swiper" data-swiper-slides="6" data-swiper-autoplay="true">
                                     <div className="swiper-wrapper">
                                         {listAuthAccount && listAuthAccount.map((account) => (
-                                            <div className="swiper-slide">
+                                            <div className="swiper-slide" key={account.id}>
                                                 <div className="avatar avatar--xxl d-block text-center">
                                                     <div className="avatar__image">
                                                         <div>
