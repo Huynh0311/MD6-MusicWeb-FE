@@ -24,6 +24,8 @@ const ActionPlay = () => {
             player.current.audio.current.play();
         };
 
+
+
         const handlePreviousSongClick = () => {
             const currentIndex = songs.findIndex((song) => song.id === currentSong.id)
             if (currentIndex > 0) {

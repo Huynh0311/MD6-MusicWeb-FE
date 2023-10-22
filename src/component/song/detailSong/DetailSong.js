@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useNavigate, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {getAllSongByGenresIDAPI, getSongByID, playSong} from "../../api/songService/SongService";
 import {getSongLikeQuantityAPI, isLikedAPI, likeClickAPI} from "../../api/LikesService/LikesService";
 import {getAllCommentBySongIdAPI, sendCommentAPI} from "../../api/commentService/CommentService";
@@ -32,10 +32,21 @@ const DetailSong = () => {
     const [relatedSongs, setrelatedSongs] = useState([]);
     const [isPlay, setIsPlay] = useState(false);
     const [detailSong, setDetailSong] = useState({genres: {}});
+    const [currentDetailSong, setCurrentDetailSong] = useState();
+    const [relateSongIsPlaying, setRelateSongIsPlaying] = useState(false);
+
+
     useEffect(() => {
         getSongByID(id)
             .then(res => {
-                setDetailSong({...res.data, isPlaying: isPlaying});
+                if (currentDetailSong == null) {
+                    setCurrentSongDT({...res.data, isPlaying: false});
+                } else if (relateSongIsPlaying) {
+                    setCurrentSongDT({...res.data, isPlaying: false});
+                } else {
+                    setCurrentSongDT({...res.data, isPlaying: isPlaying});
+                    console.log(currentSongDT)
+                }
                 getSongCreatedDate(res.data.timeCreate)
                 setPlay(res.data.plays)
                 setLike({
@@ -49,21 +60,64 @@ const DetailSong = () => {
         getLikeQuantity();
         getAllCommentBySongID(id)
         getAllSongByGenres();
-    }, [updateCurrentSongAndSongs, currentSong])
+
+    }, [isPlaying, currentDetailSong, updateCurrentSongAndSongs])
+
+    const handleDetailSongClick = (song) => {
+        setRelateSongIsPlaying(false);
+        const newIsPlaying = !song.isPlaying;
+        song.isPlaying = newIsPlaying;
+        if (newIsPlaying) {
+            handlePlayToggle(true);
+        } else {
+            handlePlayToggle(false);
+        }
+        setCurrentSongDT({...song});
+        updateCurrentSongAndSongs(currentSongDT, songs);
+        setCurrentDetailSong({...song})
+        setIsPlaying();
+    };
+
+
+    const handleToggleRelatedSongClick = (relatedSong) => {
+        setRelateSongIsPlaying(true);
+        const updatedSongs = relatedSongs.map((song) => {
+            const newIsPlaying = song.id === relatedSong.id ? !song.isPlaying : false;
+            return {
+                ...song,
+                isPlaying: newIsPlaying,
+            }
+        });
+        setSongs(updatedSongs);
+        handlePlayToggle(updatedSongs.some((song) => song.isPlaying));
+        updateCurrentSongAndSongs(relatedSong, songs);
+    };
 
     const checkLike = () => {
-        if (like.account.name != null && like.song.nameSong != null) {
-            isLikedAPI(like).then(res => {
-                setIsLiked(res.data)
-            })
+        if (account == null) {
+            setIsLiked(false);
         } else {
-            console.log("Không có dữ liệu hợp lệ để gửi yêu cầu.");
+            if (like.account.name != null || like.song.nameSong != null) {
+                isLikedAPI(like).then(res => {
+                    setIsLiked(res.data)
+                })
+            }
         }
+
+        //
+        // if (like.account.name != null || like.song.nameSong != null) {
+        //     isLikedAPI(like).then(res => {
+        //         setIsLiked(res.data)
+        //     })
+        // } else if (account==null) {
+        //     setIsLiked(false);
+        // }
     }
 
     useEffect(() => {
         checkLike();
     }, [like.account, like.song]);
+
 
     const getLikeQuantity = () => {
         getSongLikeQuantityAPI(id).then(res => {
@@ -152,31 +206,6 @@ const DetailSong = () => {
         getAllCommentBySongIdAPI(id).then(res => setAllComments(res.data))
     }
 
-    const handleToggleSongPlay = (songId) => {
-        const updatedSongs = relatedSongs.map((song) => {
-            const newIsPlaying = song.id === songId ? !song.isPlaying : false;
-            return {
-                ...song,
-                isPlaying: newIsPlaying,
-            }
-        });
-        setSongs(updatedSongs);
-        handlePlayToggle(updatedSongs.some((song) => song.isPlaying));
-    };
-
-
-    const handleSongClick = (song) => {
-        const newIsPlaying = !song.isPlaying;
-        song.isPlaying = newIsPlaying;
-        if (newIsPlaying) {
-            handlePlayToggle(true);
-        } else {
-            handlePlayToggle(false);
-        }
-        setDetailSong({...song});
-        updateCurrentSongAndSongs(detailSong, songs);
-        setIsPlaying();
-    };
 
     return (
         <div>
@@ -185,21 +214,21 @@ const DetailSong = () => {
                     <div className="hero" style={{backgroundImage: "url(../../images/banner/song.jpg)"}}></div>
                     <div className="under-hero container">
                         <div className="section">
-                            <div className="row" data-song-id={detailSong.id} data-song-name={detailSong.nameSong}
-                                 data-song-artist={detailSong.nameSinger}
-                                 data-song-album="Sadness" data-song-url={detailSong.pathSong}
-                                 data-song-cover={detailSong.imgSong}>
+                            <div className="row" data-song-id={currentSongDT.id} data-song-name={currentSongDT.nameSong}
+                                 data-song-artist={currentSongDT.nameSinger}
+                                 data-song-album="Sadness" data-song-url={currentSongDT.pathSong}
+                                 data-song-cover={currentSongDT.imgSong}>
                                 <div className="col-xl-3 col-md-4">
                                     <div className="cover cover--round">
                                         <div className="cover__image">
-                                            <img src={detailSong.imgSong} alt="Treasure face"
+                                            <img src={currentSongDT.imgSong} alt="Treasure face"
                                                  style={{marginLeft: "30px", marginTop: "10px"}}/></div>
                                     </div>
                                 </div>
                                 <div className="col-1 d-none d-xl-block"></div>
                                 <div className="col-md-8 mt-5 mt-md-0">
                                     <div className="d-flex flex-wrap mb-2"><span
-                                        className="text-dark fs-4 fw-semi-bold pe-2">{detailSong && detailSong.nameSong}</span>
+                                        className="text-dark fs-4 fw-semi-bold pe-2">{currentSongDT && currentSongDT.nameSong}</span>
                                         <div className="dropstart d-inline-flex ms-auto">
                                             <div className="dropdown-link"
                                                  role="button"
@@ -214,23 +243,6 @@ const DetailSong = () => {
                                                     >Thêm vào danh sách phát
                                                     </div>
                                                 </li>
-                                                {/*<li>*/}
-                                                {/*    <div className="dropdown-item"*/}
-                                                {/*         role="button"*/}
-                                                {/*         >Add to queue*/}
-                                                {/*    </div>*/}
-                                                {/*</li>*/}
-                                                {/*<li>*/}
-                                                {/*    <div className="dropdown-item"*/}
-                                                {/*         role="button"*/}
-                                                {/*         >Next to play*/}
-                                                {/*    </div>*/}
-                                                {/*</li>*/}
-                                                {/*<li>*/}
-                                                {/*    <div className="dropdown-item"*/}
-                                                {/*         role="button">Share*/}
-                                                {/*    </div>*/}
-                                                {/*</li>*/}
                                                 <li className="dropdown-divider"></li>
                                                 <li>
                                                     <div className="dropdown-item"
@@ -242,16 +254,16 @@ const DetailSong = () => {
                                         </div>
                                     </div>
                                     <ul className="info-list info-list--dotted mb-3">
-                                        <li>Thể loại: {detailSong.genres.name}</li>
+                                        <li>Thể loại: {currentSongDT.genres.name}</li>
                                         <li>Đăng ngày: {
                                             songCreateDate.day + '-' + songCreateDate.month + '-' + songCreateDate.year}
                                         </li>
                                     </ul>
                                     <div className="mb-4"><p className="mb-2">Người đăng: <span
-                                        className="text-dark fw-medium">{detailSong.accountName}</span></p>
+                                        className="text-dark fw-medium">{currentSongDT.accountName}</span></p>
                                         <p className="mb-2">Ca sỹ: <span className="text-dark fw-medium">
-                                           {detailSong && detailSong.nameSinger}
-                                            {detailSong.auth === true &&
+                                           {currentSongDT && currentSongDT.nameSinger}
+                                            {currentSongDT.auth === true &&
                                                 <i className="fa-sharp fa-solid fa-circle-check"
                                                    style={{color: "#005eff", marginLeft: "5px"}}></i>
                                             }
@@ -264,14 +276,14 @@ const DetailSong = () => {
                                                 <button type="button"
                                                         className="btn btn-play btn-default btn-icon rounded-pill playing"
                                                         data-play-id="">
-                                                    {detailSong.isPlaying ? (
+                                                    {currentSongDT.isPlaying ? (
                                                         <BsPauseFill
-                                                            onClick={() => handleSongClick(detailSong)}
+                                                            onClick={() => handleDetailSongClick(currentSongDT)}
                                                             style={{fontSize: '30px'}}
                                                         />
                                                     ) : (
                                                         <BsFillPlayFill
-                                                            onClick={() => handleSongClick(detailSong)}
+                                                            onClick={() => handleDetailSongClick(currentSongDT)}
                                                             style={{fontSize: '30px'}}
                                                         />
                                                     )
@@ -318,13 +330,13 @@ const DetailSong = () => {
                                     </ul>
                                     <div className="mt-2"><span
                                         className="d-block text-dark fs-6 fw-semi-bold mb-3">Mô tả</span>
-                                        <p dangerouslySetInnerHTML={{__html: detailSong.description}}></p></div>
+                                        <p dangerouslySetInnerHTML={{__html: currentSongDT.description}}></p></div>
                                 </div>
                             </div>
                         </div>
                         <div className="section">
-                            <div className="section__head"><h3 className="mb-0">Related <span
-                                className="text-primary">Songs</span></h3></div>
+                            <div className="section__head"><h3 className="mb-0">Các bài hát <span
+                                className="text-primary">Liên quan</span></h3></div>
                             <div className="swiper-carousel swiper-carousel-button">
                                 <div className="swiper" data-swiper-slides="5" data-swiper-autoplay="true">
                                     <div className="swiper-wrapper">
@@ -333,8 +345,7 @@ const DetailSong = () => {
                                                 <div className="cover cover--round">
                                                     <div className="cover__head">
                                                         <ul className="cover__label d-flex">
-                                                            <li><span className="badge rounded-pill bg-danger"><i
-                                                                className="ri-heart-fill"></i></span>
+                                                            <li><span className="badge rounded-pill bg-danger"></span>
                                                             </li>
                                                         </ul>
                                                         <div
@@ -393,16 +404,14 @@ const DetailSong = () => {
                                                             {rs.isPlaying ? (
                                                                 <AiOutlinePauseCircle
                                                                     onClick={() => {
-                                                                        handleToggleSongPlay(rs.id);
-                                                                        updateCurrentSongAndSongs(rs, songs);
+                                                                        handleToggleRelatedSongClick(rs);
                                                                     }}
                                                                     style={{fontSize: "30px"}}
                                                                 />
                                                             ) : (
                                                                 <AiOutlinePlayCircle
                                                                     onClick={() => {
-                                                                        handleToggleSongPlay(rs.id);
-                                                                        updateCurrentSongAndSongs(rs, songs);
+                                                                        handleToggleRelatedSongClick(rs);
                                                                     }}
                                                                     style={{fontSize: "30px"}}
                                                                 />
@@ -410,10 +419,13 @@ const DetailSong = () => {
                                                         </button>
                                                     </div>
                                                     <div className="cover__foot">
-                                                        <div className="cover__title text-truncate">{rs.nameSong}</div>
+                                                            <div
+                                                                className="cover__title text-truncate">{rs.nameSong}
+                                                            </div>
                                                         <p className="cover__subtitle text-truncate">
                                                             {rs.nameSinger}
                                                         </p>
+
                                                     </div>
                                                 </div>
 
