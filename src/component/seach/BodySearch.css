@@ -1,6 +1,7 @@
 .playlist {
     display: flex;
 }
+
 .playlist .playlist-mainpacket h1 {
     display: flex;
     flex-direction: column;
@@ -9,21 +10,43 @@
 }
 
 .playlist .playlist-mainpacket h1 {
-   font-size: 20px;
+    font-size: 20px;
 }
 
 .playlist .playlist-mainpacket img {
     width: 100px;
     height: 30%;
 }
+
 .playlist-mainpacket {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.song-component{
+.song-component {
     height: 256px;
     overflow: auto;
     width: 70%;
 }
+
+.dropdown-notify {
+    left: -300px !important;
+    width: 350px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.dropdown-notify-item {
+    cursor: pointer;
+    text-decoration: none;
+    color: unset;
+}
+
+
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+    height: 20px;
+}
+

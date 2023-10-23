@@ -37,7 +37,11 @@ const searchListSongByNameSinger = (name) => {
 const searchListSongByNamePlaylist = (name) => {
     return axios.get(`songs/findByPlaylist/${name}`)
 }
+const findAccountBySong = (id) => {
+    return axios.get(`songs/findAccountBySong/${id}`)
+}
 export {
+    findAccountBySong,
     addSongSV,
     getAllGenres,
     getSongByID,
