@@ -103,15 +103,6 @@ const DetailSong = () => {
                 })
             }
         }
-
-        //
-        // if (like.account.name != null || like.song.nameSong != null) {
-        //     isLikedAPI(like).then(res => {
-        //         setIsLiked(res.data)
-        //     })
-        // } else if (account==null) {
-        //     setIsLiked(false);
-        // }
     }
 
     useEffect(() => {
@@ -315,8 +306,8 @@ const DetailSong = () => {
                                                         <span
                                                             className="ps-2 fw-medium">{
                                                             likedQuantity != null ? likedQuantity : ''
-                                                        }</span></div>)}
-
+                                                        }</span></div>)
+                                            }
                                         </li>
                                         <li>
                                             <div role="button"

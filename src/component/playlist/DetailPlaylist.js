@@ -5,6 +5,7 @@ import axios from "axios";
 import {AudioPlayerContext, useAudioPlayer} from "../../redux/playern/ActionsUseContext/AudioPlayerProvider";
 import {BsFillPlayFill, BsPauseFill} from "react-icons/bs";
 import {likeClickAPI} from "../api/LikesService/LikesService";
+import {playlistLikeClickAPI} from "../api/playlistLikesService/playlistLikesService";
 
 
 export default function DetailPlaylist() {
@@ -27,7 +28,8 @@ export default function DetailPlaylist() {
     useEffect(() => {
         findPlaylistById(id).then(res => {
             setPlaylist({...res.data, isPlaying});
-            if(songs) {
+            console.log(res.data);
+            if (songs) {
                 const updatedSongs = songs.map((song) => ({
                     ...song,
                     isPlaying: currentSong && currentSong.id === song.id ? isPlaying : false,
@@ -37,11 +39,11 @@ export default function DetailPlaylist() {
             fetchPlaylistCount(id);
             fetchAccount(id);
         })
-    }, [ currentSong, updateCurrentSongAndSongs])
+    }, [isLike, currentSong, updateCurrentSongAndSongs])
 
     useEffect(() => {
         fetchSongs(id);
-    }, [isLike]);
+    }, []);
 
     const handleToggleSongPlay = (song1) => {
         const updateSongs = songs.map((song) => {
@@ -80,8 +82,6 @@ export default function DetailPlaylist() {
             const config = {
                 headers: {},
             };
-
-            // Kiểm tra xem người dùng đã đăng nhập hay chưa, và token có tồn tại không
             if (accountLogin && accountLogin.token) {
                 config.headers.Authorization = `Bearer ${accountLogin.token}`;
             }
@@ -95,6 +95,7 @@ export default function DetailPlaylist() {
             setPlaylist({...playlist, songs});
             updateCurrentPlaylist({playlist});
             handleCheckingDuplacateSongsInAPlaylist(res.data);
+
         } catch (error) {
             setSongs([]);
         }
@@ -109,15 +110,16 @@ export default function DetailPlaylist() {
         }
     };
 
-    function likeClick(id) {
+    const likeClick = (id) => {
         if (!accountLogin) {
             navigate("/login");
             return;
         }
-        likeClickAPI(id).then(res => {
-            setIsLike(!isLike)
+        playlistLikeClickAPI(id).then(res => {
+            setIsLike(res.data)
         })
     }
+
 
     return (
         <main id="page_content">
@@ -177,12 +179,23 @@ export default function DetailPlaylist() {
                                     </div>
                                 </li>
                                 <li>
-                                    <a href="#" role="button"
+                                    <a role="button"
                                        className="text-dark d-flex align-items-center"
                                        aria-label="Favorite" data-favorite-id="1">
-                                        <i className="ri-heart-line heart-empty"></i>
-                                        <i className="ri-heart-fill heart-fill"></i>
-                                        <span className="ps-2 fw-medium">121</span>
+                                        {playlist.isLiked === 1 ? (
+                                            <i className="fa-sharp fa-solid fa-heart"
+                                               style={{
+                                                   color: "#ff0000",
+                                                   fontSize: "24px"
+                                               }}
+                                               onClick={() => likeClick(playlist.id)}>
+                                            </i>
+                                        ) : (
+                                            <i className="ri-heart-line heart-empty"
+                                               onClick={() => likeClick(playlist.id)}
+                                            />
+                                        )}
+                                        <span className="ps-2 fw-medium">{playlist.likesQuantity}</span>
                                     </a>
                                 </li>
                             </ul>
