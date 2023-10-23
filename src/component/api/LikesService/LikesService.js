@@ -11,9 +11,8 @@ const likeClickAPI=(id) => {
     return axios.post(`likes/setlike/${id}`)
 }
 
-
 export {
     isLikedAPI,
     getSongLikeQuantityAPI,
-    likeClickAPI
+    likeClickAPI,
 }
