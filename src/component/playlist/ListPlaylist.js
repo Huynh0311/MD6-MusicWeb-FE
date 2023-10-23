@@ -1,20 +1,37 @@
 import React, {useEffect, useState} from "react";
-import {getAllPlaylist} from "../api/PlaylistService/PlaylistService";
-import {Link} from "react-router-dom";
+import {getAllPlaylist, getAllPlaylistWithLikeQuantity} from "../api/PlaylistService/PlaylistService";
+import {Link, useNavigate} from "react-router-dom";
 import "./Playlist.css"
 import {useSelector} from "react-redux";
+import {likeClickAPI} from "../api/LikesService/LikesService";
+import {playlistLikeClickAPI} from "../api/playlistLikesService/playlistLikesService";
 
 export default function ListPlaylist() {
+    const navigate = useNavigate();
     const accountLogin = useSelector(state => state.account)
     const [listPlaylist, setListPlaylist] = useState([]);
     const [account, setAccount] = useState(JSON.parse(localStorage.getItem("data")));
+    const [playlistLikesQuantity, setPlaylistLikesQuantity] = useState(0);
+    const [isLiked, setIsLiked] = useState();
+
     useEffect(() => {
-        if(account!=null) {
-            getAllPlaylist(accountLogin.id).then(res => {
-                setListPlaylist(res.data)
+        if (account != null) {
+            getAllPlaylistWithLikeQuantity().then(res => {
+                setListPlaylist(res.data);
             })
         }
-    }, [])
+    }, [playlistLikesQuantity,isLiked])
+
+    const likeClick = (id) => {
+        if (!accountLogin) {
+            navigate("/login");
+            return;
+        }
+        playlistLikeClickAPI(id).then(res => {
+            setIsLiked(res.data)
+        })
+    }
+
     return (
         <div>
             <div id="wrapper">
@@ -34,25 +51,41 @@ export default function ListPlaylist() {
                             <div className="list list--lg list--order">
                                 <div className="row">
                                     {listPlaylist.map((item) => (
-                                        <div className="list__item"><a href="album-details.html"
+                                        <div className="list__item" key={item.id}>
+                                            <a href="album-details.html"
                                                                        className="list__cover"
                                                                        style={{height: "150px", width: "150px"}}><img
                                             src={item.playlistImg} alt="Luna" style={{height: 200 + 'px'}}/></a>
                                             <div className="list__content">
                                                 <Link
-                                                to={`/detailPlaylist/${item.id}`}
-                                                className="list__title text-truncate">{item.namePlaylist}</Link>
+                                                    to={`/detailPlaylist/${item.id}`}
+                                                    className="list__title text-truncate">{item.namePlaylist}</Link>
                                                 <p className="list__subtitle text-truncate"><Link
                                                     to={`/detailPlaylist/${item.id}`}>
                                                 </Link></p></div>
                                             <ul className="list__option">
                                                 <li><span className="badge rounded-pill bg-info"><i
                                                     className="ri-vip-crown-fill"></i></span></li>
-                                                <li><a href="#" role="button"
+                                                <li>
+                                                    <a role="button"
                                                        className="d-inline-flex"
-                                                       aria-label="Favorite" data-favorite-id="100"><i
-                                                    className="ri-heart-line heart-empty"></i> <i
-                                                    className="ri-heart-fill heart-fill"></i></a></li>
+                                                       aria-label="Favorite" data-favorite-id="100">
+                                                        {item.isLiked === 1 ? (
+                                                            <i className="fa-sharp fa-solid fa-heart"
+                                                               style={{
+                                                                   color: "#ff0000",
+                                                                   fontSize: "24px"
+                                                               }}
+                                                               onClick={() => likeClick(item.id)}>
+                                                            </i>
+                                                        ) : (
+                                                            <i className="ri-heart-line heart-empty"
+                                                               onClick={() => likeClick(item.id)}
+                                                            />
+                                                        )}
+                                                    </a>
+                                                </li>
+                                                <p style={{marginLeft:"5px"}}>{item.likesQuantity}</p>
                                                 <li className="dropstart d-inline-flex"><a
                                                     className="dropdown-link"
                                                     href="#"
