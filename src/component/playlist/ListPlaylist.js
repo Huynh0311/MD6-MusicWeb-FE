@@ -9,7 +9,6 @@ export default function ListPlaylist() {
     const [listPlaylist, setListPlaylist] = useState([]);
     useEffect(() => {
         getAllPlaylist(accountLogin.id).then(res => {
-            console.log(res.data)
             setListPlaylist(res.data)
         })
     }, [])
@@ -32,7 +31,8 @@ export default function ListPlaylist() {
                             <div className="list list--lg list--order">
                                 <div className="row">
                                     {listPlaylist.map((item) => (
-                                        <div className="list__item"><a href="album-details.html"
+                                        <div className="list__item" key={item.id}>
+                                            <a href="album-details.html"
                                                                        className="list__cover"
                                                                        style={{height: "150px", width: "150px"}}><img
                                             src={item.playlistImg} alt="Luna" style={{height: 200 + 'px'}}/></a>

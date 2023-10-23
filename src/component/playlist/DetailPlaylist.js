@@ -5,9 +5,11 @@ import axios from "axios";
 import {AudioPlayerContext, useAudioPlayer} from "../../redux/playern/ActionsUseContext/AudioPlayerProvider";
 import {BsFillPlayFill, BsPauseFill} from "react-icons/bs";
 import {likeClickAPI} from "../api/LikesService/LikesService";
+import {useSelector} from "react-redux";
+
 
 export default function DetailPlaylist() {
-    const [playlist, setPlaylist] = useState({})
+    const [playlist, setPlaylist] = useState({isPlaying: false})
     const [count, setCount] = useState(0);
     const [songs, setSongs] = useState([]);
     const [account, setAccount] = useState({});
@@ -16,16 +18,16 @@ export default function DetailPlaylist() {
     const [isLike, setIsLike] = useState(false);
     const {currentSong, updateCurrentSongAndSongs} = useAudioPlayer();
     const {isPlaying, handlePlayToggle} = useContext(AudioPlayerContext);
-    const [accountLogin, setAccountLogin] = useState(JSON.parse(localStorage.getItem("data")));
+    const accountLogin = useSelector(state => state.account);
 
     useEffect(() => {
         findPlaylistById(id).then(res => {
-            setPlaylist(res.data)
+            setPlaylist({...res.data, isPlaying});
             fetchPlaylistCount(id);
             fetchSongs(id);
             fetchAccount(id);
         })
-    }, [updateCurrentSongAndSongs, currentSong, isLike])
+    }, [isPlaying, currentSong, updateCurrentSongAndSongs, isLike])
 
     const handleToggleSongPlay = (songId) => {
         const updateSongs = songs.map((song) => {
@@ -35,10 +37,16 @@ export default function DetailPlaylist() {
                 isPlaying: newIsPlaying,
             }
         })
+        setPlaylist({...playlist, isPlaying: !isPlaying});
         setSongs(updateSongs);
         setIsCurrentSongPlayingNow(!isCurrentSongPlayingNow);
         handlePlayToggle(updateSongs.some((song) => song.isPlaying));
     };
+
+    const removeFromPlaylist = () => {
+
+    }
+
     const fetchPlaylistCount = async (id) => {
         try {
             const res = await axios.get(`http://localhost:8080/playlist/countSong/${id}`);
@@ -66,10 +74,6 @@ export default function DetailPlaylist() {
         }
     };
 
-    // const isAnySongPlaying = () => {
-    //     const hasAnySongIsPlaying = songs.some((song) => song.isPlaying === true);
-    //     hasAnySongIsPlaying ? setIsCurrentSongPlayingNow(true) : setIsCurrentSongPlayingNow(false);
-    // }
     const fetchAccount = async (id) => {
         try {
             const res = await axios.get(`http://localhost:8080/playlist/getUserByPlaylist/${id}`);
@@ -114,7 +118,7 @@ export default function DetailPlaylist() {
                                     <div className="d-flex align-items-center">
                                         <button type="button" id="play_all"
                                                 className="btn btn-icon btn-primary rounded-pill">
-                                            {isPlaying ? (
+                                            {playlist.isPlaying ? (
                                                 <BsPauseFill role='button'
                                                              onClick={() => {
                                                                  handleToggleSongPlay(currentSong.id);
@@ -132,7 +136,6 @@ export default function DetailPlaylist() {
                                                                         handleToggleSongPlay(currentSong.id);
                                                                         updateCurrentSongAndSongs(currentSong, songs);
                                                                     }
-
                                                                 }}
                                                                 style={{fontSize: "30px"}}
                                                 />
@@ -144,7 +147,7 @@ export default function DetailPlaylist() {
                                     </div>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);" role="button"
+                                    <a role="button"
                                        className="text-dark d-flex align-items-center"
                                        aria-label="Favorite" data-favorite-id="1">
                                         <i className="ri-heart-line heart-empty"></i>
@@ -166,11 +169,10 @@ export default function DetailPlaylist() {
                                     <div className="list__cover">
                                         <img src={song.imgSong}
                                              alt="ảnh"/>
-                                        <a href="javascript:void(0);"
-                                           className="btn btn-play btn-sm btn-default btn-icon rounded-pill"
-                                           data-play-id="1"
-                                           aria-label="Play pause">
-                                            {console.log(songs)}
+                                        <a
+                                            className="btn btn-play btn-sm btn-default btn-icon rounded-pill"
+                                            data-play-id="1"
+                                            aria-label="Play pause">
                                             {song.isPlaying ? (
                                                 <BsPauseFill role='button'
                                                              onClick={() => {
@@ -193,22 +195,19 @@ export default function DetailPlaylist() {
 
                                     <div className="list__content">
                                         <Link to={`/song/detailSong/${song.id}`}>
-                                            <div className="list__title text-truncate">{song.nameSong}</div>
+                                            <div className="list__title text-truncate">
+                                                {song.nameSong}
+                                            </div>
                                         </Link>
                                         <p className="list__subtitle text-truncate">
-                                            <a href="artist-details.html">
                                                 {song.nameSinger}
-                                            </a>
                                         </p>
                                     </div>
                                     <ul className="list__option">
                                         <li>
-                                            <a href="javascript:void(0);" role="button"
+                                            <a role="button"
                                                className="d-inline-flex active"
                                                aria-label="Favorite" data-favorite-id="1">
-                                                {/*<i className="ri-heart-line heart-empty"></i>*/}
-                                                {/*<i className="ri-heart-fill heart-fill"></i>*/}
-                                                {console.log(song.isLiked)}
                                                 {song.isLiked === 1 ? (
                                                     <i className="fa-sharp fa-solid fa-heart"
                                                        style={{
@@ -218,42 +217,35 @@ export default function DetailPlaylist() {
                                                        onClick={() => likeClick(song.id)}>
                                                     </i>
                                                 ) : (
-                                                    <i className="fa-sharp fa-regular fa-heart" onClick={() => likeClick(song.id)}
+                                                    <i className="fa-sharp fa-regular fa-heart"
+                                                       onClick={() => likeClick(song.id)}
                                                        style={{color: "#000000", fontSize: "24px"}}></i>
                                                 )}
                                             </a>
                                         </li>
-                                        <li>
-                                            <div className="me-4 d-none d-xl-block"><span
-                                                className="amplitude-current-minutes"></span>:<span
-                                                className="amplitude-current-seconds"></span> / <span
-                                                className="amplitude-duration-minutes"></span>:
-                                                <span className="amplitude-duration-seconds"></span>
-                                            </div>
-                                        </li>
-                                        <li className="dropstart d-inline-flex"><a className="dropdown-link"
-                                                                                   href="javascript:void(0);"
-                                                                                   role="button"
-                                                                                   data-bs-toggle="dropdown"
-                                                                                   aria-label="Cover options"
-                                                                                   aria-expanded="false"><i
-                                            className="ri-more-fill"></i></a>
+                                        <li className="dropstart d-inline-flex">
+                                            <a className="dropdown-link"
+                                               role="button"
+                                               data-bs-toggle="dropdown"
+                                               aria-label="Cover options"
+                                               aria-expanded="false"><i
+                                                className="ri-more-fill"></i>
+                                            </a>
                                             <ul className="dropdown-menu dropdown-menu-sm">
-                                                <li><a className="dropdown-item" href="javascript:void(0);"
-                                                       role="button"
-                                                       data-playlist-id="1">Add to playlist</a></li>
-                                                <li><a className="dropdown-item" href="javascript:void(0);"
-                                                       role="button"
-                                                       data-queue-id="1">Add to queue</a></li>
-                                                <li><a className="dropdown-item" href="javascript:void(0);"
-                                                       role="button"
-                                                       data-next-id="1">Next to play</a></li>
-                                                <li><a className="dropdown-item" href="javascript:void(0);"
-                                                       role="button">Share</a></li>
-                                                <li className="dropdown-divider"></li>
-                                                <li><a className="dropdown-item" href="javascript:void(0);"
-                                                       role="button"
-                                                       data-play-id="1">Play</a></li>
+                                                { accountLogin.id === playlist.account.id ?
+                                                    <li>
+                                                        <div className="dropdown-item"
+                                                             role="button">Xóa khỏi danh sách phát
+                                                        </div>
+                                                    </li>
+                                                    :
+                                                    <></>
+                                                }
+                                                <li>
+                                                    <div className="dropdown-item"
+                                                         role="button">Phát
+                                                    </div>
+                                                </li>
                                             </ul>
                                         </li>
                                     </ul>

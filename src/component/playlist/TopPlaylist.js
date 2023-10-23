@@ -8,7 +8,6 @@ export default function TopPlaylist(){
     const [playlistCounts, setPlaylistCounts] = useState(0);
     useEffect(() => {
         getAllPlaylist().then(res => {
-            console.log(res.data)
             setListPlaylist(res.data)
             fetchPlaylistCounts(res.data);
         })
@@ -31,8 +30,8 @@ export default function TopPlaylist(){
         <div className="section">
             <div className="section__head">
                 <div className="flex-grow-1">
-                    <span className="section__subtitle">Collection to listen</span>
-                    <h3 className="mb-0">Best <span className="text-primary">Playlist</span></h3>
+                    <span className="section__subtitle">Bộ sưu tập bài hát yêu thích</span>
+                    <h3 className="mb-0">Top <span className="text-primary">Playlist</span></h3>
                 </div>
                 <a href="albums.html" className="btn btn-link">View All</a>
             </div>

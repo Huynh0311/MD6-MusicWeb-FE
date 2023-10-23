@@ -235,7 +235,7 @@ function SongList() {
                                                 {song.nameSong}
                                             </p>
                                             <p className="cover__subtitle text-truncate">
-                                                {song.description}
+                                                {song.nameSinger}
                                             </p>
                                         </div>
                                     </Link>
@@ -292,9 +292,9 @@ function SongList() {
             <Snackbar
                 anchorOrigin={{vertical: 'bottom', horizontal: 'right'}} open={openSnackbar} autoHideDuration={6000}
                 onClose={handleCloseSnackbar}>
-                <Alert onClose={handleCloseSnackbar} severity="success" sx={{width: '100%'}}>
-                    Thêm vào playlist thành công
-                </Alert>
+                {/*<Alert onClose={handleCloseSnackbar} severity="success" sx={{width: '100%'}}>*/}
+                {/*    Thêm vào playlist thành công*/}
+                {/*</Alert>*/}
             </Snackbar>
         </>
     );
