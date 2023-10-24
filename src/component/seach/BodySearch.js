@@ -123,11 +123,11 @@ const BodySearch = () => {
                             </span>
                                 <div>
                                     <select id="select-option" className="form-select" aria-label="Filter song"
-                                             onChange={(e) => handleSelectFindSelection(e)}>
-                                    <option key={1} value="song">Tìm theo tên bài hát</option>
-                                    <option key={2} value="singer">Tìm theo tên ca sỹ</option>
-                                    <option key={3} value="playlist">Tìm theo tên playlist</option>
-                                </select></div>
+                                            onChange={(e) => handleSelectFindSelection(e)}>
+                                        <option key={1} value="song">Tìm theo tên bài hát</option>
+                                        <option key={2} value="singer">Tìm theo tên ca sỹ</option>
+                                        <option key={3} value="playlist">Tìm theo tên playlist</option>
+                                    </select></div>
                             </div>
                             <div className="list">
                                 <div className="row">
@@ -291,7 +291,8 @@ const BodySearch = () => {
                                                                     </div>
                                                                     <div className="list__content">
                                                                         <Link to={`/song/detailSong/${song?.id}`}
-                                                                              className="list__title text-truncate" title={`isPlaying: ${JSON.stringify(songList[0].isPlaying)}`}>
+                                                                              className="list__title text-truncate"
+                                                                              title={`isPlaying: ${JSON.stringify(songList[0].isPlaying)}`}>
                                                                             {song?.nameSong} - {song.isPlaying}
                                                                         </Link>
                                                                         <p className="list__subtitle text-truncate">
