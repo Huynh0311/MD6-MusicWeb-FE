@@ -7,7 +7,7 @@ const SearchComponent = () => {
     const accountLogin = useSelector(state => state.account);
     const navigate = useNavigate();
     const [searchInput, setSearchInput] = useState();
-
+    console.log(accountLogin)
     const logOut = () => {
         localStorage.clear();
         navigate("/");

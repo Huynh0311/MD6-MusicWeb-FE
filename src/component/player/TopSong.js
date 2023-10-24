@@ -61,7 +61,7 @@ function Top5Songs() {
     return (
         <div>
             <ul>
-                {songs.map((song) => (
+                {songs.map((song,index) => (
                     <div className="list" key={song.id}>
                         <div className="list__item">
                             <div className="list__cover">
@@ -100,11 +100,11 @@ function Top5Songs() {
                                 </Link>
                             </div>
                             <ul className="list__option">
-                                <li>
+                                    <li>
                                     <span className="badge rounded-pill bg-info">
-                                        <i className="ri-vip-crown-fill"></i>
+                                        {index === 0 ?  <i className="ri-vip-crown-fill"></i> : null}
                                     </span>
-                                </li>
+                                    </li>
                                 <li>
                                     <div
                                         role="button"

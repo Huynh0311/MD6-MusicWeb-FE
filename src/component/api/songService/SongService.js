@@ -37,6 +37,15 @@ const searchListSongByNameSinger = (name) => {
 const searchListSongByNamePlaylist = (name) => {
     return axios.get(`songs/findByPlaylist/${name}`)
 }
+
+const isSongOwnedByLoggedInAccount = (id) => {
+    return axios.get(`songs/checkOwned/${id}`)
+}
+
+const removeCommentInASongByCommentID = (idSong,idComment) => {
+    return axios.post(`songs/removeComment/${idSong}/${idComment}`)
+}
+
 export {
     addSongSV,
     getAllGenres,
@@ -46,5 +55,7 @@ export {
     findListSongFavorite,
     searchListSongByName,
     searchListSongByNameSinger,
-    searchListSongByNamePlaylist
+    searchListSongByNamePlaylist,
+    isSongOwnedByLoggedInAccount,
+    removeCommentInASongByCommentID
 }
