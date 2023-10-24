@@ -15,6 +15,7 @@ export default function DetailPlaylist() {
     const [songs, setSongs] = useState([]);
     const [account, setAccount] = useState({});
     const {id} = useParams();
+    const [isLikePlaylist, setIsLikePlaylist] = useState(false);
     const [isLike, setIsLike] = useState(false);
     const {currentSong, updateCurrentSongAndSongs} = useAudioPlayer();
     const {
@@ -39,11 +40,11 @@ export default function DetailPlaylist() {
             fetchPlaylistCount(id);
             fetchAccount(id);
         })
-    }, [isLike, currentSong, updateCurrentSongAndSongs])
+    }, [isLikePlaylist, currentSong, updateCurrentSongAndSongs])
 
     useEffect(() => {
         fetchSongs(id);
-    }, []);
+    }, [isLike]);
 
     const handleToggleSongPlay = (song1) => {
         const updateSongs = songs.map((song) => {
@@ -110,13 +111,23 @@ export default function DetailPlaylist() {
         }
     };
 
-    const likeClick = (id) => {
+    const likePlaylistClick = (id) => {
         if (!accountLogin) {
             navigate("/login");
             return;
         }
         playlistLikeClickAPI(id).then(res => {
-            setIsLike(res.data)
+            setIsLikePlaylist(res.data)
+        })
+    }
+
+    function likeClick(id) {
+        if (!accountLogin) {
+            navigate("/login");
+            return;
+        }
+        likeClickAPI(id).then(res => {
+            setIsLike(!isLike)
         })
     }
 
@@ -188,11 +199,11 @@ export default function DetailPlaylist() {
                                                    color: "#ff0000",
                                                    fontSize: "24px"
                                                }}
-                                               onClick={() => likeClick(playlist.id)}>
+                                               onClick={() => likePlaylistClick(playlist.id)}>
                                             </i>
                                         ) : (
                                             <i className="ri-heart-line heart-empty"
-                                               onClick={() => likeClick(playlist.id)}
+                                               onClick={() => likePlaylistClick(playlist.id)}
                                             />
                                         )}
                                         <span className="ps-2 fw-medium">{playlist.likesQuantity}</span>

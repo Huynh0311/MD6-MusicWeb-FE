@@ -1,12 +1,20 @@
 import React, {useEffect, useState} from 'react';
 import {Link, useNavigate, useParams} from "react-router-dom";
-import {findAccountBySong, getAllSongByGenresIDAPI, getSongByID, playSong} from "../../api/songService/SongService";
+import {
+    getAllSongByGenresIDAPI,
+    getSongByID,
+    isSongOwnedByLoggedInAccount,
+    playSong, removeCommentInASongByCommentID
+} from "../../api/songService/SongService";
+import {findAccountBySong} from "../../api/songService/SongService";
 import {getSongLikeQuantityAPI, isLikedAPI, likeClickAPI} from "../../api/LikesService/LikesService";
 import {getAllCommentBySongIdAPI, sendCommentAPI} from "../../api/commentService/CommentService";
 import {AiOutlinePauseCircle, AiOutlinePlayCircle} from "react-icons/ai";
 import {AudioPlayerContext, useAudioPlayer} from "../../../redux/playern/ActionsUseContext/AudioPlayerProvider";
 import {useContext} from "react";
 import {BsFillPlayFill, BsPauseFill} from "react-icons/bs";
+import {ImCross} from "react-icons/im";
+import {toast} from "react-toastify";
 import {WebSocketContext} from "../../WebSocketProvider";
 import {saveNotify} from "../../api/NotifyService/NotifyService";
 
@@ -16,7 +24,7 @@ const DetailSong = () => {
     const [account, setAccount] = useState(JSON.parse(localStorage.getItem("data")));
     const [receiver, setReceiver] = useState({});
     const {currentSong, updateCurrentSongAndSongs} = useAudioPlayer();
-    const {isPlaying, handlePlayToggle} = useContext(AudioPlayerContext);
+    const {isPlaying, handlePlayToggle,updateAllCurrentComments,allCurrentComments} = useContext(AudioPlayerContext);
     const [songs, setSongs] = useState([]);
     const [currentSongDT, setCurrentSongDT] = useState({
         genres: {}
@@ -41,6 +49,8 @@ const DetailSong = () => {
     const [relateSongIsPlaying, setRelateSongIsPlaying] = useState(false);
     const {sendNotify} = useContext(WebSocketContext);
 
+    const [ownedSong,setOwnedSong] = useState(false);
+    const [removedComment,setRemovedComment] = useState(false);
 
     useEffect(() => {
         getSongByID(id)
@@ -66,8 +76,8 @@ const DetailSong = () => {
         getLikeQuantity();
         getAllCommentBySongID(id)
         getAllSongByGenres();
-
-    }, [isPlaying, currentDetailSong, updateCurrentSongAndSongs])
+        isSongOwnedByLoggedInAccount(id).then(res=>setOwnedSong(res.data));
+    }, [isPlaying, currentDetailSong, updateCurrentSongAndSongs,removedComment,allCurrentComments])
 
     const handleDetailSongClick = (song) => {
         setRelateSongIsPlaying(false);
@@ -115,6 +125,7 @@ const DetailSong = () => {
     useEffect(() => {
         checkLike();
     }, [like.account, like.song]);
+
     useEffect(() => {
         findAccountBySong(id).then(res => {
             console.log(res.data)
@@ -240,7 +251,7 @@ const DetailSong = () => {
     }
 
     const getAllCommentBySongID = (id) => {
-        getAllCommentBySongIdAPI(id).then(res => setAllComments(res.data))
+        getAllCommentBySongIdAPI(id).then(res => updateAllCurrentComments(res.data))
     }
 
 
@@ -355,12 +366,12 @@ const DetailSong = () => {
                                                         }</span></div>)
                                             }
                                         </li>
-                                        <li>
-                                            <div role="button"
-                                                 className="text-dark d-flex align-items-center"
-                                                 aria-label="Download"><i className="ri-download-2-line"></i> <span
-                                                className="ps-2 fw-medium">24</span></div>
-                                        </li>
+                                        {/*<li>*/}
+                                        {/*    <div role="button"*/}
+                                        {/*         className="text-dark d-flex align-items-center"*/}
+                                        {/*         aria-label="Download"><i className="ri-download-2-line"></i> <span*/}
+                                        {/*        className="ps-2 fw-medium">24</span></div>*/}
+                                        {/*</li>*/}
                                         {/*<li><span className="text-dark d-flex align-items-center"><i*/}
                                         {/*    className="ri-star-fill text-warning"></i> <span*/}
                                         {/*    className="ps-2 fw-medium">4.5</span></span></li>*/}
@@ -494,28 +505,28 @@ const DetailSong = () => {
                                             </button>
                                         </div>
                                     </form>
-                                    {allComments.map((cm) => {
+                                    {allCurrentComments.map((cm) => {
                                         return (
                                             <div className="avatar avatar--lg align-items-start" key={cm.id}>
                                                 <div className="avatar__image"><img src={cm.account.img} alt="user"/>
                                                 </div>
-                                                <div className="avatar__content"><span
-                                                    className="avatar__title mb-1">{cm.account.name}</span>
-                                                    <span
-                                                        className="avatar__subtitle mb-2">{cm.timeComment}</span>
-                                                    <div className="text-warning d-flex mb-1"><i
-                                                        className="ri-star-s-fill"></i>
-                                                        <i
-                                                            className="ri-star-s-fill"></i> <i
-                                                            className="ri-star-s-fill"></i>
-                                                        <i
-                                                            className="ri-star-s-fill"></i></div>
+                                                <div className="avatar__content">
+                                                    <div style={{display:"flex"}}>
+                                                    <span className="avatar__title mb-1">{cm.account.name}</span>
+                                                        {ownedSong && ownedSong ? (
+                                                            <span style={{marginLeft:"10px",cursor:"pointer",color:"red"}}><ImCross onClick={()=>{
+                                                                removeCommentInASongByCommentID(id,cm.id).then(res=>
+                                                                    setRemovedComment(!removedComment),
+                                                                    toast.success("Xóa bình luận thành công"))
+                                                            }}></ImCross></span>
+                                                        ): ('')
+                                                        }
+                                                    </div>
+                                                    <span className="avatar__subtitle mb-2">{cm.timeComment}</span>
+
+                                                    <div className="text-warning d-flex mb-1"></div>
                                                     <p>{cm.content}</p>
                                                     <div className="btn btn-link">
-                                                        <div className="btn__wrap">
-                                                            <i className="ri-reply-line fs-6"></i>
-                                                            <span>Reply</span>
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

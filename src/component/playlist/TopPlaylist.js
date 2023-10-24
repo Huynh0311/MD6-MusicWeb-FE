@@ -34,7 +34,6 @@ export default function TopPlaylist(){
                     <span className="section__subtitle">Bộ sưu tập bài hát yêu thích</span>
                     <h3 className="mb-0">Top <span className="text-primary">Playlist</span></h3>
                 </div>
-                <a href="albums.html" className="btn btn-link">View All</a>
             </div>
             <div className="swiper-carousel">
                 <div className="swiper" data-swiper-slides="4" data-swiper-autoplay="true">
