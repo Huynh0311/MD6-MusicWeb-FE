@@ -241,7 +241,9 @@ const EditSong = () => {
                                             'Chỉnh sửa'
                                         )}
                                     </button>
+                                    <Link to={"/song/"}>
                                     <button className="btn btn-danger">Hủy bỏ</button>
+                                    </Link>
                                 </div>
                             </div>
                         </div>

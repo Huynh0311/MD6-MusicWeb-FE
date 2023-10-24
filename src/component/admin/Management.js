@@ -9,7 +9,6 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import './Management.css';
 import _ from 'lodash';
-import Tooltip from "@mui/material/Tooltip";
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -17,12 +16,14 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { viVN } from '@mui/material/locale';
 
 const userColumns = [
-    {id: 'name', label: 'Tên', minWidth: 150,maxHeight:50, align: 'center',},
-    {id: 'phone', label: 'Điện thoại', minWidth: 250, align: 'center',},
-    {id: 'email', label: 'Email', minWidth: 250, align: 'center',},
-    {id: 'auth', label: 'Kích hoạt', minWidth: 170, align: 'center',},
+    {id: 'name', label: 'Tên', minWidth: 300, maxWidth:300, maxHeight:50, align: 'center',},
+    {id: 'phone', label: 'Điện thoại', minWidth: 150, maxWidth:150, maxHeight:50,  align: 'center',},
+    {id: 'email', label: 'Email', minWidth: 250, maxWidth:250, maxHeight:50, align: 'center',},
+    {id: 'auth', label: 'Kích hoạt', minWidth: 100, maxHeight:50, align: 'center',},
 ];
 
 const singerColumns = [
@@ -31,8 +32,27 @@ const singerColumns = [
 ];
 
 const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
+    return <Slide direction="down" ref={ref} {...props} />;
 });
+
+const theme = createTheme(
+    {
+        palette: {
+            primary: { main: '#1976d2' },
+        },
+    },
+    viVN,
+);
+
+const ActiveUser = (iduser) => {
+    fetch("http://localhost:8080/admin/auth/" + iduser, {
+        method: "PUT"
+    }).then((res) => {
+        window.location.reload();
+    }).catch((err) => {
+        console.log(err.message)
+    })
+}
 
 
 function GetUserList() {
@@ -58,7 +78,6 @@ function GetSingerList() {
             .then((res) => res.json())
             .then((data) => {
                 setRows(data);
-                console.log(data)
             })
             .catch((err) => {
                 console.error(err.message);
@@ -99,6 +118,29 @@ function GetSongQuantity() {
     return songQuantity;
 }
 
+function GetSingerTop() {
+    const [singerTop, setSingerTop] = useState("");
+
+    useEffect(() => {
+        fetch("http://localhost:8080/admin/singertop")
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.text();
+            })
+            .then((data) => {
+                setSingerTop(data);
+            })
+            .catch((error) => {
+                console.error("Error fetching data:", error);
+            });
+    }, "");
+    return singerTop;
+}
+
+
+
 
 export default function DataTable() {
     const [pageUser, setPageUser] = useState(0);
@@ -109,8 +151,11 @@ export default function DataTable() {
     const dataUser = GetUserQuantity();
     const dataSong = GetSongQuantity();
     const dataSinger = GetSingerList();
+    const dataSingerTop = GetSingerTop();
 
-    const [open, setOpen] = React.useState(false);
+    const [selectedUserId, setSelectedUserId] = useState(null);
+
+    const [open, setOpen] = useState(false);
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -153,18 +198,16 @@ export default function DataTable() {
                                     <div className="card bg-primary text-white">
                                         <div className="card-body fs-6">
                                             <div className="d-flex align-items-center mb-2"><h4
-                                                className="text-white mb-0">Total
-                                                Earnings</h4>
+                                                className="text-white mb-0">Xu hướng âm nhạc</h4>
                                                 <button type="button" className="btn btn-icon text-white ms-auto"><i
                                                     className="ri-settings-fill"></i></button>
                                             </div>
-                                            <p>Voluptatem ut, facilis ipsum, nostrum quia officia dolor mollitia
-                                                temporibus
-                                                hic
-                                                aspernatur laborum.</p><span
-                                            className="display-4 d-block mb-3">$126,457</span>
-                                            <button type="button" className="btn btn-warning rounded-pill">Get Details
-                                            </button>
+                                            <p>Tìm hiểu, phân tích về xu hướng âm nhạc mới nhất.
+                                                Cập nhật những bài hát hit trên thế giới.</p><span
+                                            className="display-4 d-block mb-1" style={{color:'#146bf7'}}>.</span>
+                                            <a href="https://www.billboard.com/charts/" target="_blank" rel="noopener noreferrer">
+                                                <button className="custom-btn btn-9">Read More</button>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -196,13 +239,14 @@ export default function DataTable() {
                                         </div>
                                         <div className="col-sm-4 mt-4 mt-sm-0">
                                             <div className="card h-100 bg-warning">
-                                                <div className="card-body"><h5 className="text-black">Purchases</h5>
-                                                    <div className="d-flex align-items-center text-black"><i
-                                                        className="ri-currency-fill fs-5"></i>
-                                                        <p className="fw-medium ps-2">11,012,547</p></div>
+                                                <div className="card-body"><h5 className="text-black">Ca sĩ nổi bật</h5>
+
+                                                    <div className="d-flex align-items-center text-black">
+                                                        <i className="ri-currency-fill fs-5"></i>
+                                                        <p className="fw-medium ps-2">{dataSingerTop}</p></div>
                                                 </div>
-                                                <div style={{height: 160 + 'px'}}>
-                                                    <canvas id="purchases"></canvas>
+                                                <div style={{height: 130 + 'px', textAlign:'center'}}>
+                                                    <i className="fa-light fa-user-crown fa-7x" style={{color: '#0c5fed'}}></i>
                                                 </div>
                                             </div>
                                         </div>
@@ -215,6 +259,7 @@ export default function DataTable() {
                                         <div className="card-body">
 
                                          <span className="border">
+                                             <ThemeProvider theme={theme}>
                 <Paper sx={{width: '100%', overflow: 'hidden'}}>
                     <TableContainer sx={{minHeight: 440}}>
                         <Table stickyHeader aria-label="sticky table">
@@ -235,41 +280,55 @@ export default function DataTable() {
                                 {data
                                     .slice(pageUser * rowsPerPageUser, pageUser * rowsPerPageUser + rowsPerPageUser)
                                     .map((row) => (
+
                                         <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                                             {userColumns.map((column) => (
-                                                <TableCell key={column.id} align={column.align}>
-                                                    {column.id === 'auth' ? (row[column.id] ?
+                                                <TableCell key={column.id} align={column.align} >
+                                                    {
+                                                        column.id === 'auth' ? (row[column.id] ?
                                                         <a className="fa-sharp fa-solid fa-circle-check fa-2xl"
                                                            style={{color: '#12f34a'}}>
                                                         </a> :
                                                         <Button className="auth-button"
-                                                           style={{color: '#da1010'}} onClick={handleClickOpen}>
+                                                                style={{color: '#da1010'}} onClick={() => {
+                                                            setSelectedUserId(row.id);
+                                                            handleClickOpen();
+                                                        }}>
                                                             <i className="fa-solid fa-circle-xmark fa-2xl"></i>
-                                                        </Button>) : row[column.id]}
-                                                    <Dialog
-                                                        open={open}
-                                                        TransitionComponent={Transition}
-                                                        keepMounted
-                                                        onClose={handleClose}
-                                                        aria-describedby="alert-dialog-slide-description"
-                                                    >
+                                                        </Button>) : row[column.id]
+                                                    }
+                                                </TableCell>
+                                            ))}
+                                        </TableRow>
+                                    ))
+
+                                }
+                            </TableBody>
+
+                            <Dialog
+                                open={open}
+                                TransitionComponent={Transition}
+                                keepMounted
+                                onClose={handleClose}
+                                aria-describedby="alert-dialog-slide-description"
+                                BackdropProps ={{ style: { backgroundColor: 'transparent' }, }}>
+
                                                         <DialogTitle>{"Bạn có muốn kích hoạt cho tài khoản này?"}</DialogTitle>
                                                         <DialogContent>
                                                             <DialogContentText id="alert-dialog-slide-description">
-                                                                Chủ sở hữu tài khoản sẽ được xác thực. Tên ca sĩ sẽ được 
+                                                                Chủ sở hữu tài khoản sẽ được xác thực. Tên ca sĩ sẽ được
                                                                 cho thêm vào danh sách.
                                                             </DialogContentText>
                                                         </DialogContent>
                                                         <DialogActions>
-                                                            <Button onClick={handleClose}>Disagree</Button>
-                                                            <Button onClick={handleClose}>Agree</Button>
+                                                            <Button onClick={handleClose}>Hủy</Button>
+                                                            <Button onClick={() => {
+                                                                if (selectedUserId) {
+                                                                    ActiveUser(selectedUserId);
+                                                            }
+                                                            }}>Xác nhận</Button>
                                                         </DialogActions>
                                                     </Dialog>
-                                                </TableCell>
-                                            ))}
-                                        </TableRow>
-                                    ))}
-                            </TableBody>
                         </Table>
                     </TableContainer>
                     <TablePagination
@@ -282,6 +341,7 @@ export default function DataTable() {
                         onRowsPerPageChange={handleChangeRowsPerPageUser}
                     />
                 </Paper>
+                                                 </ThemeProvider>
             </span>
 
                                         </div>
@@ -292,6 +352,7 @@ export default function DataTable() {
                                         <div className="card-header"><h5 className="mb-0">Danh sách ca sĩ</h5></div>
                                         <div className="card-body">
                                             <span className="border">
+                                                 <ThemeProvider theme={theme}>
                 <Paper sx={{width: '100%', overflow: 'hidden'}}>
                     <TableContainer sx={{minHeight: 440,maxWidth: 350}}>
                         <Table stickyHeader aria-label="sticky table">
@@ -339,6 +400,7 @@ export default function DataTable() {
                         onRowsPerPageChange={handleChangeRowsPerPageSinger}
                     />
                 </Paper>
+                                                     </ThemeProvider>
             </span>
 
 
