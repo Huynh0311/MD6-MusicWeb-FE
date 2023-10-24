@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Link, useLocation} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import "./BodySearch.css"
 import {
     searchListSongByName,
@@ -12,6 +12,8 @@ import {BsFillPlayFill, BsPauseFill} from "react-icons/bs";
 
 const BodySearch = () => {
     const location = useLocation();
+    const navigate = useNavigate();
+    const [account, setAccount] = useState(JSON.parse(localStorage.getItem("data")));
     const queryParams = new URLSearchParams(location.search);
     const searchInput = queryParams.get('q');
     const [selection, setSelection] = useState('song');
@@ -61,6 +63,10 @@ const BodySearch = () => {
     }
 
     function likeClick(id) {
+        if (!account) {
+            navigate("/login");
+            return;
+        }
         likeClickAPI(id).then(res => {
             setIsLike(!isLike)
         })
@@ -376,14 +382,16 @@ const BodySearch = () => {
                                     }
                                 </div>
                             </div>
-                            <div className="mt-5 text-center">
-                                <div className="btn btn-primary"
-                                     style={{marginBottom: "30px"}}>
-                                    <div className="btn__wrap"><i className="ri-loader-3-fill"></i> <span
-                                        onClick={loadMore}>Load more</span>
+                            {searchList && searchList.length > 4 ? (
+                                <div className="mt-5 text-center">
+                                    <div className="btn btn-primary"
+                                         style={{marginBottom: "30px"}}>
+                                        <div className="btn__wrap"><i className="ri-loader-3-fill"></i> <span
+                                            onClick={loadMore}>Load more</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            ) : null}
                         </div>
                     </div>
                 </main>

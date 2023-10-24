@@ -2,16 +2,17 @@ import React, {useContext, useEffect, useState} from 'react';
 import {AudioPlayerContext, useAudioPlayer} from "../../../redux/playern/ActionsUseContext/AudioPlayerProvider";
 import {getAllSongByIdDesc} from "../../api/songService/SongService";
 import {BsFillPlayFill, BsPauseFill} from "react-icons/bs";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {likeClickAPI} from "../../api/LikesService/LikesService";
 
 
 const NewSongList = () => {
+    const navigate = useNavigate();
     const [songs, setSongs] = useState([]);
     const {currentSong, updateCurrentSongAndSongs} = useAudioPlayer();
     const {isPlaying, handlePlayToggle} = useContext(AudioPlayerContext);
     const [isLike, setIsLike] = useState(false);
-
+    const [account, setAccount] = useState(JSON.parse(localStorage.getItem("data")));
     const [songsPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -45,6 +46,10 @@ const NewSongList = () => {
     };
 
     function likeClick(id) {
+        if (!account) {
+            navigate("/login");
+            return;
+        }
         likeClickAPI(id).then(res => {
             setIsLike(!isLike)
         })
