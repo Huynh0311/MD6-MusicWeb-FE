@@ -63,7 +63,7 @@ const ListSongFavorite = () => {
                         <div className="list list--order">
                             <div className="row">
                                 {listSong.map((song) => (
-                                    <div className="list__item" key={song.id} style={{width: "60%"}}>
+                                    <div className="list__item" key={song.id} style={{width: "99%"}}>
                                         <div className="list__cover">
                                             <img src={song.imgSong}
                                                                           alt="ảnh"/>

@@ -37,8 +37,8 @@ const RegisterComponent = () => {
         let errorMessage = '';
         if (!value) {
             errorMessage = 'Tên không được để trống';
-        } else if (!/^(?=.*[a-zA-Z])[a-zA-Z0-9\s]*$/.test(value)) {
-            errorMessage = 'Tên không được chứa kí tự đặc biệt và phải chứa ít nhất 1 chữ';
+        } else if (!/^[^\s].*[^\s]$/.test(value)) {
+            errorMessage = 'Không được có dấu cách ở đầu và cuối';
         }
         return errorMessage;
     };
@@ -86,7 +86,6 @@ const RegisterComponent = () => {
                             navigate('/login');
                             toast.success('Đăng kí thành công');
                         }).catch(error => {
-                            console.log(error)
                             if(error.response.status === 409){
                                 toast.error(error.response.data);
                             }else {

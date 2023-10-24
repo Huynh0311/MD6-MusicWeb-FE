@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography';
 import FormControl from "@mui/material/FormControl";
 import AxiosCustomize from "../api/utils/AxiosCustomize";
 import {toast} from "react-toastify";
+import {likeClickAPI} from "../api/LikesService/LikesService";
 
 
 export default function DetailPlaylist() {
@@ -21,6 +22,7 @@ export default function DetailPlaylist() {
     const [songs, setSongs] = useState([]);
     const [account, setAccount] = useState({});
     const {id} = useParams();
+    const [isLikePlaylist, setIsLikePlaylist] = useState(false);
     const [isLike, setIsLike] = useState(false);
     const {currentSong, updateCurrentSongAndSongs} = useAudioPlayer();
     const {
@@ -80,12 +82,12 @@ const [songDeleteId, setSongDeleteId] = useState()
             fetchPlaylistCount(id);
             fetchAccount(id);
         })
-    }, [isLike, currentSong, updateCurrentSongAndSongs])
+    }, [isLikePlaylist, currentSong, updateCurrentSongAndSongs])
 
     useEffect(() => {
         fetchSongs(id);
         setDeleteSong(false);
-    }, [deleteSong]);
+    }, [deleteSong, isLike]);
 
     const handleToggleSongPlay = (song1) => {
         const updateSongs = songs.map((song) => {
@@ -152,13 +154,23 @@ const [songDeleteId, setSongDeleteId] = useState()
         }
     };
 
-    const likeClick = (id) => {
+    const likePlaylistClick = (id) => {
         if (!accountLogin) {
             navigate("/login");
             return;
         }
         playlistLikeClickAPI(id).then(res => {
-            setIsLike(res.data)
+            setIsLikePlaylist(res.data)
+        })
+    }
+
+    function likeClick(id) {
+        if (!accountLogin) {
+            navigate("/login");
+            return;
+        }
+        likeClickAPI(id).then(res => {
+            setIsLike(!isLike)
         })
     }
 
@@ -231,11 +243,11 @@ const [songDeleteId, setSongDeleteId] = useState()
                                                    color: "#ff0000",
                                                    fontSize: "24px"
                                                }}
-                                               onClick={() => likeClick(playlist.id)}>
+                                               onClick={() => likePlaylistClick(playlist.id)}>
                                             </i>
                                         ) : (
                                             <i className="ri-heart-line heart-empty"
-                                               onClick={() => likeClick(playlist.id)}
+                                               onClick={() => likePlaylistClick(playlist.id)}
                                             />
                                         )}
                                         <span className="ps-2 fw-medium">{playlist.likesQuantity}</span>
