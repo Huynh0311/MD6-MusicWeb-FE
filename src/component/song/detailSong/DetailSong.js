@@ -1,17 +1,20 @@
 import React, {useEffect, useState} from 'react';
 import {Link, useNavigate, useParams} from "react-router-dom";
-import {getAllSongByGenresIDAPI, getSongByID, playSong} from "../../api/songService/SongService";
+import {findAccountBySong, getAllSongByGenresIDAPI, getSongByID, playSong} from "../../api/songService/SongService";
 import {getSongLikeQuantityAPI, isLikedAPI, likeClickAPI} from "../../api/LikesService/LikesService";
 import {getAllCommentBySongIdAPI, sendCommentAPI} from "../../api/commentService/CommentService";
 import {AiOutlinePauseCircle, AiOutlinePlayCircle} from "react-icons/ai";
 import {AudioPlayerContext, useAudioPlayer} from "../../../redux/playern/ActionsUseContext/AudioPlayerProvider";
 import {useContext} from "react";
 import {BsFillPlayFill, BsPauseFill} from "react-icons/bs";
+import {WebSocketContext} from "../../WebSocketProvider";
+import {saveNotify} from "../../api/NotifyService/NotifyService";
 
 
 const DetailSong = () => {
     const navigate = useNavigate();
     const [account, setAccount] = useState(JSON.parse(localStorage.getItem("data")));
+    const [receiver, setReceiver] = useState({});
     const {currentSong, updateCurrentSongAndSongs} = useAudioPlayer();
     const {isPlaying, handlePlayToggle} = useContext(AudioPlayerContext);
     const [songs, setSongs] = useState([]);
@@ -30,10 +33,13 @@ const DetailSong = () => {
     const [allComments, setAllComments] = useState([]);
     const {id} = useParams();
     const [relatedSongs, setrelatedSongs] = useState([]);
+    const [status, setStatus] = useState(true);
+    localStorage.setItem("status", status)
     const [isPlay, setIsPlay] = useState(false);
     const [detailSong, setDetailSong] = useState({genres: {}});
     const [currentDetailSong, setCurrentDetailSong] = useState();
     const [relateSongIsPlaying, setRelateSongIsPlaying] = useState(false);
+    const {sendNotify} = useContext(WebSocketContext);
 
 
     useEffect(() => {
@@ -100,6 +106,7 @@ const DetailSong = () => {
             if (like.account.name != null || like.song.nameSong != null) {
                 isLikedAPI(like).then(res => {
                     setIsLiked(res.data)
+
                 })
             }
         }
@@ -108,7 +115,12 @@ const DetailSong = () => {
     useEffect(() => {
         checkLike();
     }, [like.account, like.song]);
-
+    useEffect(() => {
+        findAccountBySong(id).then(res => {
+            console.log(res.data)
+            setReceiver(res.data)
+        })
+    }, []);
 
     const getLikeQuantity = () => {
         getSongLikeQuantityAPI(id).then(res => {
@@ -140,6 +152,39 @@ const DetailSong = () => {
         likeClickAPI(id).then(res => {
             setIsLiked(res.data)
             getLikeQuantity();
+            if (isLiked ===0){
+                if (localStorage.getItem("status") === "true") {
+                    handleSendNotifyLike()
+                    setStatus(false)
+                    localStorage.setItem("status", `${status}`)
+                }
+            }
+        })
+    }
+    const handleSendNotifyLike = () => {
+        const data = {
+            sender: account,
+            receiver: {id: receiver.id},
+            message: `${account.name} đã thích 1 bài hát của bạn`,
+            navigate: '/song/detailSong/' + id
+        }
+        saveNotify(data).then(response => {
+            sendNotify(response.data);
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+    const handleSendNotifyComment = () => {
+        const data = {
+            sender: account,
+            receiver: {id: receiver.id},
+            message: `${account.name} đã bình luận 1 bài hát của bạn`,
+            navigate: '/song/detailSong/' + id
+        }
+        saveNotify(data).then(response => {
+            sendNotify(response.data);
+        }).catch(error => {
+            console.log(error)
         })
     }
 
@@ -189,6 +234,7 @@ const DetailSong = () => {
                 getAllCommentBySongID(id)
             })
             setComment('');
+            handleSendNotifyComment();
         }
 
     }
