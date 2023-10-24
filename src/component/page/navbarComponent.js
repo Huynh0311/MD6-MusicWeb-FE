@@ -39,7 +39,8 @@ const NavbarComponent = () => {
                         <ul className="navbar-nav">
                             <li className="nav-item nav-item-color">
                                 <Link to={"/"} className="nav-link d-flex align-items-center active"
-                                      onClick={event => handleNavbar('/')}>
+                                      onClick={event => handleNavbar('/')}
+                                    >
                                     <i className="ri-home-4-line fs-5"></i>
                                     <span className="ps-3">Trang chủ</span>
                                 </Link>
@@ -51,7 +52,8 @@ const NavbarComponent = () => {
                             <li className="nav-item nav-item-color">
                                 <Link to={'/listPlaylist'}
                                       className="nav-link d-flex align-items-center"
-                                      onClick={event => handleNavbar('/listPlaylist')}>
+                                      onClick={event => handleNavbar('/listPlaylist')}
+                                >
                                     <i className="ri-album-line fs-5"></i>
                                     <span className="ps-3">Danh sách phát</span>
                                 </Link>
@@ -76,7 +78,8 @@ const NavbarComponent = () => {
                                 <>
                                     <li className="nav-item nav-item-color">
                                         <Link to={"/favorite"} className="nav-link d-flex align-items-center"
-                                              onClick={event => handleNavbar('/favorite')}>
+                                              onClick={event => handleNavbar('/favorite')}
+                                        >
                                             <i className="ri-heart-line fs-5"></i>
                                             <span className="ps-3">Yêu thích</span>
 
@@ -85,7 +88,8 @@ const NavbarComponent = () => {
                                     <li className="nav-item nav-item-color">
                                         <Link to={"/song"}
                                               className="nav-link d-flex align-items-center"
-                                              onClick={event => handleNavbar('/song')}>
+                                              onClick={event => handleNavbar('/song')}
+                                        >
                                             <i className="fa-solid fa-list-music" style={{fontSize: "20px"}}></i>
                                             <span className="ps-3">Danh sách bài hát đã tạo</span>
                                         </Link>

@@ -14,9 +14,12 @@ const findPlaylistById = (id) => {
     return axios.get(`playlist/findOne/${id}`);
 }
 
+const getAllPlaylistWithLikeQuantity = () => {
+    return axios.get(`playlist/getAllWithLikeQuantity`);
+}
 
 
 
 export {
-   getAllPlaylist,findPlaylistById
+   getAllPlaylist,findPlaylistById,getAllPlaylistWithLikeQuantity,getAllPlaylistById
 }

@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Link, useNavigate} from "react-router-dom";
 import "./ListSong.css"
 import Tooltip from '@mui/material/Tooltip';
+import {linkClasses} from "@mui/material";
 
 
 const ListSong = () => {
@@ -22,12 +23,7 @@ const ListSong = () => {
     }
 
     const EditFunction = (id) => {
-        navigate("/song/edit/" +id);
-    }
-
-    const DetailFunction = (id) => {
-        navigate("/song/detailSong/" +id);
-        navigate(0);
+        navigate("/song/edit/" + id);
     }
 
     const RemoveFunction = (id) => {
@@ -112,9 +108,7 @@ const ListSong = () => {
                                             </Tooltip>
 
                                             <Tooltip title="Thông tin" placement="top-end">
-                                                <a onClick={() => {
-                                                    DetailFunction(item.id)
-                                                }} className="fa-duotone fa-circle-info  custom-button"></a>
+                                                <Link to={"/song/detailSong/" + item.id} className="fa-duotone fa-circle-info  custom-button"></Link>
                                             </Tooltip>
                                         </td>
 

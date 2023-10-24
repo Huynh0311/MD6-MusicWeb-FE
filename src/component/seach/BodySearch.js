@@ -121,7 +121,8 @@ const BodySearch = () => {
                                 )}
 
                             </span>
-                                <div><select id="select-option" className="form-select" aria-label="Filter song"
+                                <div>
+                                    <select id="select-option" className="form-select" aria-label="Filter song"
                                              onChange={(e) => handleSelectFindSelection(e)}>
                                     <option key={1} value="song">Tìm theo tên bài hát</option>
                                     <option key={2} value="singer">Tìm theo tên ca sỹ</option>
