@@ -6,6 +6,7 @@ import {
     isSongOwnedByLoggedInAccount,
     playSong, removeCommentInASongByCommentID
 } from "../../api/songService/SongService";
+import {findAccountBySong} from "../../api/songService/SongService";
 import {getSongLikeQuantityAPI, isLikedAPI, likeClickAPI} from "../../api/LikesService/LikesService";
 import {getAllCommentBySongIdAPI, sendCommentAPI} from "../../api/commentService/CommentService";
 import {AiOutlinePauseCircle, AiOutlinePlayCircle} from "react-icons/ai";
@@ -14,13 +15,16 @@ import {useContext} from "react";
 import {BsFillPlayFill, BsPauseFill} from "react-icons/bs";
 import {ImCross} from "react-icons/im";
 import {toast} from "react-toastify";
+import {WebSocketContext} from "../../WebSocketProvider";
+import {saveNotify} from "../../api/NotifyService/NotifyService";
 
 
 const DetailSong = () => {
     const navigate = useNavigate();
     const [account, setAccount] = useState(JSON.parse(localStorage.getItem("data")));
+    const [receiver, setReceiver] = useState({});
     const {currentSong, updateCurrentSongAndSongs} = useAudioPlayer();
-    const {isPlaying, handlePlayToggle} = useContext(AudioPlayerContext);
+    const {isPlaying, handlePlayToggle,updateAllCurrentComments,allCurrentComments} = useContext(AudioPlayerContext);
     const [songs, setSongs] = useState([]);
     const [currentSongDT, setCurrentSongDT] = useState({
         genres: {}
@@ -37,10 +41,14 @@ const DetailSong = () => {
     const [allComments, setAllComments] = useState([]);
     const {id} = useParams();
     const [relatedSongs, setrelatedSongs] = useState([]);
+    const [status, setStatus] = useState(true);
+    localStorage.setItem("status", status)
     const [isPlay, setIsPlay] = useState(false);
     const [detailSong, setDetailSong] = useState({genres: {}});
     const [currentDetailSong, setCurrentDetailSong] = useState();
     const [relateSongIsPlaying, setRelateSongIsPlaying] = useState(false);
+    const {sendNotify} = useContext(WebSocketContext);
+
     const [ownedSong,setOwnedSong] = useState(false);
     const [removedComment,setRemovedComment] = useState(false);
 
@@ -68,9 +76,8 @@ const DetailSong = () => {
         getLikeQuantity();
         getAllCommentBySongID(id)
         getAllSongByGenres();
-        isSongOwnedByLoggedInAccount(id).then(res=>setOwnedSong(res.data))
-    }, [isPlaying, currentDetailSong, updateCurrentSongAndSongs,removedComment])
-
+        isSongOwnedByLoggedInAccount(id).then(res=>setOwnedSong(res.data));
+    }, [isPlaying, currentDetailSong, updateCurrentSongAndSongs,removedComment,allCurrentComments])
 
     const handleDetailSongClick = (song) => {
         setRelateSongIsPlaying(false);
@@ -109,6 +116,7 @@ const DetailSong = () => {
             if (like.account.name != null || like.song.nameSong != null) {
                 isLikedAPI(like).then(res => {
                     setIsLiked(res.data)
+
                 })
             }
         }
@@ -117,6 +125,13 @@ const DetailSong = () => {
     useEffect(() => {
         checkLike();
     }, [like.account, like.song]);
+
+    useEffect(() => {
+        findAccountBySong(id).then(res => {
+            console.log(res.data)
+            setReceiver(res.data)
+        })
+    }, []);
 
     const getLikeQuantity = () => {
         getSongLikeQuantityAPI(id).then(res => {
@@ -148,6 +163,39 @@ const DetailSong = () => {
         likeClickAPI(id).then(res => {
             setIsLiked(res.data)
             getLikeQuantity();
+            if (isLiked ===0){
+                if (localStorage.getItem("status") === "true") {
+                    handleSendNotifyLike()
+                    setStatus(false)
+                    localStorage.setItem("status", `${status}`)
+                }
+            }
+        })
+    }
+    const handleSendNotifyLike = () => {
+        const data = {
+            sender: account,
+            receiver: {id: receiver.id},
+            message: `${account.name} đã thích 1 bài hát của bạn`,
+            navigate: '/song/detailSong/' + id
+        }
+        saveNotify(data).then(response => {
+            sendNotify(response.data);
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+    const handleSendNotifyComment = () => {
+        const data = {
+            sender: account,
+            receiver: {id: receiver.id},
+            message: `${account.name} đã bình luận 1 bài hát của bạn`,
+            navigate: '/song/detailSong/' + id
+        }
+        saveNotify(data).then(response => {
+            sendNotify(response.data);
+        }).catch(error => {
+            console.log(error)
         })
     }
 
@@ -197,12 +245,13 @@ const DetailSong = () => {
                 getAllCommentBySongID(id)
             })
             setComment('');
+            handleSendNotifyComment();
         }
 
     }
 
     const getAllCommentBySongID = (id) => {
-        getAllCommentBySongIdAPI(id).then(res => setAllComments(res.data))
+        getAllCommentBySongIdAPI(id).then(res => updateAllCurrentComments(res.data))
     }
 
 
@@ -456,7 +505,7 @@ const DetailSong = () => {
                                             </button>
                                         </div>
                                     </form>
-                                    {allComments.map((cm) => {
+                                    {allCurrentComments.map((cm) => {
                                         return (
                                             <div className="avatar avatar--lg align-items-start" key={cm.id}>
                                                 <div className="avatar__image"><img src={cm.account.img} alt="user"/>
