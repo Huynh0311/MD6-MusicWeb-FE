@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Link, useLocation} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import "./BodySearch.css"
 import {
     searchListSongByName,
@@ -12,6 +12,8 @@ import {BsFillPlayFill, BsPauseFill} from "react-icons/bs";
 
 const BodySearch = () => {
     const location = useLocation();
+    const navigate = useNavigate();
+    const [account, setAccount] = useState(JSON.parse(localStorage.getItem("data")));
     const queryParams = new URLSearchParams(location.search);
     const searchInput = queryParams.get('q');
     const [selection, setSelection] = useState('song');
@@ -61,6 +63,10 @@ const BodySearch = () => {
     }
 
     function likeClick(id) {
+        if (!account) {
+            navigate("/login");
+            return;
+        }
         likeClickAPI(id).then(res => {
             setIsLike(!isLike)
         })
@@ -123,11 +129,11 @@ const BodySearch = () => {
                             </span>
                                 <div>
                                     <select id="select-option" className="form-select" aria-label="Filter song"
-                                             onChange={(e) => handleSelectFindSelection(e)}>
-                                    <option key={1} value="song">Tìm theo tên bài hát</option>
-                                    <option key={2} value="singer">Tìm theo tên ca sỹ</option>
-                                    <option key={3} value="playlist">Tìm theo tên playlist</option>
-                                </select></div>
+                                            onChange={(e) => handleSelectFindSelection(e)}>
+                                        <option key={1} value="song">Tìm theo tên bài hát</option>
+                                        <option key={2} value="singer">Tìm theo tên ca sỹ</option>
+                                        <option key={3} value="playlist">Tìm theo tên playlist</option>
+                                    </select></div>
                             </div>
                             <div className="list">
                                 <div className="row">
@@ -291,7 +297,8 @@ const BodySearch = () => {
                                                                     </div>
                                                                     <div className="list__content">
                                                                         <Link to={`/song/detailSong/${song?.id}`}
-                                                                              className="list__title text-truncate" title={`isPlaying: ${JSON.stringify(songList[0].isPlaying)}`}>
+                                                                              className="list__title text-truncate"
+                                                                              title={`isPlaying: ${JSON.stringify(songList[0].isPlaying)}`}>
                                                                             {song?.nameSong} - {song.isPlaying}
                                                                         </Link>
                                                                         <p className="list__subtitle text-truncate">
@@ -375,14 +382,16 @@ const BodySearch = () => {
                                     }
                                 </div>
                             </div>
-                            <div className="mt-5 text-center">
-                                <div className="btn btn-primary"
-                                     style={{marginBottom: "30px"}}>
-                                    <div className="btn__wrap"><i className="ri-loader-3-fill"></i> <span
-                                        onClick={loadMore}>Load more</span>
+                            {searchList && searchList.length > 4 ? (
+                                <div className="mt-5 text-center">
+                                    <div className="btn btn-primary"
+                                         style={{marginBottom: "30px"}}>
+                                        <div className="btn__wrap"><i className="ri-loader-3-fill"></i> <span
+                                            onClick={loadMore}>Load more</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            ) : null}
                         </div>
                     </div>
                 </main>
