@@ -260,12 +260,7 @@ const BodySearch = () => {
                                                     <div className="song-component">
                                                         {songList.map((song) => (
                                                             <div className="col-xl-6" key={song.id}>
-                                                                <div className="list__item" data-song-id={song.id}
-                                                                     data-song-name={song?.nameSong}
-                                                                     data-song-artist={song?.nameSinger}
-                                                                     data-song-album="Mummy"
-                                                                     data-song-url={song?.pathSong}
-                                                                     data-song-cover={song?.imgSong}
+                                                                <div className="list__item"
                                                                      style={{width: "200%"}}>
                                                                     <div className="list__cover"><img
                                                                         src={song?.imgSong}
@@ -299,7 +294,7 @@ const BodySearch = () => {
                                                                         <Link to={`/song/detailSong/${song?.id}`}
                                                                               className="list__title text-truncate"
                                                                               title={`isPlaying: ${JSON.stringify(songList[0].isPlaying)}`}>
-                                                                            {song?.nameSong} - {song.isPlaying}
+                                                                            {song?.nameSong}
                                                                         </Link>
                                                                         <p className="list__subtitle text-truncate">
                                                                             {song.nameSinger}

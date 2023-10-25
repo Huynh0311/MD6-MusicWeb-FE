@@ -63,7 +63,7 @@ const ListSongFavorite = () => {
                         <div className="list list--order">
                             <div className="row">
                                 {listSong.map((song) => (
-                                    <div className="list__item" key={song.id}>
+                                    <div className="list__item" key={song.id} style={{width: "99%"}}>
                                         <div className="list__cover">
                                             <img src={song.imgSong}
                                                                           alt="ảnh"/>
@@ -125,20 +125,10 @@ const ListSongFavorite = () => {
                                                 </div>
                                                 <ul className="dropdown-menu dropdown-menu-sm">
                                                     <li><div className="dropdown-item"
-                                                           role="button"
-                                                           data-playlist-id="1">Add to playlist</div></li>
-                                                    <li><div className="dropdown-item"
-                                                           role="button"
-                                                           data-queue-id="1">Add to queue</div></li>
-                                                    <li><div className="dropdown-item"
-                                                           role="button"
-                                                           data-next-id="1">Next to play</div></li>
-                                                    <li><div className="dropdown-item"
-                                                           role="button">Share</div></li>
+                                                           role="button">Thêm vào danh sách phát</div></li>
                                                     <li className="dropdown-divider"></li>
                                                     <li><div className="dropdown-item"
-                                                           role="button"
-                                                           data-play-id="1">Play</div></li>
+                                                           role="button">Phát</div></li>
                                                 </ul>
                                             </li>
                                         </ul>

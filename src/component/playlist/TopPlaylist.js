@@ -8,7 +8,6 @@ export default function TopPlaylist(){
     const [playlistCounts, setPlaylistCounts] = useState(0);
     useEffect(() => {
         getAllPlaylist().then(res => {
-            console.log(res.data)
             setListPlaylist(res.data)
             fetchPlaylistCounts(res.data);
         })
@@ -43,7 +42,7 @@ export default function TopPlaylist(){
                                 <div className="cover cover--round">
                                     <div className="cover__image">
                                         <Link to={`/detailPlaylist/${item.id}`}>
-                                            <img src={item.playlistImg} alt="DJ Remix" />
+                                            <img src={item.playlistImg} alt="" />
                                         </Link>
                                         <div className="cover__image__content">
                                             <Link to={`/detailPlaylist/${item.id}`} className="cover__title mb-1 fs-6 text-truncate">{item.namePlaylist}</Link>

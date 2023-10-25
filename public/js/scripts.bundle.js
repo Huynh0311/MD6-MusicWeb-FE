@@ -464,7 +464,7 @@ $(document).ready(function () {
                     o = a.body,
                     s = "skin",
                     d = "setting",
-                    p = "Theme Settings",
+                    p = "Giao diện",
                     u = ["yellow", "orange", "red", "green", "blue", "purple", "indigo", "dark"],
                     c = ["light", "dark"],
                     g = "data-theme",

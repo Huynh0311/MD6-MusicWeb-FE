@@ -18,6 +18,7 @@ import FormControl from '@mui/material/FormControl';
 import Select, {SelectChangeEvent} from '@mui/material/Select';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import {toast} from "react-toastify";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -47,13 +48,10 @@ function SongList() {
     const {currentSong, updateCurrentSongAndSongs} = useAudioPlayer();
     const {isPlaying, handlePlayToggle} = useContext(AudioPlayerContext);
     const [open, setOpen] = React.useState(false);
-    const [openSnackbar, setOpenSnackbar] = React.useState(false);
+    // const [openSnackbar, setOpenSnackbar] = React.useState(false);
     const handleOpen = async (id) => {
-        console.log(1)
         try {
-            console.log('handleOpen', id);
             const response = await AxiosCustomize.get('/playlist/findByAccountId/' + accountLogin.id);
-            console.log('response.data', response.data)
             setSelectedSongId(id);
             setPlaylist(response.data);
             setOpen(true)
@@ -74,28 +72,28 @@ function SongList() {
         try {
             let playlistSong = {playlist: {id: selectedPlaylist}, song: {id: selectedSongId}}
             const response = await AxiosCustomize.post('/playlist/saveToPlaylist', playlistSong);
-
+            toast.success('Thêm vào danh sách phát thành công');
         } catch (error) {
             console.error('Lỗi khi lấy danh sách bài hát:', error);
         }
         // Lưu xong thì đóng modal
         handleClose();
         // Đóng modal xong thì hiển thị thông báo thêm playlist thành công
-        setOpenSnackbar(true);
+        // setOpenSnackbar(true);
     };
 
-    const handleCloseSnackbar = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-
-        setOpenSnackbar(false);
-    };
+    // const handleCloseSnackbar = (event, reason) => {
+    //     if (reason === 'clickaway') {
+    //         return;
+    //     }
+    //
+    //     setOpenSnackbar(false);
+    // };
 
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await AxiosCustomize.get('/songs/getall');
+                const response = await AxiosCustomize.get('/songs/getLimitSong');
                 const songs = response.data.map((song) => ({
                     ...song,
                     isPlaying: currentSong && currentSong.id === song.id ? isPlaying : false,
@@ -159,38 +157,14 @@ function SongList() {
                                                 <i className="ri-more-2-fill"></i>
                                             </div>
                                             <ul className="dropdown-menu dropdown-menu-sm">
-                                                {/*<li>*/}
-                                                {/*    <div className="dropdown-item"*/}
-                                                {/*         role="button"*/}
-                                                {/*         >Favorite*/}
-                                                {/*    </div>*/}
-                                                {/*</li>*/}
                                                 <li>
                                                     <div className="dropdown-item"
                                                          role="button"
                                                          data-playlist-id="1" onClick={() => {
                                                         handleOpen(song.id)
-                                                    }}>Add to playlist
+                                                    }}>Thêm vào danh sách phát
                                                     </div>
                                                 </li>
-                                                {/*<li>*/}
-                                                {/*    <p className="dropdown-item"*/}
-                                                {/*       role="button"*/}
-                                                {/*        // data-queue-id="1"*/}
-                                                {/*       onClick={() => addToQueue(song)}*/}
-                                                {/*    >Add to queue</p>*/}
-                                                {/*</li>*/}
-                                                {/*<li>*/}
-                                                {/*    <div className="dropdown-item"*/}
-                                                {/*         role="button"*/}
-                                                {/*         data-next-id="1">Next to play*/}
-                                                {/*    </div>*/}
-                                                {/*</li>*/}
-                                                {/*<li>*/}
-                                                {/*    <div className="dropdown-item"*/}
-                                                {/*         role="button">Share*/}
-                                                {/*    </div>*/}
-                                                {/*</li>*/}
                                                 <li className="dropdown-divider"></li>
                                                 <li>
                                                     <div className="dropdown-item"
@@ -199,7 +173,7 @@ function SongList() {
                                                              handleToggleSongPlay(song.id);
                                                              updateCurrentSongAndSongs(song, songs);
                                                          }}
-                                                    >Play
+                                                    >Phát
                                                     </div>
                                                 </li>
                                             </ul>
@@ -236,7 +210,7 @@ function SongList() {
                                                 {song.nameSong}
                                             </p>
                                             <p className="cover__subtitle text-truncate">
-                                                {song.description}
+                                                {song.nameSinger}
                                             </p>
                                         </div>
                                     </Link>
@@ -289,13 +263,6 @@ function SongList() {
                     </div>
                 </Box>
             </Modal>
-            <Snackbar
-                anchorOrigin={{vertical: 'bottom', horizontal: 'right'}} open={openSnackbar} autoHideDuration={6000}
-                onClose={handleCloseSnackbar}>
-                <Alert onClose={handleCloseSnackbar} severity="success" sx={{width: '100%'}}>
-                    Thêm vào playlist thành công
-                </Alert>
-            </Snackbar>
         </>
     );
 }
