@@ -24,7 +24,7 @@ const DetailSong = () => {
     const [account, setAccount] = useState(JSON.parse(localStorage.getItem("data")));
     const [receiver, setReceiver] = useState({});
     const {currentSong, updateCurrentSongAndSongs} = useAudioPlayer();
-    const {isPlaying, handlePlayToggle,updateAllCurrentComments,allCurrentComments} = useContext(AudioPlayerContext);
+    const {isPlaying, handlePlayToggle, updateAllCurrentComments, allCurrentComments} = useContext(AudioPlayerContext);
     const [songs, setSongs] = useState([]);
     const [currentSongDT, setCurrentSongDT] = useState({
         genres: {}
@@ -49,8 +49,8 @@ const DetailSong = () => {
     const [relateSongIsPlaying, setRelateSongIsPlaying] = useState(false);
     const {sendNotify} = useContext(WebSocketContext);
 
-    const [ownedSong,setOwnedSong] = useState(false);
-    const [removedComment,setRemovedComment] = useState(false);
+    const [ownedSong, setOwnedSong] = useState(false);
+    const [removedComment, setRemovedComment] = useState(false);
 
     useEffect(() => {
         getSongByID(id)
@@ -76,8 +76,8 @@ const DetailSong = () => {
         getLikeQuantity();
         getAllCommentBySongID(id)
         getAllSongByGenres();
-        isSongOwnedByLoggedInAccount(id).then(res=>setOwnedSong(res.data));
-    }, [isPlaying, currentDetailSong, updateCurrentSongAndSongs,removedComment,allCurrentComments])
+        isSongOwnedByLoggedInAccount(id).then(res => setOwnedSong(res.data));
+    }, [isPlaying, currentDetailSong, updateCurrentSongAndSongs, removedComment, allCurrentComments])
 
     const handleDetailSongClick = (song) => {
         setRelateSongIsPlaying(false);
@@ -128,7 +128,6 @@ const DetailSong = () => {
 
     useEffect(() => {
         findAccountBySong(id).then(res => {
-            console.log(res.data)
             setReceiver(res.data)
         })
     }, []);
@@ -163,7 +162,7 @@ const DetailSong = () => {
         likeClickAPI(id).then(res => {
             setIsLiked(res.data)
             getLikeQuantity();
-            if (isLiked ===0){
+            if (isLiked === 0) {
                 if (localStorage.getItem("status") === "true") {
                     handleSendNotifyLike()
                     setStatus(false)
@@ -308,13 +307,14 @@ const DetailSong = () => {
                                         </li>
                                     </ul>
                                     <div className="mb-4"><p className="mb-2">Người đăng: <span
-                                        className="text-dark fw-medium">{currentSongDT.accountName}</span></p>
+                                        className="text-dark fw-medium">{currentSongDT.accountName}</span>
+                                        {currentSongDT.auth === true &&
+                                            <i className="fa-sharp fa-solid fa-circle-check"
+                                               style={{color: "#005eff", marginLeft: "5px"}}></i>
+                                        }
+                                    </p>
                                         <p className="mb-2">Ca sỹ: <span className="text-dark fw-medium">
                                            {currentSongDT && currentSongDT.nameSinger}
-                                            {currentSongDT.auth === true &&
-                                                <i className="fa-sharp fa-solid fa-circle-check"
-                                                   style={{color: "#005eff", marginLeft: "5px"}}></i>
-                                            }
                                         </span>
                                         </p>
                                     </div>
@@ -483,15 +483,19 @@ const DetailSong = () => {
                                                 <div className="avatar__image"><img src={cm.account.img} alt="user"/>
                                                 </div>
                                                 <div className="avatar__content">
-                                                    <div style={{display:"flex"}}>
-                                                    <span className="avatar__title mb-1">{cm.account.name}</span>
+                                                    <div style={{display: "flex"}}>
+                                                        <span className="avatar__title mb-1">{cm.account.name}</span>
                                                         {ownedSong && ownedSong ? (
-                                                            <span style={{marginLeft:"10px",cursor:"pointer",color:"red"}}><ImCross onClick={()=>{
-                                                                removeCommentInASongByCommentID(id,cm.id).then(res=>
-                                                                    setRemovedComment(!removedComment),
+                                                            <span style={{
+                                                                marginLeft: "10px",
+                                                                cursor: "pointer",
+                                                                color: "red"
+                                                            }}><ImCross onClick={() => {
+                                                                removeCommentInASongByCommentID(id, cm.id).then(res =>
+                                                                        setRemovedComment(!removedComment),
                                                                     toast.success("Xóa bình luận thành công"))
                                                             }}></ImCross></span>
-                                                        ): ('')
+                                                        ) : ('')
                                                         }
                                                     </div>
                                                     <span className="avatar__subtitle mb-2">{cm.timeComment}</span>

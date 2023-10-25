@@ -23,8 +23,7 @@ import ListPlaylist from "./component/playlist/ListPlaylist";
 import ListSongFavorite from "./component/song/listSong/ListSongFavorite";
 import {useSelector} from "react-redux";
 import DataTable from "./component/admin/Management";
-
-
+import NewSongList from "./component/song/listSong/NewSongList";
 
 
 function App() {
@@ -48,9 +47,10 @@ function App() {
                     <Route path="/login" element={<LoginComponent/>}/>
                     <Route path={'/favorite'} element={<ListSongFavorite/>}></Route>
                     <Route path='/song' element={<ListSong/>}></Route>
-                    <Route path={"/song/edit/:songid"} element={<EditSong />}></Route>
+                    <Route path={"/song/edit/:songid"} element={<EditSong/>}></Route>
                     <Route path='/song/search' element={<BodySearch/>}></Route>
-                    <Route path="/admin" element={<DataTable />}></Route>
+                    <Route path="/admin" element={<DataTable/>}></Route>
+                    <Route path='/song/newSongList' element={<NewSongList/>}></Route>
                 </Route>
                 <Route path={'*'} element={<Component404/>}></Route>
             </Routes>

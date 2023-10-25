@@ -3,6 +3,7 @@ import SongList from "../player/SongList";
 import TopSong from "../player/TopSong";
 import accountService from "../api/AccountService/AccountService";
 import TopPlaylist from "../playlist/TopPlaylist";
+import {Link} from "react-router-dom";
 
 
 const HomeComponent = () => {
@@ -24,8 +25,12 @@ const HomeComponent = () => {
                             <div className="section__head">
                                 <div className="flex-grow-1"><span
                                     className="section__subtitle"></span>
-                                    <h3 className="mb-0"><span className="text-primary">Mới phát hành</span></h3></div>
-                               </div>
+                                    <h3 className="mb-0">Mới <span className="text-primary">phát hành</span></h3>
+                                </div>
+                                <Link to={"/song/newSongList"}>
+                                <p  className="btn btn-link">Xem toàn bộ</p>
+                                </Link>
+                            </div>
                             <div className="swiper-carousel swiper-carousel-button"
                                  style={{display: 'flex', flexWrap: 'nowrap'}}>
                                 <SongList/>

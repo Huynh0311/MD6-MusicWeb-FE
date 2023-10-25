@@ -49,6 +49,10 @@ const removeCommentInASongByCommentID = (idSong,idComment) => {
     return axios.post(`songs/removeComment/${idSong}/${idComment}`)
 }
 
+const getAllSongByIdDesc = () => {
+    return axios.get(`/songs/getAllDesc`)
+}
+
 export {
     findAccountBySong,
     addSongSV,
@@ -61,5 +65,6 @@ export {
     searchListSongByNameSinger,
     searchListSongByNamePlaylist,
     isSongOwnedByLoggedInAccount,
-    removeCommentInASongByCommentID
+    removeCommentInASongByCommentID,
+    getAllSongByIdDesc
 }

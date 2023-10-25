@@ -50,3 +50,7 @@
     height: 20px;
 }
 
+.notify-hover:hover{
+    background-color: #ebeffd;
+}
+

@@ -93,7 +93,7 @@ function SongList() {
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await AxiosCustomize.get('/songs/getall');
+                const response = await AxiosCustomize.get('/songs/getLimitSong');
                 const songs = response.data.map((song) => ({
                     ...song,
                     isPlaying: currentSong && currentSong.id === song.id ? isPlaying : false,
@@ -135,6 +135,7 @@ function SongList() {
         setSongs(updateSongs);
         handlePlayToggle(updateSongs.some((song) => song.isPlaying));
     };
+
 
     return (
         <>
@@ -225,7 +226,6 @@ function SongList() {
                             className={`pagination-button ${currentPage === index + 1 ? 'active' : ''}`}
                             onClick={() => handlePageChange(index + 1)}
                         >
-
                         </button>
                     ))}
                 </div>

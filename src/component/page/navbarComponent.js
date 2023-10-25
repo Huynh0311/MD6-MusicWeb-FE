@@ -40,24 +40,26 @@ const NavbarComponent = () => {
                             <li className="nav-item nav-item-color">
                                 <Link to={"/"} className="nav-link d-flex align-items-center active"
                                       onClick={event => handleNavbar('/')}
-                                    >
+                                >
                                     <i className="ri-home-4-line fs-5"></i>
                                     <span className="ps-3">Trang chủ</span>
+                                </Link>
+                            </li>
+                            <li className="nav-item nav-item-color"><a href="analytics.html"
+                                                                       className="nav-link d-flex align-items-center"><i
+                                className="ri-pie-chart-line fs-5"></i> <span className="ps-3">Thịnh hành</span></a>
+                            </li>
+                            <li className="nav-item nav-item-color">
+                                <Link to={"/song/newSongList"} className="nav-link d-flex align-items-center"
+                                      onClick={event => handleNavbar('/song/newSongList')}>
+                                    <i className="ri-music-2-line"></i>
+                                    <span className="ps-3">Bài hát mới</span>
                                 </Link>
                             </li>
                             <li className="nav-item nav-item-color"><a href="genres.html"
                                                                        className="nav-link d-flex align-items-center"><i
                                 className="ri-disc-line fs-5"></i> <span className="ps-3">Thể loại</span></a></li>
 
-                            <li className="nav-item nav-item-color">
-                                <Link to={'/listPlaylist'}
-                                      className="nav-link d-flex align-items-center"
-                                      onClick={event => handleNavbar('/listPlaylist')}
-                                >
-                                    <i className="ri-album-line fs-5"></i>
-                                    <span className="ps-3">Danh sách phát</span>
-                                </Link>
-                            </li>
 
                             <li className="nav-item nav-item-color"><a href="artists.html"
                                                                        className="nav-link d-flex align-items-center"><i
@@ -65,17 +67,17 @@ const NavbarComponent = () => {
                             <li className="nav-item nav-item-color nav-item nav-item-color--head"><span
                                 className="nav-item nav-item-color--head__text"
                                 style={{marginLeft: "5px"}}>Bài hát</span></li>
-                            <li className="nav-item nav-item-color"><a href="analytics.html"
-                                                                       className="nav-link d-flex align-items-center"><i
-                                className="ri-pie-chart-line fs-5"></i> <span className="ps-3">Thịnh hành</span></a>
-                            </li>
-                            <li className="nav-item nav-item-color"><a href="analytics.html"
-                                                                       className="nav-link d-flex align-items-center">
-                                <i className="ri-music-2-line"></i>
-                                <span className="ps-3">Bài hát mới</span></a>
-                            </li>
                             {loggedIn ? (
                                 <>
+                                    <li className="nav-item nav-item-color">
+                                        <Link to={'/listPlaylist'}
+                                              className="nav-link d-flex align-items-center"
+                                              onClick={event => handleNavbar('/listPlaylist')}
+                                        >
+                                            <i className="ri-album-line fs-5"></i>
+                                            <span className="ps-3">Danh sách phát</span>
+                                        </Link>
+                                    </li>
                                     <li className="nav-item nav-item-color">
                                         <Link to={"/favorite"} className="nav-link d-flex align-items-center"
                                               onClick={event => handleNavbar('/favorite')}
@@ -111,20 +113,19 @@ const NavbarComponent = () => {
                         </ul>
                     </nav>
                 </div>
-                {
-                    loggedIn ? (
-                        <div className="sidebar-foot">
-                            <Link to={"/song/create"}>
-                                <div className="btn btn-primary d-flex">
-                                    <div className="btn__wrap"><i className="ri-music-fill"></i>
-                                        <span>Tạo bài hát</span></div>
+                {loggedIn ? (
+                    <div className="sidebar-foot">
+                        <Link to={"/song/create"}>
+                            <div className="btn btn-primary d-flex">
+                                <div className="btn__wrap"><i className="ri-music-fill"></i> <span>Tạo bài hát</span>
                                 </div>
-                            </Link>
-                        </div>
+                            </div>
+                        </Link>
+                    </div>
 
-                    ) : (
-                        <></>
-                    )
+                ) : (
+                    <></>
+                )
                 }
             </aside>
         </div>

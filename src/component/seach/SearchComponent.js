@@ -81,7 +81,12 @@ const SearchComponent = () => {
                             />
                             </form>
                             <div className="nav-item dropdown">
-                                <button className="nav-link dropdown-toggle" data-bs-toggle="dropdown"
+                                {!_.isEmpty(accountLogin) ? (
+                                <button className="nav-link dropdown-toggle" data-bs-toggle="dropdown" style={{
+                                    border: "none",
+                                    background: "none",
+                                    color: "white"
+                                }}
                                         onClick={handleChangeStatusNotify}>
                                     <i className="fa-sharp fa-solid fa-bell"></i>
                                     {unreadNotify ?
@@ -93,9 +98,10 @@ const SearchComponent = () => {
                                         null
                                     }
                                 </button>
+                                ) : null}
                                 <div className="dropdown-menu dropdown-notify">
                                     {!_.isEmpty(notifyList) && notifyList.map(item => (
-                                        <Link to={`${item.navigate}`} className="d-flex align-items-center py-2 px-3 dropdown-notify-item"
+                                        <Link to={`${item.navigate}`} className="d-flex align-items-center py-2 px-3 dropdown-notify-item notify-hover"
                                               key={item.id}>
                                             <img className="img-thumbnail rounded-circle"
                                                  src={item.sender.img ? item.sender.img : "https://img.lovepik.com/original_origin_pic/17/11/27/0f0628268c4abd9497d6b44f781c2d76.png_wh860.png"}
