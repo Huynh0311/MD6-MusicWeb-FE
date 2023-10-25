@@ -36,7 +36,6 @@ const WebSocketProvider = ({children}) => {
 
     const onNotifyReceived = (payload) => {
         const data = JSON.parse(payload.body);
-        console.log(data)
         if (data.message === 'Thay đổi trạng thái'){
             dispatch(changeStatus());
         } else {

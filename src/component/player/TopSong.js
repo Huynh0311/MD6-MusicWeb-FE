@@ -9,6 +9,9 @@ import {BsFillPlayFill, BsPauseFill} from "react-icons/bs";
 import {Link, useNavigate} from "react-router-dom";
 import AxiosCustomize from "../api/utils/AxiosCustomize";
 import {likeClickAPI} from "../api/LikesService/LikesService";
+import {saveNotify} from "../api/NotifyService/NotifyService";
+import {WebSocketContext} from "../WebSocketProvider";
+import {findAccountBySong} from "../api/songService/SongService";
 
 function Top5Songs() {
     const {currentSong, updateCurrentSongAndSongs} = useAudioPlayer();
@@ -16,6 +19,7 @@ function Top5Songs() {
     const [songs, setSongs] = useState([]);
     const [isLike, setIsLike] = useState(false);
     const [account, setAccount] = useState(JSON.parse(localStorage.getItem("data")));
+    const {sendNotify} = useContext(WebSocketContext);
     const navigate = useNavigate();
     useEffect(() => {
         async function fetchData() {
@@ -54,8 +58,27 @@ function Top5Songs() {
         }
         likeClickAPI(id).then(res => {
             setIsLike(!isLike)
+            if (isLike === true){
+                    findAccountBySong(id).then(res => {
+                        handleSendNotifyLike(res.data, id)
+                    })
+            }
         })
     }
+    const handleSendNotifyLike = (receiver, id) => {
+        const data = {
+            sender: account,
+            receiver: {id: receiver.id},
+            message: `${account.name} đã thích 1 bài hát của bạn`,
+            navigate: '/song/detailSong/' + id
+        }
+        saveNotify(data).then(response => {
+            sendNotify(response.data);
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+
 
 
     return (

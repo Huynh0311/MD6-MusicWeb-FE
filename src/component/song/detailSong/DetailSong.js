@@ -152,10 +152,9 @@ const DetailSong = () => {
         likeClickAPI(id).then(res => {
             setIsLiked(res.data)
             getLikeQuantity();
-            if (isLiked ===0){
+            if (isLiked === 0){
                 if (localStorage.getItem("status") === "true") {
                     handleSendNotifyLike()
-                    setStatus(false)
                     localStorage.setItem("status", `${status}`)
                 }
             }
@@ -170,6 +169,7 @@ const DetailSong = () => {
         }
         saveNotify(data).then(response => {
             sendNotify(response.data);
+            setStatus(false)
         }).catch(error => {
             console.log(error)
         })

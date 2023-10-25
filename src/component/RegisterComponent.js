@@ -54,13 +54,6 @@ const RegisterComponent = () => {
     };
 
 
-    // const validateConfirmPassword = (value, { values }) => {
-    //     let errorMessage = '';
-    //     if (value !== values.password) {
-    //         errorMessage = 'Mật khẩu xác nhận không khớp';
-    //     }
-    //     return errorMessage;
-    // };
     return (
         <div>
             <Formik initialValues={{
