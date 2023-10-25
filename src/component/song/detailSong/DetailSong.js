@@ -1,12 +1,20 @@
 import React, {useEffect, useState} from 'react';
 import {Link, useNavigate, useParams} from "react-router-dom";
-import {findAccountBySong, getAllSongByGenresIDAPI, getSongByID, playSong} from "../../api/songService/SongService";
+import {
+    getAllSongByGenresIDAPI,
+    getSongByID,
+    isSongOwnedByLoggedInAccount,
+    playSong, removeCommentInASongByCommentID
+} from "../../api/songService/SongService";
+import {findAccountBySong} from "../../api/songService/SongService";
 import {getSongLikeQuantityAPI, isLikedAPI, likeClickAPI} from "../../api/LikesService/LikesService";
 import {getAllCommentBySongIdAPI, sendCommentAPI} from "../../api/commentService/CommentService";
 import {AiOutlinePauseCircle, AiOutlinePlayCircle} from "react-icons/ai";
 import {AudioPlayerContext, useAudioPlayer} from "../../../redux/playern/ActionsUseContext/AudioPlayerProvider";
 import {useContext} from "react";
 import {BsFillPlayFill, BsPauseFill} from "react-icons/bs";
+import {ImCross} from "react-icons/im";
+import {toast} from "react-toastify";
 import {WebSocketContext} from "../../WebSocketProvider";
 import {saveNotify} from "../../api/NotifyService/NotifyService";
 
@@ -16,7 +24,7 @@ const DetailSong = () => {
     const [account, setAccount] = useState(JSON.parse(localStorage.getItem("data")));
     const [receiver, setReceiver] = useState({});
     const {currentSong, updateCurrentSongAndSongs} = useAudioPlayer();
-    const {isPlaying, handlePlayToggle} = useContext(AudioPlayerContext);
+    const {isPlaying, handlePlayToggle, updateAllCurrentComments, allCurrentComments} = useContext(AudioPlayerContext);
     const [songs, setSongs] = useState([]);
     const [currentSongDT, setCurrentSongDT] = useState({
         genres: {}
@@ -41,6 +49,8 @@ const DetailSong = () => {
     const [relateSongIsPlaying, setRelateSongIsPlaying] = useState(false);
     const {sendNotify} = useContext(WebSocketContext);
 
+    const [ownedSong, setOwnedSong] = useState(false);
+    const [removedComment, setRemovedComment] = useState(false);
 
     useEffect(() => {
         getSongByID(id)
@@ -66,8 +76,8 @@ const DetailSong = () => {
         getLikeQuantity();
         getAllCommentBySongID(id)
         getAllSongByGenres();
-
-    }, [isPlaying, currentDetailSong, updateCurrentSongAndSongs])
+        isSongOwnedByLoggedInAccount(id).then(res => setOwnedSong(res.data));
+    }, [isPlaying, currentDetailSong, updateCurrentSongAndSongs, removedComment, allCurrentComments])
 
     const handleDetailSongClick = (song) => {
         setRelateSongIsPlaying(false);
@@ -115,6 +125,7 @@ const DetailSong = () => {
     useEffect(() => {
         checkLike();
     }, [like.account, like.song]);
+
     useEffect(() => {
         findAccountBySong(id).then(res => {
             console.log(res.data)
@@ -152,10 +163,13 @@ const DetailSong = () => {
         likeClickAPI(id).then(res => {
             setIsLiked(res.data)
             getLikeQuantity();
-            if (isLiked === 0){
-                if (localStorage.getItem("status") === "true") {
-                    handleSendNotifyLike()
-                    localStorage.setItem("status", `${status}`)
+            if (account.id !== receiver.id) {
+                if (isLiked === 0) {
+                    if (localStorage.getItem("status") === "true") {
+                        handleSendNotifyLike()
+                        setStatus(false)
+                        localStorage.setItem("status", `${status}`)
+                    }
                 }
             }
         })
@@ -169,7 +183,6 @@ const DetailSong = () => {
         }
         saveNotify(data).then(response => {
             sendNotify(response.data);
-            setStatus(false)
         }).catch(error => {
             console.log(error)
         })
@@ -240,7 +253,7 @@ const DetailSong = () => {
     }
 
     const getAllCommentBySongID = (id) => {
-        getAllCommentBySongIdAPI(id).then(res => setAllComments(res.data))
+        getAllCommentBySongIdAPI(id).then(res => updateAllCurrentComments(res.data))
     }
 
 

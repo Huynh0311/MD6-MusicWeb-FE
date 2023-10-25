@@ -13,7 +13,7 @@ import {editAccount} from "../../redux/actions";
 
 const validateSchema = Yup.object().shape({
     name: Yup.string()
-        .min(5, 'Tên phải có ít nhất 5 ký tự')
+        .matches(/^[^\s].*[^\s]$/, 'Không được có dấu cách ở đầu và cuối')
         .max(50, 'Tên không được quá 50 kí tự')
         .required('Tên không được để trống'),
     email: Yup.string()
@@ -32,10 +32,10 @@ const UpdateAccount = () => {
     const [account, setAccount] = useState({});
 
     const uploadImg = (even) => {
+        if (even.target.files[0] == null) return;
         if (!even.target.files[0].name.match(/\.(jpg|jpeg|png|gif)$/)) {
             toast.error('Thêm ảnh thất bại!');
         } else {
-            if (even.target.files[0] == null) return;
             const imageRef = ref(storage, `images/${even.target.files[0].name + v4()}`);
             uploadBytes(imageRef, even.target.files[0]).then((snapshot) => {
                 getDownloadURL(snapshot.ref).then((url) => {
@@ -98,9 +98,9 @@ const UpdateAccount = () => {
                                     console.log(response)
                                     const dataLogin = {
                                         ...accountLogin,
-                                        name:response.data.name,
-                                        img:response.data.img,
-                                        phone:response.data.phone
+                                        name: response.data.name,
+                                        img: response.data.img,
+                                        phone: response.data.phone
                                     }
                                     dispatch(editAccount(dataLogin));
                                     toast.success('Cập nhật thành công');
@@ -109,7 +109,8 @@ const UpdateAccount = () => {
                                 })
                             }}>
                             <Form>
-                                <div className="hero" style={{backgroundImage: "url(../../images/banner/event.jpg)"}}></div>
+                                <div className="hero"
+                                     style={{backgroundImage: "url(../../images/banner/event.jpg)"}}></div>
                                 <div className="under-hero container">
                                     <div className="section">
                                         <div className="plan bg-light">
@@ -124,8 +125,13 @@ const UpdateAccount = () => {
                                                                 </div>
                                                             </div>
                                                             <div className="col-8">
-                                                                <div className="col-sm-12 cursor mb-3 ps-2" style={{marginLeft: "36px"}}>
-                                                                    <label htmlFor="image" style={{color: "red", fontSize:"15px", marginRight: "15px"}}
+                                                                <div className="col-sm-12 cursor mb-3 ps-2"
+                                                                     style={{marginLeft: "36px"}}>
+                                                                    <label htmlFor="image" style={{
+                                                                        color: "red",
+                                                                        fontSize: "15px",
+                                                                        marginRight: "15px"
+                                                                    }}
                                                                            className="form-label fw-medium">
                                                                         Chọn ảnh
                                                                     </label>
@@ -142,14 +148,14 @@ const UpdateAccount = () => {
                                                                     <Field type="email" id="l_name" name={"email"}
                                                                            className="form-control"
                                                                            onInput={ChangeInputAccountEdit}
-                                                                           value={account.email} readOnly />
+                                                                           value={account.email} readOnly/>
                                                                     <span style={{color: "red"}}><ErrorMessage
                                                                         name={'email'}></ErrorMessage></span>
                                                                 </div>
                                                                 <div className="col-sm-12 inputEdit mb-3">
                                                                     <div className="text-lable">
-                                                                    <label htmlFor="name"
-                                                                           className="form-label fw-medium">Tên</label>
+                                                                        <label htmlFor="name"
+                                                                               className="form-label fw-medium">Tên</label>
                                                                     </div>
                                                                     <Field type="text" id="name" name={"name"}
                                                                            className="form-control"
@@ -160,8 +166,9 @@ const UpdateAccount = () => {
                                                                 </div>
                                                                 <div className="col-sm-12 inputEdit mb-3">
                                                                     <div className="text-lable">
-                                                                    <label htmlFor="d_name"
-                                                                           className="form-label fw-medium">Số điện thoại</label>
+                                                                        <label htmlFor="d_name"
+                                                                               className="form-label fw-medium">Số điện
+                                                                            thoại</label>
                                                                     </div>
                                                                     <Field type={"text"} id="d_name" name={"phone"}
                                                                            className="form-control"

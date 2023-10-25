@@ -19,10 +19,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 
 const userColumns = [
-    {id: 'name', label: 'Tên', minWidth: 150,maxHeight:50, align: 'center',},
-    {id: 'phone', label: 'Điện thoại', minWidth: 250, align: 'center',},
-    {id: 'email', label: 'Email', minWidth: 250, align: 'center',},
-    {id: 'auth', label: 'Kích hoạt', minWidth: 170, align: 'center',},
+    {id: 'name', label: 'Tên', minWidth: 130,maxHeight:50, align: 'center',},
+    {id: 'phone', label: 'Điện thoại', minWidth: 230, align: 'center',},
+    {id: 'email', label: 'Email', minWidth: 230, align: 'center',},
+    {id: 'auth', label: 'Kích hoạt', minWidth: 130, align: 'center',},
 ];
 
 const singerColumns = [

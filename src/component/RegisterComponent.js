@@ -79,7 +79,6 @@ const RegisterComponent = () => {
                             navigate('/login');
                             toast.success('Đăng kí thành công');
                         }).catch(error => {
-                            console.log(error)
                             if(error.response.status === 409){
                                 toast.error(error.response.data);
                             }else {

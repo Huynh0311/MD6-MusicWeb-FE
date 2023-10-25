@@ -60,7 +60,11 @@
 }
 
 .rhap_progress-bar {
-    background-color: #8CB6F6 !important;
+    background-color: #88abe3 !important;
+}
+
+.rhap_download-progress{
+    background-color: #196EED !important;
 }
 
 .rhap_button-clear.rhap_volume-button {

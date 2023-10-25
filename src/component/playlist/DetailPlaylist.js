@@ -4,8 +4,15 @@ import {findPlaylistById} from "../api/PlaylistService/PlaylistService";
 import axios from "axios";
 import {AudioPlayerContext, useAudioPlayer} from "../../redux/playern/ActionsUseContext/AudioPlayerProvider";
 import {BsFillPlayFill, BsPauseFill} from "react-icons/bs";
-import {likeClickAPI} from "../api/LikesService/LikesService";
 import {playlistLikeClickAPI} from "../api/playlistLikesService/playlistLikesService";
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import FormControl from "@mui/material/FormControl";
+import AxiosCustomize from "../api/utils/AxiosCustomize";
+import {toast} from "react-toastify";
+import {likeClickAPI} from "../api/LikesService/LikesService";
 
 
 export default function DetailPlaylist() {
@@ -15,6 +22,7 @@ export default function DetailPlaylist() {
     const [songs, setSongs] = useState([]);
     const [account, setAccount] = useState({});
     const {id} = useParams();
+    const [isLikePlaylist, setIsLikePlaylist] = useState(false);
     const [isLike, setIsLike] = useState(false);
     const {currentSong, updateCurrentSongAndSongs} = useAudioPlayer();
     const {
@@ -24,6 +32,41 @@ export default function DetailPlaylist() {
     } = useContext(AudioPlayerContext);
     const [accountLogin, setAccountLogin] = useState(JSON.parse(localStorage.getItem("data")));
     const [isDuplicateSong, setIsDuplicateSong] = useState(false);
+
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = (id) => {
+            setSongDeleteId(id);
+        setOpen(true)
+    };
+    const [deleteSong, setDeleteSong] = useState(false);
+
+    const handleDelete = async () => {
+        // TODO: Gọi API add song to playlist
+        try {
+            const response = await AxiosCustomize.post('/playlist/removeFromPlaylist/' + playlist.id + "/" + songDeleteId, accountLogin);
+            toast.success('Xóa bài hát thành công');
+            setDeleteSong(true);
+        } catch (error) {
+            toast.error("Xóa bài hát thất bại");
+        }
+        // Lưu xong thì đóng modal
+        handleClose();
+    }
+
+    const handleClose = () => setOpen(false);
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 500,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+    };
+const [songDeleteId, setSongDeleteId] = useState()
+
 
     useEffect(() => {
         findPlaylistById(id).then(res => {
@@ -39,11 +82,12 @@ export default function DetailPlaylist() {
             fetchPlaylistCount(id);
             fetchAccount(id);
         })
-    }, [isLike, currentSong, updateCurrentSongAndSongs])
+    }, [isLikePlaylist, currentSong, updateCurrentSongAndSongs])
 
     useEffect(() => {
         fetchSongs(id);
-    }, []);
+        setDeleteSong(false);
+    }, [deleteSong, isLike]);
 
     const handleToggleSongPlay = (song1) => {
         const updateSongs = songs.map((song) => {
@@ -110,18 +154,29 @@ export default function DetailPlaylist() {
         }
     };
 
-    const likeClick = (id) => {
+    const likePlaylistClick = (id) => {
         if (!accountLogin) {
             navigate("/login");
             return;
         }
         playlistLikeClickAPI(id).then(res => {
-            setIsLike(res.data)
+            setIsLikePlaylist(res.data)
+        })
+    }
+
+    function likeClick(id) {
+        if (!accountLogin) {
+            navigate("/login");
+            return;
+        }
+        likeClickAPI(id).then(res => {
+            setIsLike(!isLike)
         })
     }
 
 
     return (
+        <>
         <main id="page_content">
             <div className="hero" style={{backgroundImage: "url(../../images/banner/event.jpg)"}}></div>
             <div className="under-hero container">
@@ -181,18 +236,18 @@ export default function DetailPlaylist() {
                                 <li>
                                     <a role="button"
                                        className="text-dark d-flex align-items-center"
-                                       aria-label="Favorite" data-favorite-id="1">
+                                       aria-label="Favorite">
                                         {playlist.isLiked === 1 ? (
                                             <i className="fa-sharp fa-solid fa-heart"
                                                style={{
                                                    color: "#ff0000",
                                                    fontSize: "24px"
                                                }}
-                                               onClick={() => likeClick(playlist.id)}>
+                                               onClick={() => likePlaylistClick(playlist.id)}>
                                             </i>
                                         ) : (
                                             <i className="ri-heart-line heart-empty"
-                                               onClick={() => likeClick(playlist.id)}
+                                               onClick={() => likePlaylistClick(playlist.id)}
                                             />
                                         )}
                                         <span className="ps-2 fw-medium">{playlist.likesQuantity}</span>
@@ -212,9 +267,7 @@ export default function DetailPlaylist() {
                                     <div className="list__cover">
                                         <img src={song.imgSong}
                                              alt="ảnh"/>
-                                        <a
-                                            className="btn btn-play btn-sm btn-default btn-icon rounded-pill"
-                                            data-play-id="1"
+                                        <a className="btn btn-play btn-sm btn-default btn-icon rounded-pill"
                                             aria-label="Play pause">
                                             {song.isPlaying ? (
                                                 <BsPauseFill role='button'
@@ -238,19 +291,19 @@ export default function DetailPlaylist() {
 
                                     <div className="list__content">
                                         <Link to={`/song/detailSong/${song.id}`}>
-                                            <div className="list__title text-truncate">{song.nameSong}</div>
+                                            <div className="list__title text-truncate">
+                                                {song.nameSong}
+                                            </div>
                                         </Link>
                                         <p className="list__subtitle text-truncate">
-                                            <a href="artist-details.html">
                                                 {song.nameSinger}
-                                            </a>
                                         </p>
                                     </div>
                                     <ul className="list__option">
                                         <li>
                                             <a role="button"
                                                className="d-inline-flex active"
-                                               aria-label="Favorite" data-favorite-id="1">
+                                               aria-label="Favorite">
                                                 {song.isLiked === 1 ? (
                                                     <i className="fa-sharp fa-solid fa-heart"
                                                        style={{
@@ -266,17 +319,8 @@ export default function DetailPlaylist() {
                                                 )}
                                             </a>
                                         </li>
-                                        <li>
-                                            <div className="me-4 d-none d-xl-block"><span
-                                                className="amplitude-current-minutes"></span>:<span
-                                                className="amplitude-current-seconds"></span> / <span
-                                                className="amplitude-duration-minutes"></span>:
-                                                <span className="amplitude-duration-seconds"></span>
-                                            </div>
-                                        </li>
                                         <li className="dropstart d-inline-flex">
                                             <a className="dropdown-link"
-                                               href="#"
                                                role="button"
                                                data-bs-toggle="dropdown"
                                                aria-label="Cover options"
@@ -284,21 +328,24 @@ export default function DetailPlaylist() {
                                                 className="ri-more-fill"></i>
                                             </a>
                                             <ul className="dropdown-menu dropdown-menu-sm">
-                                                <li><a className="dropdown-item" href="#"
-                                                       role="button"
-                                                       data-playlist-id="1">Add to playlist</a></li>
-                                                <li><a className="dropdown-item" href="#"
-                                                       role="button"
-                                                       data-queue-id="1">Add to queue</a></li>
-                                                <li><a className="dropdown-item" href="#"
-                                                       role="button"
-                                                       data-next-id="1">Next to play</a></li>
-                                                <li><a className="dropdown-item" href="#"
-                                                       role="button">Share</a></li>
-                                                <li className="dropdown-divider"></li>
-                                                <li><a className="dropdown-item" href="#"
-                                                       role="button"
-                                                       data-play-id="1">Play</a></li>
+                                                { accountLogin.id === playlist.idAccount ?
+                                                    <li>
+                                                        <div className="dropdown-item" onClick={() => {
+                                                            handleOpen(song.id)
+                                                        }}
+                                                             role="button">
+                                                            Xóa
+                                                        </div>
+                                                    </li>
+                                                    :
+                                                    <></>
+                                                }
+                                                <li>
+                                                    <div className="dropdown-item"
+                                                         role="button">
+                                                        Phát
+                                                    </div>
+                                                </li>
                                             </ul>
                                         </li>
                                     </ul>
@@ -309,5 +356,29 @@ export default function DetailPlaylist() {
                 </div>
             </div>
         </main>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2" sx={{
+                        mb: 2
+                    }}>
+                        Bạn Chắc chắn muốn xóa khỏi danh sách phát
+                    </Typography>
+                    <FormControl sx={{
+                        mb: 2
+                    }} fullWidth>
+
+                    </FormControl>
+                    <div style={{textAlign: 'right'}}>
+                        <Button variant="contained" onClick={handleDelete}>Xóa</Button>
+                        <Button variant="contained" onClick={handleClose} style={{marginLeft:"15px"}}>Đóng</Button>
+                    </div>
+                </Box>
+            </Modal>
+        </>
     )
 }
