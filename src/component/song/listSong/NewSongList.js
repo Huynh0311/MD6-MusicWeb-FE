@@ -72,8 +72,10 @@ const NewSongList = () => {
         <div>
             <div id="wrapper">
                 <main id="page_content">
-                    <div className="under-hero container">
-                        <div className="section" style={{marginTop: "150px"}}>
+                    <div className="hero" style={{backgroundImage: "url(../../images/banner/song.jpg)"}}></div>
+                    <div className="under-hero container" >
+                        <div className="section">
+                            <div className="section__head"><h3 className="mb-0">Bài hát mới</h3></div>
                             <div className="list">
                                 <div className="row">
                                     <div className="col-xl-12">
@@ -147,29 +149,17 @@ const NewSongList = () => {
                                                         </div>
                                                         <ul className="dropdown-menu dropdown-menu-sm">
                                                             <li>
-                                                                <div className="dropdown-item" href="#" role="button"
-                                                                     data-playlist-id="1">Add to playlist
-                                                                </div>
-                                                            </li>
-                                                            <li>
-                                                                <div className="dropdown-item" href="#" role="button"
-                                                                     data-queue-id="1">Add to queue
-                                                                </div>
-                                                            </li>
-                                                            <li>
-                                                                <div className="dropdown-item" href="#" role="button"
-                                                                     data-next-id="1">Next to play
-                                                                </div>
-                                                            </li>
-                                                            <li>
-                                                                <div className="dropdown-item" href="#"
-                                                                     role="button">Share
+                                                                <div className="dropdown-item" role="button"
+                                                                     >Thêm vào danh sách phát
                                                                 </div>
                                                             </li>
                                                             <li className="dropdown-divider"></li>
                                                             <li>
-                                                                <div className="dropdown-item" href="#" role="button"
-                                                                     data-play-id="1">Play
+                                                                <div className="dropdown-item" role="button"
+                                                                     onClick={() => {
+                                                                         handleToggleSongPlay(song.id);
+                                                                         updateCurrentSongAndSongs(song, songs);
+                                                                     }}>Phát
                                                                 </div>
                                                             </li>
                                                         </ul>
@@ -191,13 +181,6 @@ const NewSongList = () => {
                                     </button>
                                 ))}
                             </div>
-                            {/*<div className="mt-5 text-center">*/}
-                            {/*    <div href="#" className="btn btn-primary">*/}
-                            {/*        <div className="btn__wrap"><i className="ri-loader-3-fill"></i>*/}
-                            {/*            <span>Load more</span>*/}
-                            {/*        </div>*/}
-                            {/*    </div>*/}
-                            {/*</div>*/}
                         </div>
                     </div>
                 </main>

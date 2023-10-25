@@ -21,5 +21,5 @@ const getAllPlaylistWithLikeQuantity = () => {
 
 
 export {
-   getAllPlaylist,findPlaylistById,getAllPlaylistWithLikeQuantity
+   getAllPlaylist,findPlaylistById,getAllPlaylistWithLikeQuantity,getAllPlaylistById
 }

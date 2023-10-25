@@ -2,8 +2,19 @@ import React, {useEffect, useState} from 'react';
 import {Link, useNavigate} from "react-router-dom";
 import "./ListSong.css"
 import Tooltip from '@mui/material/Tooltip';
+import {linkClasses} from "@mui/material";
 import {toast} from "react-toastify";
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Slide from '@mui/material/Slide';
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const ListSong = () => {
     const [songdata, songdatachange] = useState([]);
@@ -23,26 +34,45 @@ const ListSong = () => {
     }
 
     const EditFunction = (id) => {
-        navigate("/song/edit/" +id);
+        navigate("/song/edit/" + id);
     }
 
-    const DetailFunction = (id) => {
-        navigate("/song/detailSong/" +id);
-        navigate(0);
-    }
+    const [deleteSong, deleteSongChange] = useState([]);
 
     const RemoveFunction = (id) => {
-        if (window.confirm('Bạn chắc chắn muốn xoá bài hát này?')) {
             fetch("http://localhost:8080/songs/delete/" + id, {
                 method: "GET"
             }).then((res) => {
-                window.location.reload();
+                fetch("http://localhost:8080/songs/account", {
+                    headers: {
+                        Authorization: `Bearer ${account.token}`,
+                    },
+                }).then((res) => {
+
+                    return res.json();
+                }).then((resp) => {
+                    songdatachange(resp);
+                    console.log(resp)
+                }).catch((err) => {
+                    console.log(err.message);
+                })
             }).catch((err) => {
                 console.log(err.message)
             })
-        }
+
     }
 
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const [selectedSongId, setSelectedSongId] = useState(null);
 
     React.useEffect(() => {
         fetch("http://localhost:8080/songs/account", {
@@ -89,7 +119,6 @@ const ListSong = () => {
                                 </tr>
                                 </thead>
                                 <tbody className="count-numb-rs">
-                                {console.log(typeof (songdata))}
                                 {songdata.length === 0 ?
                                     (
                                         <tr>
@@ -114,24 +143,47 @@ const ListSong = () => {
 
                                                     <Tooltip title="Xóa" placement="top-end">
                                                         <a onClick={() => {
-                                                            RemoveFunction(item.id)
+                                                            setSelectedSongId(item.id);
+                                                            handleClickOpen();
                                                         }} className="fa-sharp fa-solid fa-trash  custom-button"
                                                            style={{color: '#196734'}}></a>
+
                                                     </Tooltip>
 
-                                                    <Tooltip title="Thông tin" placement="top-end">
-                                                        <a onClick={() => {
-                                                            DetailFunction(item.id)
-                                                        }} className="fa-duotone fa-circle-info  custom-button"></a>
-                                                    </Tooltip>
-                                                </td>
+                                            <Tooltip title="Thông tin" placement="top-end">
+                                                <Link to={"/song/detailSong/" + item.id} className="fa-duotone fa-circle-info  custom-button"></Link>
+                                            </Tooltip>
+                                        </td>
 
                                             </tr>
                                         )
                                     ))
                                 }
                                 </tbody>
+                                <Dialog
+                                    open={open}
+                                    TransitionComponent={Transition}
+                                    keepMounted
+                                    onClose={handleClose}
+                                    aria-describedby="alert-dialog-slide-description"
+                                    BackdropProps ={{ style: { backgroundColor: 'transparent' }, }}>
 
+                                    <DialogTitle>{"Bạn có muốn xóa bài hát này?"}</DialogTitle>
+                                    <DialogContent>
+                                        <DialogContentText id="alert-dialog-slide-description">
+                                            Bài hát sẽ bị xóa vĩnh viễn. Bạn có chắc chắn muốn xóa.
+                                        </DialogContentText>
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={handleClose}>Hủy</Button>
+                                        <Button onClick={() => {
+                                            if (selectedSongId){
+                                                RemoveFunction(selectedSongId);
+                                                handleClose();
+                                            }
+                                        }}>Xác nhận</Button>
+                                    </DialogActions>
+                                </Dialog>
 
                             </table>
                         </div>

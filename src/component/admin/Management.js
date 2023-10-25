@@ -20,10 +20,10 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { viVN } from '@mui/material/locale';
 
 const userColumns = [
-    {id: 'name', label: 'Tên', minWidth: 300, maxWidth:300, maxHeight:50, align: 'center',},
-    {id: 'phone', label: 'Điện thoại', minWidth: 150, maxWidth:150, maxHeight:50,  align: 'center',},
-    {id: 'email', label: 'Email', minWidth: 250, maxWidth:250, maxHeight:50, align: 'center',},
-    {id: 'auth', label: 'Kích hoạt', minWidth: 100, maxHeight:50, align: 'center',},
+    {id: 'name', label: 'Tên', minWidth: 130,maxHeight:50, align: 'center',},
+    {id: 'phone', label: 'Điện thoại', minWidth: 230, align: 'center',},
+    {id: 'email', label: 'Email', minWidth: 230, align: 'center',},
+    {id: 'auth', label: 'Kích hoạt', minWidth: 130, align: 'center',},
 ];
 
 const singerColumns = [
@@ -32,7 +32,7 @@ const singerColumns = [
 ];
 
 const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="down" ref={ref} {...props} />;
+    return <Slide direction="up" ref={ref} {...props} />;
 });
 
 const theme = createTheme(
@@ -206,7 +206,8 @@ export default function DataTable() {
                                                 Cập nhật những bài hát hit trên thế giới.</p><span
                                             className="display-4 d-block mb-1" style={{color:'#146bf7'}}>.</span>
                                             <a href="https://www.billboard.com/charts/" target="_blank" rel="noopener noreferrer">
-                                                <button className="custom-btn btn-9">Read More</button>
+                                                <button type="button" className="btn btn-warning rounded-pill">Thông tin chi tiết
+                                                </button>
                                             </a>
                                         </div>
                                     </div>

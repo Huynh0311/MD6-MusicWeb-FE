@@ -3,10 +3,12 @@ import SongList from "../player/SongList";
 import TopSong from "../player/TopSong";
 import accountService from "../api/AccountService/AccountService";
 import TopPlaylist from "../playlist/TopPlaylist";
+import {Link} from "react-router-dom";
 
 
 const HomeComponent = () => {
     const [listAuthAccount, setListAuthAccount] = useState([]);
+
     useEffect(() => {
         accountService.getAllAccountByAuth().then(res => {
             setListAuthAccount(res.data);
@@ -23,8 +25,12 @@ const HomeComponent = () => {
                             <div className="section__head">
                                 <div className="flex-grow-1"><span
                                     className="section__subtitle"></span>
-                                    <h3 className="mb-0"><span className="text-primary">Mới phát hành</span></h3></div>
-                               </div>
+                                    <h3 className="mb-0">Mới <span className="text-primary">phát hành</span></h3>
+                                </div>
+                                <Link to={"/song/newSongList"}>
+                                <p  className="btn btn-link">Xem toàn bộ</p>
+                                </Link>
+                            </div>
                             <div className="swiper-carousel swiper-carousel-button"
                                  style={{display: 'flex', flexWrap: 'nowrap'}}>
                                 <SongList/>
@@ -201,7 +207,7 @@ const HomeComponent = () => {
                                                 <div className="avatar avatar--xxl d-block text-center">
                                                     <div className="avatar__image">
                                                         <div>
-                                                            <img src={account.img} alt="Arebica Luna"/>
+                                                            <img src={account.img} alt=""/>
                                                         </div>
                                                     </div>
                                                     <div
@@ -209,7 +215,6 @@ const HomeComponent = () => {
                                                     </div>
                                                 </div>
                                             </div>
-
                                         ))}
                                     </div>
                                     <div className="swiper-pagination"></div>
