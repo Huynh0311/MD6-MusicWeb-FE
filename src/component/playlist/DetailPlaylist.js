@@ -129,7 +129,6 @@ const [songDeleteId, setSongDeleteId] = useState()
             if (accountLogin && accountLogin.token) {
                 config.headers.Authorization = `Bearer ${accountLogin.token}`;
             }
-
             const res = await axios.get(`http://localhost:8080/playlist/getSongByPlaylist/${id}`, config);
             const songs = res.data.map((song) => ({
                 ...song,
@@ -261,7 +260,7 @@ const [songDeleteId, setSongDeleteId] = useState()
                         Playlist</h3></div>
                     <div className="list list--order">
                         <div className="row">
-                            {songs.map((song) => (
+                            {songs && songs.map((song) => (
                                 <div className="list__item list__playlist"
                                      style={{width: "50%"}} key={song.id}>
                                     <div className="list__cover">
@@ -328,7 +327,7 @@ const [songDeleteId, setSongDeleteId] = useState()
                                                 className="ri-more-fill"></i>
                                             </a>
                                             <ul className="dropdown-menu dropdown-menu-sm">
-                                                { accountLogin.id === playlist.idAccount ?
+                                                { accountLogin && accountLogin.id === playlist.idAccount ?
                                                     <li>
                                                         <div className="dropdown-item" onClick={() => {
                                                             handleOpen(song.id)
