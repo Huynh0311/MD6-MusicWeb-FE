@@ -128,6 +128,7 @@ const DetailSong = () => {
 
     useEffect(() => {
         findAccountBySong(id).then(res => {
+            console.log(res.data)
             setReceiver(res.data)
         })
     }, []);
@@ -162,11 +163,13 @@ const DetailSong = () => {
         likeClickAPI(id).then(res => {
             setIsLiked(res.data)
             getLikeQuantity();
-            if (isLiked === 0) {
-                if (localStorage.getItem("status") === "true") {
-                    handleSendNotifyLike()
-                    setStatus(false)
-                    localStorage.setItem("status", `${status}`)
+            if (account.id !== receiver.id) {
+                if (isLiked === 0) {
+                    if (localStorage.getItem("status") === "true") {
+                        handleSendNotifyLike()
+                        setStatus(false)
+                        localStorage.setItem("status", `${status}`)
+                    }
                 }
             }
         })
@@ -307,14 +310,13 @@ const DetailSong = () => {
                                         </li>
                                     </ul>
                                     <div className="mb-4"><p className="mb-2">Người đăng: <span
-                                        className="text-dark fw-medium">{currentSongDT.accountName}</span>
-                                        {currentSongDT.auth === true &&
-                                            <i className="fa-sharp fa-solid fa-circle-check"
-                                               style={{color: "#005eff", marginLeft: "5px"}}></i>
-                                        }
-                                    </p>
+                                        className="text-dark fw-medium">{currentSongDT.accountName}</span></p>
                                         <p className="mb-2">Ca sỹ: <span className="text-dark fw-medium">
                                            {currentSongDT && currentSongDT.nameSinger}
+                                            {currentSongDT.auth === true &&
+                                                <i className="fa-sharp fa-solid fa-circle-check"
+                                                   style={{color: "#005eff", marginLeft: "5px"}}></i>
+                                            }
                                         </span>
                                         </p>
                                     </div>
@@ -366,12 +368,12 @@ const DetailSong = () => {
                                                         }</span></div>)
                                             }
                                         </li>
-                                        {/*<li>*/}
-                                        {/*    <div role="button"*/}
-                                        {/*         className="text-dark d-flex align-items-center"*/}
-                                        {/*         aria-label="Download"><i className="ri-download-2-line"></i> <span*/}
-                                        {/*        className="ps-2 fw-medium">24</span></div>*/}
-                                        {/*</li>*/}
+                                        <li>
+                                            <div role="button"
+                                                 className="text-dark d-flex align-items-center"
+                                                 aria-label="Download"><i className="ri-download-2-line"></i> <span
+                                                className="ps-2 fw-medium">24</span></div>
+                                        </li>
                                         {/*<li><span className="text-dark d-flex align-items-center"><i*/}
                                         {/*    className="ri-star-fill text-warning"></i> <span*/}
                                         {/*    className="ps-2 fw-medium">4.5</span></span></li>*/}
@@ -408,13 +410,38 @@ const DetailSong = () => {
                                                             <ul className="dropdown-menu dropdown-menu-sm">
                                                                 <li>
                                                                     <div className="dropdown-item"
-                                                                         role="button">Thêm vào danh sách phát
+                                                                         role="button"
+                                                                         data-favorite-id="1">Favorite
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div className="dropdown-item"
+                                                                         role="button"
+                                                                         data-playlist-id="1">Add to playlist
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div className="dropdown-item"
+                                                                         role="button"
+                                                                         data-queue-id="1">Add to queue
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div className="dropdown-item"
+                                                                         role="button"
+                                                                         data-next-id="1">Next to play
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div className="dropdown-item"
+                                                                         role="button">Share
                                                                     </div>
                                                                 </li>
                                                                 <li className="dropdown-divider"></li>
                                                                 <li>
                                                                     <div className="dropdown-item"
-                                                                         role="button">Phát
+                                                                         role="button"
+                                                                         data-play-id="1">Play
                                                                     </div>
                                                                 </li>
                                                             </ul>
@@ -425,14 +452,14 @@ const DetailSong = () => {
                                                         <button type="button"
                                                                 className="btn btn-play btn-default btn-icon rounded-pill">
                                                             {rs.isPlaying ? (
-                                                                <BsPauseFill
+                                                                <AiOutlinePauseCircle
                                                                     onClick={() => {
                                                                         handleToggleRelatedSongClick(rs);
                                                                     }}
                                                                     style={{fontSize: "30px"}}
                                                                 />
                                                             ) : (
-                                                                <BsFillPlayFill
+                                                                <AiOutlinePlayCircle
                                                                     onClick={() => {
                                                                         handleToggleRelatedSongClick(rs);
                                                                     }}
@@ -441,17 +468,20 @@ const DetailSong = () => {
                                                             )}
                                                         </button>
                                                     </div>
-                                                    <Link to={"/song/detailSong/" + rs.id}>
-                                                        <div className="cover__foot">
+                                                    <div className="cover__foot">
                                                             <div
-                                                                className="cover__title text-truncate">{rs.nameSong}</div>
-                                                            <p className="cover__subtitle text-truncate">
-                                                                <div>{rs.nameSinger}</div>
-                                                            </p>
-                                                        </div>
-                                                    </Link>
+                                                                className="cover__title text-truncate">{rs.nameSong}
+                                                            </div>
+                                                        <p className="cover__subtitle text-truncate">
+                                                            {rs.nameSinger}
+                                                        </p>
+
+                                                    </div>
                                                 </div>
+
+
                                             </div>
+
                                         ))}
                                     </div>
                                 </div>
@@ -477,32 +507,28 @@ const DetailSong = () => {
                                             </button>
                                         </div>
                                     </form>
-                                    {allCurrentComments.map((cm) => {
+                                    {allComments.map((cm) => {
                                         return (
                                             <div className="avatar avatar--lg align-items-start" key={cm.id}>
                                                 <div className="avatar__image"><img src={cm.account.img} alt="user"/>
                                                 </div>
-                                                <div className="avatar__content">
-                                                    <div style={{display: "flex"}}>
-                                                        <span className="avatar__title mb-1">{cm.account.name}</span>
-                                                        {ownedSong && ownedSong ? (
-                                                            <span style={{
-                                                                marginLeft: "10px",
-                                                                cursor: "pointer",
-                                                                color: "red"
-                                                            }}><ImCross onClick={() => {
-                                                                removeCommentInASongByCommentID(id, cm.id).then(res =>
-                                                                        setRemovedComment(!removedComment),
-                                                                    toast.success("Xóa bình luận thành công"))
-                                                            }}></ImCross></span>
-                                                        ) : ('')
-                                                        }
-                                                    </div>
-                                                    <span className="avatar__subtitle mb-2">{cm.timeComment}</span>
-
-                                                    <div className="text-warning d-flex mb-1"></div>
+                                                <div className="avatar__content"><span
+                                                    className="avatar__title mb-1">{cm.account.name}</span>
+                                                    <span
+                                                        className="avatar__subtitle mb-2">{cm.timeComment}</span>
+                                                    <div className="text-warning d-flex mb-1"><i
+                                                        className="ri-star-s-fill"></i>
+                                                        <i
+                                                            className="ri-star-s-fill"></i> <i
+                                                            className="ri-star-s-fill"></i>
+                                                        <i
+                                                            className="ri-star-s-fill"></i></div>
                                                     <p>{cm.content}</p>
                                                     <div className="btn btn-link">
+                                                        <div className="btn__wrap">
+                                                            <i className="ri-reply-line fs-6"></i>
+                                                            <span>Reply</span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
