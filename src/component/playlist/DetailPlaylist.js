@@ -67,27 +67,26 @@ export default function DetailPlaylist() {
     };
 const [songDeleteId, setSongDeleteId] = useState()
 
+    useEffect(() => {
+        fetchSongs(id);
+        setDeleteSong(false);
+    }, [deleteSong, isLike]);
 
     useEffect(() => {
         findPlaylistById(id).then(res => {
             setPlaylist({...res.data, isPlaying});
             console.log(res.data);
-            if (songs) {
-                const updatedSongs = songs.map((song) => ({
-                    ...song,
-                    isPlaying: currentSong && currentSong.id === song.id ? isPlaying : false,
-                }));
-                setSongs(updatedSongs);
-            }
+            // if (songs) {
+            //     const updatedSongs = songs.map((song) => ({
+            //         ...song,
+            //         isPlaying: currentSong && currentSong.id === song.id ? isPlaying : false,
+            //     }));
+            //     setSongs(updatedSongs);
+            // }
             fetchPlaylistCount(id);
             fetchAccount(id);
         })
     }, [isLikePlaylist, currentSong, updateCurrentSongAndSongs])
-
-    useEffect(() => {
-        fetchSongs(id);
-        setDeleteSong(false);
-    }, [deleteSong, isLike]);
 
     const handleToggleSongPlay = (song1) => {
         const updateSongs = songs.map((song) => {
@@ -260,7 +259,7 @@ const [songDeleteId, setSongDeleteId] = useState()
                         Playlist</h3></div>
                     <div className="list list--order">
                         <div className="row">
-                            {songs && songs.map((song) => (
+                            {songs.length !== 0 && songs.map((song) => (
                                 <div className="list__item list__playlist"
                                      style={{width: "50%"}} key={song.id}>
                                     <div className="list__cover">
