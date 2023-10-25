@@ -1,44 +1,74 @@
 import React, {useContext, useEffect, useState} from "react";
-import {Link, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {findPlaylistById} from "../api/PlaylistService/PlaylistService";
 import axios from "axios";
 import {AudioPlayerContext, useAudioPlayer} from "../../redux/playern/ActionsUseContext/AudioPlayerProvider";
 import {BsFillPlayFill, BsPauseFill} from "react-icons/bs";
 import {likeClickAPI} from "../api/LikesService/LikesService";
+import {playlistLikeClickAPI} from "../api/playlistLikesService/playlistLikesService";
+
 
 export default function DetailPlaylist() {
-    const [playlist, setPlaylist] = useState({})
+    const navigate = useNavigate();
+    const [playlist, setPlaylist] = useState({isPlaying: false})
     const [count, setCount] = useState(0);
     const [songs, setSongs] = useState([]);
     const [account, setAccount] = useState({});
-    const [isCurrentSongPlayingNow, setIsCurrentSongPlayingNow] = useState(false);
     const {id} = useParams();
+    const [isLikePlaylist, setIsLikePlaylist] = useState(false);
     const [isLike, setIsLike] = useState(false);
     const {currentSong, updateCurrentSongAndSongs} = useAudioPlayer();
-    const {isPlaying, handlePlayToggle} = useContext(AudioPlayerContext);
+    const {
+        isPlaying,
+        handlePlayToggle,
+        currentPlaylist, updateCurrentPlaylist
+    } = useContext(AudioPlayerContext);
     const [accountLogin, setAccountLogin] = useState(JSON.parse(localStorage.getItem("data")));
+    const [isDuplicateSong, setIsDuplicateSong] = useState(false);
 
     useEffect(() => {
         findPlaylistById(id).then(res => {
-            setPlaylist(res.data)
+            setPlaylist({...res.data, isPlaying});
+            console.log(res.data);
+            if (songs) {
+                const updatedSongs = songs.map((song) => ({
+                    ...song,
+                    isPlaying: currentSong && currentSong.id === song.id ? isPlaying : false,
+                }));
+                setSongs(updatedSongs);
+            }
             fetchPlaylistCount(id);
-            fetchSongs(id);
             fetchAccount(id);
         })
-    }, [updateCurrentSongAndSongs, currentSong, isLike])
+    }, [isLikePlaylist, currentSong, updateCurrentSongAndSongs])
 
-    const handleToggleSongPlay = (songId) => {
+    useEffect(() => {
+        fetchSongs(id);
+    }, [isLike]);
+
+    const handleToggleSongPlay = (song1) => {
         const updateSongs = songs.map((song) => {
-            const newIsPlaying = song.id === songId ? !song.isPlaying : false;
+            const newIsPlaying = song.id === song1.id ? !song.isPlaying : false;
             return {
                 ...song,
                 isPlaying: newIsPlaying,
             }
         })
         setSongs(updateSongs);
-        setIsCurrentSongPlayingNow(!isCurrentSongPlayingNow);
+        setPlaylist({...playlist, isPlaying: !isPlaying});
         handlePlayToggle(updateSongs.some((song) => song.isPlaying));
+        handleCheckingDuplacateSongsInAPlaylist(song1);
     };
+
+    const handleCheckingDuplacateSongsInAPlaylist = (song1) => {
+        if (song1 == null) {
+            return false;
+        }
+        let isDuplicate = songs.some((song) => song.id === song1.id);
+        setIsDuplicateSong(isDuplicate);
+    }
+
+
     const fetchPlaylistCount = async (id) => {
         try {
             const res = await axios.get(`http://localhost:8080/playlist/countSong/${id}`);
@@ -51,25 +81,27 @@ export default function DetailPlaylist() {
     const fetchSongs = async (id) => {
         try {
             const config = {
-                headers: {
-                    Authorization: `Bearer ${accountLogin.token}`,
-                },
+                headers: {},
             };
+            if (accountLogin && accountLogin.token) {
+                config.headers.Authorization = `Bearer ${accountLogin.token}`;
+            }
+
             const res = await axios.get(`http://localhost:8080/playlist/getSongByPlaylist/${id}`, config);
             const songs = res.data.map((song) => ({
                 ...song,
                 isPlaying: currentSong && currentSong.id === song.id ? isPlaying : false,
             }));
             setSongs(songs);
+            setPlaylist({...playlist, songs});
+            updateCurrentPlaylist({playlist});
+            handleCheckingDuplacateSongsInAPlaylist(res.data);
+
         } catch (error) {
             setSongs([]);
         }
     };
 
-    // const isAnySongPlaying = () => {
-    //     const hasAnySongIsPlaying = songs.some((song) => song.isPlaying === true);
-    //     hasAnySongIsPlaying ? setIsCurrentSongPlayingNow(true) : setIsCurrentSongPlayingNow(false);
-    // }
     const fetchAccount = async (id) => {
         try {
             const res = await axios.get(`http://localhost:8080/playlist/getUserByPlaylist/${id}`);
@@ -79,11 +111,26 @@ export default function DetailPlaylist() {
         }
     };
 
+    const likePlaylistClick = (id) => {
+        if (!accountLogin) {
+            navigate("/login");
+            return;
+        }
+        playlistLikeClickAPI(id).then(res => {
+            setIsLikePlaylist(res.data)
+        })
+    }
+
     function likeClick(id) {
+        if (!accountLogin) {
+            navigate("/login");
+            return;
+        }
         likeClickAPI(id).then(res => {
             setIsLike(!isLike)
         })
     }
+
 
     return (
         <main id="page_content">
@@ -114,11 +161,11 @@ export default function DetailPlaylist() {
                                     <div className="d-flex align-items-center">
                                         <button type="button" id="play_all"
                                                 className="btn btn-icon btn-primary rounded-pill">
-                                            {isPlaying ? (
+                                            {playlist.isPlaying && isDuplicateSong ? (
                                                 <BsPauseFill role='button'
                                                              onClick={() => {
-                                                                 handleToggleSongPlay(currentSong.id);
-                                                                 updateCurrentSongAndSongs(currentSong, songs);
+                                                                 handleToggleSongPlay(currentSong);
+                                                                 setIsDuplicateSong(true);
                                                              }}
                                                              style={{fontSize: "30px"}}
                                                 />
@@ -126,13 +173,12 @@ export default function DetailPlaylist() {
                                                 <BsFillPlayFill role='button'
                                                                 onClick={() => {
                                                                     if (currentSong === null) {
-                                                                        handleToggleSongPlay(songs[0].id);
                                                                         updateCurrentSongAndSongs(songs[0], songs);
+                                                                        handleToggleSongPlay(songs[0]);
                                                                     } else {
-                                                                        handleToggleSongPlay(currentSong.id);
-                                                                        updateCurrentSongAndSongs(currentSong, songs);
+                                                                        updateCurrentSongAndSongs(songs[0], songs);
+                                                                        handleToggleSongPlay(songs[0]);
                                                                     }
-
                                                                 }}
                                                                 style={{fontSize: "30px"}}
                                                 />
@@ -144,12 +190,23 @@ export default function DetailPlaylist() {
                                     </div>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);" role="button"
+                                    <a role="button"
                                        className="text-dark d-flex align-items-center"
                                        aria-label="Favorite" data-favorite-id="1">
-                                        <i className="ri-heart-line heart-empty"></i>
-                                        <i className="ri-heart-fill heart-fill"></i>
-                                        <span className="ps-2 fw-medium">121</span>
+                                        {playlist.isLiked === 1 ? (
+                                            <i className="fa-sharp fa-solid fa-heart"
+                                               style={{
+                                                   color: "#ff0000",
+                                                   fontSize: "24px"
+                                               }}
+                                               onClick={() => likePlaylistClick(playlist.id)}>
+                                            </i>
+                                        ) : (
+                                            <i className="ri-heart-line heart-empty"
+                                               onClick={() => likePlaylistClick(playlist.id)}
+                                            />
+                                        )}
+                                        <span className="ps-2 fw-medium">{playlist.likesQuantity}</span>
                                     </a>
                                 </li>
                             </ul>
@@ -162,19 +219,18 @@ export default function DetailPlaylist() {
                         <div className="row">
                             {songs.map((song) => (
                                 <div className="list__item list__playlist"
-                                     style={{width: "50%"}}>
+                                     style={{width: "50%"}} key={song.id}>
                                     <div className="list__cover">
                                         <img src={song.imgSong}
                                              alt="ảnh"/>
-                                        <a href="javascript:void(0);"
-                                           className="btn btn-play btn-sm btn-default btn-icon rounded-pill"
-                                           data-play-id="1"
-                                           aria-label="Play pause">
-                                            {console.log(songs)}
+                                        <a
+                                            className="btn btn-play btn-sm btn-default btn-icon rounded-pill"
+                                            data-play-id="1"
+                                            aria-label="Play pause">
                                             {song.isPlaying ? (
                                                 <BsPauseFill role='button'
                                                              onClick={() => {
-                                                                 handleToggleSongPlay(song.id);
+                                                                 handleToggleSongPlay(song);
                                                                  updateCurrentSongAndSongs(song, songs);
                                                              }}
                                                              style={{fontSize: "30px"}}
@@ -182,7 +238,7 @@ export default function DetailPlaylist() {
                                             ) : (
                                                 <BsFillPlayFill role='button'
                                                                 onClick={() => {
-                                                                    handleToggleSongPlay(song.id);
+                                                                    handleToggleSongPlay(song);
                                                                     updateCurrentSongAndSongs(song, songs);
                                                                 }}
                                                                 style={{fontSize: "30px"}}
@@ -203,12 +259,9 @@ export default function DetailPlaylist() {
                                     </div>
                                     <ul className="list__option">
                                         <li>
-                                            <a href="javascript:void(0);" role="button"
+                                            <a role="button"
                                                className="d-inline-flex active"
                                                aria-label="Favorite" data-favorite-id="1">
-                                                {/*<i className="ri-heart-line heart-empty"></i>*/}
-                                                {/*<i className="ri-heart-fill heart-fill"></i>*/}
-                                                {console.log(song.isLiked)}
                                                 {song.isLiked === 1 ? (
                                                     <i className="fa-sharp fa-solid fa-heart"
                                                        style={{
@@ -218,7 +271,8 @@ export default function DetailPlaylist() {
                                                        onClick={() => likeClick(song.id)}>
                                                     </i>
                                                 ) : (
-                                                    <i className="fa-sharp fa-regular fa-heart" onClick={() => likeClick(song.id)}
+                                                    <i className="fa-sharp fa-regular fa-heart"
+                                                       onClick={() => likeClick(song.id)}
                                                        style={{color: "#000000", fontSize: "24px"}}></i>
                                                 )}
                                             </a>
@@ -231,27 +285,29 @@ export default function DetailPlaylist() {
                                                 <span className="amplitude-duration-seconds"></span>
                                             </div>
                                         </li>
-                                        <li className="dropstart d-inline-flex"><a className="dropdown-link"
-                                                                                   href="javascript:void(0);"
-                                                                                   role="button"
-                                                                                   data-bs-toggle="dropdown"
-                                                                                   aria-label="Cover options"
-                                                                                   aria-expanded="false"><i
-                                            className="ri-more-fill"></i></a>
+                                        <li className="dropstart d-inline-flex">
+                                            <a className="dropdown-link"
+                                               href="#"
+                                               role="button"
+                                               data-bs-toggle="dropdown"
+                                               aria-label="Cover options"
+                                               aria-expanded="false"><i
+                                                className="ri-more-fill"></i>
+                                            </a>
                                             <ul className="dropdown-menu dropdown-menu-sm">
-                                                <li><a className="dropdown-item" href="javascript:void(0);"
+                                                <li><a className="dropdown-item" href="#"
                                                        role="button"
                                                        data-playlist-id="1">Add to playlist</a></li>
-                                                <li><a className="dropdown-item" href="javascript:void(0);"
+                                                <li><a className="dropdown-item" href="#"
                                                        role="button"
                                                        data-queue-id="1">Add to queue</a></li>
-                                                <li><a className="dropdown-item" href="javascript:void(0);"
+                                                <li><a className="dropdown-item" href="#"
                                                        role="button"
                                                        data-next-id="1">Next to play</a></li>
-                                                <li><a className="dropdown-item" href="javascript:void(0);"
+                                                <li><a className="dropdown-item" href="#"
                                                        role="button">Share</a></li>
                                                 <li className="dropdown-divider"></li>
-                                                <li><a className="dropdown-item" href="javascript:void(0);"
+                                                <li><a className="dropdown-item" href="#"
                                                        role="button"
                                                        data-play-id="1">Play</a></li>
                                             </ul>

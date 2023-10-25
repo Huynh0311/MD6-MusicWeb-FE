@@ -7,6 +7,7 @@ import {BrowserRouter} from "react-router-dom";
 import {AudioPlayerProvider} from "./redux/playern/ActionsUseContext/AudioPlayerProvider";
 import {Provider} from "react-redux";
 import {store} from "./redux/store";
+import WebSocketProvider from "./component/WebSocketProvider";
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -15,7 +16,9 @@ root.render(
         <BrowserRouter>
             <Provider store={store}>
                 <AudioPlayerProvider>
+                    <WebSocketProvider>
                     <App/>
+                    </WebSocketProvider>
                 </AudioPlayerProvider>
             </Provider>
         </BrowserRouter>

@@ -6,7 +6,7 @@ import {toast} from "react-toastify";
 
 
 const ListSong = () => {
-    const [songdata, songdatachange] = useState(null);
+    const [songdata, songdatachange] = useState([]);
     const [account, setAccount] = useState(JSON.parse(localStorage.getItem("data")));
     const navigate = useNavigate();
 
@@ -89,40 +89,47 @@ const ListSong = () => {
                                 </tr>
                                 </thead>
                                 <tbody className="count-numb-rs">
-                                {songdata &&
-                                songdata.map(item => (
-                                    <tr key={item.id} >
-                                        <td className="count-numb"></td>
-                                        <td></td>
-                                        <td> {item.nameSong}</td>
-                                        <td> {item.nameSinger}</td>
-                                        <td> {item.genres.name}</td>
-                                        <td>
-                                            <Tooltip title="Chỉnh sửa" placement="top-end">
-                                                <a onClick={() => {
-                                                    EditFunction(item.id)
-                                                }} className="fa-regular fa-file-pen  custom-button"
-                                                   style={{color: '#052ed1'}}></a>
-                                            </Tooltip>
+                                {console.log(typeof (songdata))}
+                                {songdata.length === 0 ?
+                                    (
+                                        <tr>
+                                            <td colSpan={6} style={{textAlign:'center'}}>Chưa có bài hát mới nào. Hãy thêm bài hát</td>
+                                        </tr>
+                                    )
+                                 :
+                                    ( songdata.map(item => (
+                                            <tr key={item.id} >
+                                                <td className="count-numb"></td>
+                                                <td></td>
+                                                <td> {item.nameSong}</td>
+                                                <td> {item.nameSinger}</td>
+                                                <td> {item.genres.name}</td>
+                                                <td>
+                                                    <Tooltip title="Chỉnh sửa" placement="top-end">
+                                                        <a onClick={() => {
+                                                            EditFunction(item.id)
+                                                        }} className="fa-regular fa-file-pen  custom-button"
+                                                           style={{color: '#052ed1'}}></a>
+                                                    </Tooltip>
 
-                                            <Tooltip title="Xóa" placement="top-end">
-                                                <a onClick={() => {
-                                                    RemoveFunction(item.id)
-                                                }} className="fa-sharp fa-solid fa-trash  custom-button"
-                                                   style={{color: '#196734'}}></a>
-                                            </Tooltip>
+                                                    <Tooltip title="Xóa" placement="top-end">
+                                                        <a onClick={() => {
+                                                            RemoveFunction(item.id)
+                                                        }} className="fa-sharp fa-solid fa-trash  custom-button"
+                                                           style={{color: '#196734'}}></a>
+                                                    </Tooltip>
 
-                                            <Tooltip title="Thông tin" placement="top-end">
-                                                <a onClick={() => {
-                                                    DetailFunction(item.id)
-                                                }} className="fa-duotone fa-circle-info  custom-button"></a>
-                                            </Tooltip>
-                                        </td>
+                                                    <Tooltip title="Thông tin" placement="top-end">
+                                                        <a onClick={() => {
+                                                            DetailFunction(item.id)
+                                                        }} className="fa-duotone fa-circle-info  custom-button"></a>
+                                                    </Tooltip>
+                                                </td>
 
-                                    </tr>
-                                ))
+                                            </tr>
+                                        )
+                                    ))
                                 }
-
                                 </tbody>
 
 

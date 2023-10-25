@@ -138,6 +138,7 @@ function SongList() {
         handlePlayToggle(updateSongs.some((song) => song.isPlaying));
     };
 
+
     return (
         <>
             <div className="container">
@@ -251,7 +252,6 @@ function SongList() {
                             className={`pagination-button ${currentPage === index + 1 ? 'active' : ''}`}
                             onClick={() => handlePageChange(index + 1)}
                         >
-
                         </button>
                     ))}
                 </div>

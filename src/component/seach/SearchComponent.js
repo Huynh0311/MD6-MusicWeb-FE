@@ -1,7 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {Link, useNavigate} from "react-router-dom";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import _ from "lodash";
+import {
+    changeStatusNotify,
+    countUnreadNotifyByAccountLogin,
+    getAllNotifyByAccountLogin
+} from "../api/NotifyService/NotifyService";
+import {countUnreadNotify, getAllNotify} from "../../redux/actions";
+import {format} from "date-fns";
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -17,6 +24,35 @@ const SearchComponent = () => {
     const accountLogin = useSelector(state => state.account);
     const navigate = useNavigate();
     const [searchInput, setSearchInput] = useState();
+    const {account, unreadNotify, notifyList} = useSelector((state) => state);
+    const dispatch = useDispatch();
+    useEffect(() => {
+        if (!_.isEmpty(account)) {
+            countUnreadNotifyByAccountLogin(account.id).then(response => {
+                dispatch(countUnreadNotify(response.data));
+            }).catch(error => {
+                console.log(error);
+            })
+        }
+    }, [])
+
+    useEffect(() => {
+        if (!_.isEmpty(account)) {
+            getAllNotifyByAccountLogin(account.id).then(response => {
+                dispatch(getAllNotify(response.data));
+            }).catch(error => {
+                console.log(error);
+            })
+        }
+    }, [unreadNotify])
+    const handleChangeStatusNotify = () => {
+        changeStatusNotify(account.id).then(response => {
+            dispatch(countUnreadNotify(0));
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+
     const logOut = () => {
         localStorage.clear();
         navigate("/");
@@ -95,21 +131,38 @@ const SearchComponent = () => {
                                 onChange={(e) => handleSearchInput(e)}
                             />
                             </form>
-                            <div className="icon" style={{
-                                width: '34px',
-                                height: '34px',
-                                background: '#196EED',
-                                borderRadius: '50%',
-                                MozBorderRadius: '50%',
-                                WebkitBorderRadius: '50%',
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                            }}>
-                                <button style={{color: '#ffffff', border: "none", display: 'contents'}}>
-                                    <i className="fa-regular fa-bell" style={{fontSize: '20px'}}></i>
-                                    <span className={"notify-text"}>2</span>
+                            <div className="nav-item dropdown">
+                                <button className="nav-link dropdown-toggle" data-bs-toggle="dropdown"
+                                        onClick={handleChangeStatusNotify}>
+                                    <i className="fa-sharp fa-solid fa-bell"></i>
+                                    {unreadNotify ?
+                                        <sup className="badge text-white bg-danger position-absolute top-0 start-50"
+                                             style={{fontSize: '10px'}}>
+                                            {unreadNotify > 5 ? '5+' : unreadNotify}
+                                        </sup>
+                                        :
+                                        null
+                                    }
                                 </button>
+                                <div className="dropdown-menu dropdown-notify">
+                                    {!_.isEmpty(notifyList) && notifyList.map(item => (
+                                        <Link to={`${item.navigate}`} className="d-flex align-items-center py-2 px-3 dropdown-notify-item"
+                                              key={item.id}>
+                                            <img className="img-thumbnail rounded-circle"
+                                                 src={item.sender.img ? item.sender.img : "https://img.lovepik.com/original_origin_pic/17/11/27/0f0628268c4abd9497d6b44f781c2d76.png_wh860.png"}
+                                                 alt="" width={50}
+                                                 style={{height: '50px'}}/>
+                                            <div className="d-flex flex-column ms-3">
+                                                <p className="mb-2 message-title">
+                                                    {item.message}
+                                                </p>
+                                                <small className="fst-italic" style={{fontSize: '12px'}}>
+                                                    <i className="bi bi-clock me-1"></i>{format(new Date(item.createAt), "dd/MM/yyyy")}
+                                                </small>
+                                            </div>
+                                        </Link>
+                                    ))}
+                                </div>
                             </div>
                             <div className="d-flex align-items-center">
                                 {!_.isEmpty(accountLogin) ? (

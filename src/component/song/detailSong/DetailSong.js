@@ -1,19 +1,30 @@
 import React, {useEffect, useState} from 'react';
-import {useNavigate, useParams} from "react-router-dom";
-import {getAllSongByGenresIDAPI, getSongByID, playSong} from "../../api/songService/SongService";
+import {Link, useNavigate, useParams} from "react-router-dom";
+import {
+    getAllSongByGenresIDAPI,
+    getSongByID,
+    isSongOwnedByLoggedInAccount,
+    playSong, removeCommentInASongByCommentID
+} from "../../api/songService/SongService";
+import {findAccountBySong} from "../../api/songService/SongService";
 import {getSongLikeQuantityAPI, isLikedAPI, likeClickAPI} from "../../api/LikesService/LikesService";
 import {getAllCommentBySongIdAPI, sendCommentAPI} from "../../api/commentService/CommentService";
 import {AiOutlinePauseCircle, AiOutlinePlayCircle} from "react-icons/ai";
 import {AudioPlayerContext, useAudioPlayer} from "../../../redux/playern/ActionsUseContext/AudioPlayerProvider";
 import {useContext} from "react";
 import {BsFillPlayFill, BsPauseFill} from "react-icons/bs";
+import {ImCross} from "react-icons/im";
+import {toast} from "react-toastify";
+import {WebSocketContext} from "../../WebSocketProvider";
+import {saveNotify} from "../../api/NotifyService/NotifyService";
 
 
 const DetailSong = () => {
     const navigate = useNavigate();
     const [account, setAccount] = useState(JSON.parse(localStorage.getItem("data")));
+    const [receiver, setReceiver] = useState({});
     const {currentSong, updateCurrentSongAndSongs} = useAudioPlayer();
-    const {isPlaying, handlePlayToggle} = useContext(AudioPlayerContext);
+    const {isPlaying, handlePlayToggle, updateAllCurrentComments, allCurrentComments} = useContext(AudioPlayerContext);
     const [songs, setSongs] = useState([]);
     const [currentSongDT, setCurrentSongDT] = useState({
         genres: {}
@@ -30,12 +41,28 @@ const DetailSong = () => {
     const [allComments, setAllComments] = useState([]);
     const {id} = useParams();
     const [relatedSongs, setrelatedSongs] = useState([]);
+    const [status, setStatus] = useState(true);
+    localStorage.setItem("status", status)
     const [isPlay, setIsPlay] = useState(false);
-    const [detailSong, setDetailSong] = useState({});
+    const [detailSong, setDetailSong] = useState({genres: {}});
+    const [currentDetailSong, setCurrentDetailSong] = useState();
+    const [relateSongIsPlaying, setRelateSongIsPlaying] = useState(false);
+    const {sendNotify} = useContext(WebSocketContext);
+
+    const [ownedSong, setOwnedSong] = useState(false);
+    const [removedComment, setRemovedComment] = useState(false);
+
     useEffect(() => {
         getSongByID(id)
             .then(res => {
-                setCurrentSongDT(res.data);
+                if (currentDetailSong == null) {
+                    setCurrentSongDT({...res.data, isPlaying: false});
+                } else if (relateSongIsPlaying) {
+                    setCurrentSongDT({...res.data, isPlaying: false});
+                } else {
+                    setCurrentSongDT({...res.data, isPlaying: isPlaying});
+                    console.log(currentSongDT)
+                }
                 getSongCreatedDate(res.data.timeCreate)
                 setPlay(res.data.plays)
                 setLike({
@@ -49,23 +76,61 @@ const DetailSong = () => {
         getLikeQuantity();
         getAllCommentBySongID(id)
         getAllSongByGenres();
-    }, [updateCurrentSongAndSongs, currentSong])
+        isSongOwnedByLoggedInAccount(id).then(res => setOwnedSong(res.data));
+    }, [isPlaying, currentDetailSong, updateCurrentSongAndSongs, removedComment, allCurrentComments])
+
+    const handleDetailSongClick = (song) => {
+        setRelateSongIsPlaying(false);
+        const newIsPlaying = !song.isPlaying;
+        song.isPlaying = newIsPlaying;
+        if (newIsPlaying) {
+            handlePlayToggle(true);
+        } else {
+            handlePlayToggle(false);
+        }
+        setCurrentSongDT({...song});
+        updateCurrentSongAndSongs(currentSongDT, songs);
+        setCurrentDetailSong({...song})
+        setIsPlaying();
+    };
+
+
+    const handleToggleRelatedSongClick = (relatedSong) => {
+        setRelateSongIsPlaying(true);
+        const updatedSongs = relatedSongs.map((song) => {
+            const newIsPlaying = song.id === relatedSong.id ? !song.isPlaying : false;
+            return {
+                ...song,
+                isPlaying: newIsPlaying,
+            }
+        });
+        setSongs(updatedSongs);
+        handlePlayToggle(updatedSongs.some((song) => song.isPlaying));
+        updateCurrentSongAndSongs(relatedSong, songs);
+    };
 
     const checkLike = () => {
-        if (like.account.name != null && like.song.nameSong != null) {
-            isLikedAPI(like).then(res => {
-                setIsLiked(res.data)
-            })
+        if (account == null) {
+            setIsLiked(false);
         } else {
-            console.log("Không có dữ liệu hợp lệ để gửi yêu cầu.");
+            if (like.account.name != null || like.song.nameSong != null) {
+                isLikedAPI(like).then(res => {
+                    setIsLiked(res.data)
+
+                })
+            }
         }
     }
 
     useEffect(() => {
-        if (like.account && like.song) {
-            checkLike();
-        }
+        checkLike();
     }, [like.account, like.song]);
+
+    useEffect(() => {
+        findAccountBySong(id).then(res => {
+            setReceiver(res.data)
+        })
+    }, []);
 
     const getLikeQuantity = () => {
         getSongLikeQuantityAPI(id).then(res => {
@@ -97,6 +162,39 @@ const DetailSong = () => {
         likeClickAPI(id).then(res => {
             setIsLiked(res.data)
             getLikeQuantity();
+            if (isLiked === 0) {
+                if (localStorage.getItem("status") === "true") {
+                    handleSendNotifyLike()
+                    setStatus(false)
+                    localStorage.setItem("status", `${status}`)
+                }
+            }
+        })
+    }
+    const handleSendNotifyLike = () => {
+        const data = {
+            sender: account,
+            receiver: {id: receiver.id},
+            message: `${account.name} đã thích 1 bài hát của bạn`,
+            navigate: '/song/detailSong/' + id
+        }
+        saveNotify(data).then(response => {
+            sendNotify(response.data);
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+    const handleSendNotifyComment = () => {
+        const data = {
+            sender: account,
+            receiver: {id: receiver.id},
+            message: `${account.name} đã bình luận 1 bài hát của bạn`,
+            navigate: '/song/detailSong/' + id
+        }
+        saveNotify(data).then(response => {
+            sendNotify(response.data);
+        }).catch(error => {
+            console.log(error)
         })
     }
 
@@ -146,55 +244,14 @@ const DetailSong = () => {
                 getAllCommentBySongID(id)
             })
             setComment('');
+            handleSendNotifyComment();
         }
 
     }
-
 
     const getAllCommentBySongID = (id) => {
-        getAllCommentBySongIdAPI(id).then(res => setAllComments(res.data))
+        getAllCommentBySongIdAPI(id).then(res => updateAllCurrentComments(res.data))
     }
-
-    const handleToggleSongPlay = (songId) => {
-        const updatedSongs = relatedSongs.map((song) => {
-            if (song.id === songId) {
-                const newIsPlaying = !song.isPlaying;
-                song.isPlaying = newIsPlaying;
-                if (newIsPlaying) {
-                    handlePlayToggle(true);
-                } else {
-                    handlePlayToggle(false);
-                }
-            } else {
-                song.isPlaying = false;
-            }
-            return song;
-        });
-        setSongs(updatedSongs);
-    };
-
-    useEffect(() => {
-        getSongByID(id)
-            .then(res => {
-                setDetailSong(res.data)
-            })
-            .catch(error => {
-                console.log(error);
-            })
-    }, [])
-
-    const handleSongClick = (song) => {
-        const newIsPlaying = !song.isPlaying;
-        song.isPlaying = newIsPlaying;
-        if (newIsPlaying) {
-            handlePlayToggle(true);
-        } else {
-            handlePlayToggle(false);
-        }
-        setDetailSong({...song});
-        updateCurrentSongAndSongs(detailSong, songs);
-        setIsPlaying();
-    };
 
 
     return (
@@ -211,13 +268,8 @@ const DetailSong = () => {
                                 <div className="col-xl-3 col-md-4">
                                     <div className="cover cover--round">
                                         <div className="cover__image">
-                                            <img src={currentSongDT.imgSong}
-                                                 alt="Treasure face"
-                                                 style={{
-                                                     marginLeft: "30px",
-                                                     marginTop: "10px"
-                                                 }}/>
-                                        </div>
+                                            <img src={currentSongDT.imgSong} alt="Treasure face"
+                                                 style={{marginLeft: "30px", marginTop: "10px"}}/></div>
                                     </div>
                                 </div>
                                 <div className="col-1 d-none d-xl-block"></div>
@@ -235,31 +287,14 @@ const DetailSong = () => {
                                                 <li>
                                                     <div className="dropdown-item"
                                                          role="button"
-                                                         >Thêm vào danh sách phát
+                                                    >Thêm vào danh sách phát
                                                     </div>
                                                 </li>
-                                                {/*<li>*/}
-                                                {/*    <div className="dropdown-item"*/}
-                                                {/*         role="button"*/}
-                                                {/*         >Add to queue*/}
-                                                {/*    </div>*/}
-                                                {/*</li>*/}
-                                                {/*<li>*/}
-                                                {/*    <div className="dropdown-item"*/}
-                                                {/*         role="button"*/}
-                                                {/*         >Next to play*/}
-                                                {/*    </div>*/}
-                                                {/*</li>*/}
-                                                {/*<li>*/}
-                                                {/*    <div className="dropdown-item"*/}
-                                                {/*         role="button">Share*/}
-                                                {/*    </div>*/}
-                                                {/*</li>*/}
                                                 <li className="dropdown-divider"></li>
                                                 <li>
                                                     <div className="dropdown-item"
                                                          role="button"
-                                                         >Phát
+                                                    >Phát
                                                     </div>
                                                 </li>
                                             </ul>
@@ -272,13 +307,14 @@ const DetailSong = () => {
                                         </li>
                                     </ul>
                                     <div className="mb-4"><p className="mb-2">Người đăng: <span
-                                        className="text-dark fw-medium">{currentSongDT.accountName}</span></p>
+                                        className="text-dark fw-medium">{currentSongDT.accountName}</span>
+                                        {currentSongDT.auth === true &&
+                                            <i className="fa-sharp fa-solid fa-circle-check"
+                                               style={{color: "#005eff", marginLeft: "5px"}}></i>
+                                        }
+                                    </p>
                                         <p className="mb-2">Ca sỹ: <span className="text-dark fw-medium">
                                            {currentSongDT && currentSongDT.nameSinger}
-                                            {currentSongDT.auth === true &&
-                                                <i className="fa-sharp fa-solid fa-circle-check"
-                                                   style={{color: "#005eff", marginLeft: "5px"}}></i>
-                                            }
                                         </span>
                                         </p>
                                     </div>
@@ -286,15 +322,16 @@ const DetailSong = () => {
                                         <li>
                                             <div className="d-flex align-items-center">
                                                 <button type="button"
-                                                        className="btn btn-play btn-default btn-icon rounded-pill playing">
-                                                    {detailSong.isPlaying ? (
+                                                        className="btn btn-play btn-default btn-icon rounded-pill playing"
+                                                        data-play-id="">
+                                                    {currentSongDT.isPlaying ? (
                                                         <BsPauseFill
-                                                            onClick={() => handleSongClick(detailSong)}
+                                                            onClick={() => handleDetailSongClick(currentSongDT)}
                                                             style={{fontSize: '30px'}}
                                                         />
                                                     ) : (
                                                         <BsFillPlayFill
-                                                            onClick={() => handleSongClick(detailSong)}
+                                                            onClick={() => handleDetailSongClick(currentSongDT)}
                                                             style={{fontSize: '30px'}}
                                                         />
                                                     )
@@ -306,34 +343,35 @@ const DetailSong = () => {
                                             {isLiked === 1 ?
                                                 (<div role="button"
                                                       className="text-dark d-flex align-items-center"
-                                                      aria-label="Favorite" >
-                                                    <i className="fa-sharp fa-solid fa-heart"
-                                                       style={{color: "#ff0000", fontSize: "24px"}}
-                                                       onClick={likeClick}>
-                                                    </i>
-                                                    <i className="ri-heart-fill heart-fill"></i>
-                                                    <span
-                                                        className="ps-2 fw-medium">{
-                                                        likedQuantity != null ? likedQuantity : ''
-                                                    }</span>
-                                                </div>) :
-                                                (<div role="button"
-                                                      className="text-dark d-flex align-items-center"
-                                                      aria-label="Favorite" data-favorite-id="1"
-                                                      onClick={likeClick}>
-                                                    <i className="ri-heart-line heart-empty"></i>
-                                                    <i className="ri-heart-fill heart-fill"></i> <span
-                                                    className="ps-2 fw-medium">{
-                                                    likedQuantity != null ? likedQuantity : ''
-                                                }</span></div>)}
-
+                                                      aria-label="Favorite">
+                                                        <i className="fa-sharp fa-solid fa-heart"
+                                                           style={{color: "#ff0000", fontSize: "24px"}}
+                                                           onClick={likeClick}>
+                                                        </i>
+                                                        <span
+                                                            className="ps-2 fw-medium">{
+                                                            likedQuantity != null ? likedQuantity : ''
+                                                        }
+                                                        </span>
+                                                    </div>
+                                                ) : (
+                                                    <div role="button"
+                                                         className="text-dark d-flex align-items-center"
+                                                         aria-label="Favorite" data-favorite-id="1"
+                                                         onClick={likeClick}>
+                                                        <i className="ri-heart-line heart-empty"></i>
+                                                        <span
+                                                            className="ps-2 fw-medium">{
+                                                            likedQuantity != null ? likedQuantity : ''
+                                                        }</span></div>)
+                                            }
                                         </li>
-                                        <li>
-                                            <div role="button"
-                                                 className="text-dark d-flex align-items-center"
-                                                 aria-label="Download"><i className="ri-download-2-line"></i> <span
-                                                className="ps-2 fw-medium">24</span></div>
-                                        </li>
+                                        {/*<li>*/}
+                                        {/*    <div role="button"*/}
+                                        {/*         className="text-dark d-flex align-items-center"*/}
+                                        {/*         aria-label="Download"><i className="ri-download-2-line"></i> <span*/}
+                                        {/*        className="ps-2 fw-medium">24</span></div>*/}
+                                        {/*</li>*/}
                                         {/*<li><span className="text-dark d-flex align-items-center"><i*/}
                                         {/*    className="ri-star-fill text-warning"></i> <span*/}
                                         {/*    className="ps-2 fw-medium">4.5</span></span></li>*/}
@@ -345,8 +383,8 @@ const DetailSong = () => {
                             </div>
                         </div>
                         <div className="section">
-                            <div className="section__head"><h3 className="mb-0">Related <span
-                                className="text-primary">Songs</span></h3></div>
+                            <div className="section__head"><h3 className="mb-0">Các bài hát <span
+                                className="text-primary">Liên quan</span></h3></div>
                             <div className="swiper-carousel swiper-carousel-button">
                                 <div className="swiper" data-swiper-slides="5" data-swiper-autoplay="true">
                                     <div className="swiper-wrapper">
@@ -355,8 +393,7 @@ const DetailSong = () => {
                                                 <div className="cover cover--round">
                                                     <div className="cover__head">
                                                         <ul className="cover__label d-flex">
-                                                            <li><span className="badge rounded-pill bg-danger"><i
-                                                                className="ri-heart-fill"></i></span>
+                                                            <li><span className="badge rounded-pill bg-danger"></span>
                                                             </li>
                                                         </ul>
                                                         <div
@@ -411,23 +448,18 @@ const DetailSong = () => {
                                                     <div className="cover__image"><img src={rs.imgSong}
                                                                                        alt={rs.nameSong}/>
                                                         <button type="button"
-                                                                className="btn btn-play btn-default btn-icon rounded-pill"
-                                                                data-play-id="">
-                                                            {/*<i className="ri-play-fill icon-play"/> */}
-                                                            {/*<i className="ri-pause-fill icon-pause"/>*/}
+                                                                className="btn btn-play btn-default btn-icon rounded-pill">
                                                             {rs.isPlaying ? (
                                                                 <AiOutlinePauseCircle
                                                                     onClick={() => {
-                                                                        handleToggleSongPlay(rs.id);
-                                                                        updateCurrentSongAndSongs(rs, songs);
+                                                                        handleToggleRelatedSongClick(rs);
                                                                     }}
                                                                     style={{fontSize: "30px"}}
                                                                 />
                                                             ) : (
                                                                 <AiOutlinePlayCircle
                                                                     onClick={() => {
-                                                                        handleToggleSongPlay(rs.id);
-                                                                        updateCurrentSongAndSongs(rs, songs);
+                                                                        handleToggleRelatedSongClick(rs);
                                                                     }}
                                                                     style={{fontSize: "30px"}}
                                                                 />
@@ -435,10 +467,13 @@ const DetailSong = () => {
                                                         </button>
                                                     </div>
                                                     <div className="cover__foot">
-                                                        <div className="cover__title text-truncate">{rs.nameSong}</div>
+                                                        <div
+                                                            className="cover__title text-truncate">{rs.nameSong}
+                                                        </div>
                                                         <p className="cover__subtitle text-truncate">
-                                                            <div>{rs.nameSinger}</div>
+                                                            {rs.nameSinger}
                                                         </p>
+
                                                     </div>
                                                 </div>
 
@@ -470,28 +505,32 @@ const DetailSong = () => {
                                             </button>
                                         </div>
                                     </form>
-                                    {allComments.map((cm) => {
+                                    {allCurrentComments.map((cm) => {
                                         return (
                                             <div className="avatar avatar--lg align-items-start" key={cm.id}>
                                                 <div className="avatar__image"><img src={cm.account.img} alt="user"/>
                                                 </div>
-                                                <div className="avatar__content"><span
-                                                    className="avatar__title mb-1">{cm.account.name}</span>
-                                                    <span
-                                                        className="avatar__subtitle mb-2">{cm.timeComment}</span>
-                                                    <div className="text-warning d-flex mb-1"><i
-                                                        className="ri-star-s-fill"></i>
-                                                        <i
-                                                            className="ri-star-s-fill"></i> <i
-                                                            className="ri-star-s-fill"></i>
-                                                        <i
-                                                            className="ri-star-s-fill"></i></div>
+                                                <div className="avatar__content">
+                                                    <div style={{display: "flex"}}>
+                                                        <span className="avatar__title mb-1">{cm.account.name}</span>
+                                                        {ownedSong && ownedSong ? (
+                                                            <span style={{
+                                                                marginLeft: "10px",
+                                                                cursor: "pointer",
+                                                                color: "red"
+                                                            }}><ImCross onClick={() => {
+                                                                removeCommentInASongByCommentID(id, cm.id).then(res =>
+                                                                        setRemovedComment(!removedComment),
+                                                                    toast.success("Xóa bình luận thành công"))
+                                                            }}></ImCross></span>
+                                                        ) : ('')
+                                                        }
+                                                    </div>
+                                                    <span className="avatar__subtitle mb-2">{cm.timeComment}</span>
+
+                                                    <div className="text-warning d-flex mb-1"></div>
                                                     <p>{cm.content}</p>
                                                     <div className="btn btn-link">
-                                                        <div className="btn__wrap">
-                                                            <i className="ri-reply-line fs-6"></i>
-                                                            <span>Reply</span>
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

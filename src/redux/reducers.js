@@ -1,12 +1,23 @@
 // reducers.js
-import {DELETE_ACCOUNT, EDIT_ACCOUNT, SAVE_ACCOUNT, SAVE_SONGS} from './actions';
+import {
+    CHANGE_STATUS,
+    COUNT_UNREAD_NOTIFY,
+    DELETE_ACCOUNT,
+    EDIT_ACCOUNT,
+    GET_ALL_NOTIFY,
+    SAVE_ACCOUNT,
+    SAVE_SONGS
+} from './actions';
 
 const initialState = {
     account: localStorage.getItem("data") ?
         JSON.parse(localStorage.getItem("data")) :
         {},
     songs: localStorage.getItem("songs") ?
-        JSON.parse(localStorage.getItem("songs")) : []
+        JSON.parse(localStorage.getItem("songs")) : [],
+    unreadNotify: 0,
+    notifyList: [],
+    toggleStatus: true
 
 };
 
@@ -34,6 +45,21 @@ export const accountInfo = (state = initialState, action) => {
             songs.push(action.payload)
             return {
                 ...state,songs: songs
+            }
+        case COUNT_UNREAD_NOTIFY:
+            return {
+                ...state,
+                unreadNotify: action.payload
+            };
+        case GET_ALL_NOTIFY:
+            return {
+                ...state,
+                notifyList: action.payload
+            };
+        case CHANGE_STATUS:
+            return {
+                ...state,
+                toggleStatus: !state.toggleStatus
             }
         default:
             return state;

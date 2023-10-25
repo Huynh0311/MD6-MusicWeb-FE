@@ -7,6 +7,17 @@ export function AudioPlayerProvider({children}) {
     const [currentSong, setCurrentSong] = useState(null);
     const [songs, setSongs] = useState([]);
     const [isPlaying,setIsPlaying] = useState(false);
+    const [currentPlaylist,setCurrentPlaylist] = useState();
+    const [allCurrentComments, setAllCurrentComments] = useState([]);
+
+    const updateAllCurrentComments = (playlist) => {
+        setAllCurrentComments(playlist);
+    };
+
+    const updateCurrentPlaylist = (playlist) => {
+        setCurrentPlaylist(playlist);
+    };
+
 
     const updateCurrentSongAndSongs = (song, songList) => {
         setCurrentSong(song);
@@ -17,7 +28,7 @@ export function AudioPlayerProvider({children}) {
     };
 
     return (
-        <AudioPlayerContext.Provider value={{currentSong, songs, setCurrentSong, setSongs, updateCurrentSongAndSongs,isPlaying,handlePlayToggle}}>
+        <AudioPlayerContext.Provider value={{currentSong, songs, setCurrentSong, setSongs, updateCurrentSongAndSongs,isPlaying,handlePlayToggle,currentPlaylist,updateCurrentPlaylist,updateAllCurrentComments,allCurrentComments}}>
             {children}
         </AudioPlayerContext.Provider>
     );
