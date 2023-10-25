@@ -104,8 +104,8 @@ const EditSong = () => {
             headers: {"content-type": "application/json"},
             body: JSON.stringify(songdata)
         }).then((res) => {
-            alert('Cập nhật bài hát thành công')
             navigate('/song');
+            toast.success("cập nhật bài hát thành công");
         }).catch((err) => {
             console.log(err.message)
         })
@@ -241,7 +241,9 @@ const EditSong = () => {
                                             'Chỉnh sửa'
                                         )}
                                     </button>
+                                    <Link to={"/song/"}>
                                     <button className="btn btn-danger">Hủy bỏ</button>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
