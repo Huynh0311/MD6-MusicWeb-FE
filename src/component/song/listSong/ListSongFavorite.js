@@ -27,7 +27,7 @@ const ListSongFavorite = () => {
 
     useEffect(() => {
         findById()
-    }, [updateCurrentSongAndSongs, currentSong,isLike]);
+    }, [updateCurrentSongAndSongs, currentSong, isLike]);
 
     function likeClick(id) {
         likeClickAPI(id).then(res => {
@@ -60,49 +60,49 @@ const ListSongFavorite = () => {
                         {listSong.length === 0 ? (
                             <p>Không còn bài hát yêu thích</p>
                         ) : (
-                        <div className="list list--order">
-                            <div className="row">
-                                {listSong.map((song) => (
-                                    <div className="list__item" key={song.id} style={{width: "99%"}}>
-                                        <div className="list__cover">
-                                            <img src={song.imgSong}
-                                                                          alt="ảnh"/>
-                                            <div
-                                               className="btn btn-play btn-sm btn-default btn-icon rounded-pill"
+                            <div className="list list--order">
+                                <div className="row">
+                                    {listSong.map((song) => (
+                                        <div className="list__item" key={song.id} style={{width: "99%"}}>
+                                            <div className="list__cover">
+                                                <img src={song.imgSong}
+                                                     alt="ảnh"/>
+                                                <div
+                                                    className="btn btn-play btn-sm btn-default btn-icon rounded-pill"
 
-                                               aria-label="Play pause">
-                                                {song.isPlaying ? (
-                                                    <BsPauseFill
-                                                        onClick={() => {
-                                                            handleToggleSongPlay(song.id);
-                                                            updateCurrentSongAndSongs(song, listSong);
-                                                        }}
-                                                        style={{fontSize: "30px"}}
-                                                    />
-                                                ) : (
-                                                    <BsFillPlayFill
-                                                        onClick={() => {
-                                                            handleToggleSongPlay(song.id);
-                                                            updateCurrentSongAndSongs(song, listSong);
-                                                        }}
-                                                        style={{fontSize: "30px"}}
-                                                    />
-                                                )}
+                                                    aria-label="Play pause">
+                                                    {song.isPlaying ? (
+                                                        <BsPauseFill
+                                                            onClick={() => {
+                                                                handleToggleSongPlay(song.id);
+                                                                updateCurrentSongAndSongs(song, listSong);
+                                                            }}
+                                                            style={{fontSize: "30px"}}
+                                                        />
+                                                    ) : (
+                                                        <BsFillPlayFill
+                                                            onClick={() => {
+                                                                handleToggleSongPlay(song.id);
+                                                                updateCurrentSongAndSongs(song, listSong);
+                                                            }}
+                                                            style={{fontSize: "30px"}}
+                                                        />
+                                                    )}
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className="list__content">
-                                            <div className="list__title text-truncate">
-                                                {song.nameSong}
-                                            </div>
-                                            <p className="list__subtitle text-truncate">
+                                            <div className="list__content">
+                                                <div className="list__title text-truncate">
+                                                    {song.nameSong}
+                                                </div>
+                                                <p className="list__subtitle text-truncate">
                                                     {song.nameSinger}
-                                            </p>
-                                        </div>
-                                        <ul className="list__option">
-                                            <li>
-                                                <div role="button"
-                                                   className="d-inline-flex active"
-                                                   aria-label="Favorite" data-favorite-id="1">
+                                                </p>
+                                            </div>
+                                            <ul className="list__option">
+                                                <li>
+                                                    <div role="button"
+                                                         className="d-inline-flex active"
+                                                         aria-label="Favorite" data-favorite-id="1">
                                                         <i className="fa-sharp fa-solid fa-heart"
                                                            style={{
                                                                color: "#ff0000",
@@ -111,32 +111,43 @@ const ListSongFavorite = () => {
                                                            onClick={() => likeClick(song?.id)}
                                                         />
 
-                                                </div>
-                                            </li>
-                                            <li className="dropstart d-inline-flex">
-                                                <div className="dropdown-link"
-                                                   role="button"
-                                                   data-bs-toggle="dropdown"
-                                                   aria-label="Cover options"
-                                                   aria-expanded="false"><i
-                                                    className="ri-more-fill">
+                                                    </div>
+                                                </li>
+                                                <li className="dropstart d-inline-flex">
+                                                    <div className="dropdown-link"
+                                                         role="button"
+                                                         data-bs-toggle="dropdown"
+                                                         aria-label="Cover options"
+                                                         aria-expanded="false"><i
+                                                        className="ri-more-fill">
 
-                                                </i>
-                                                </div>
-                                                <ul className="dropdown-menu dropdown-menu-sm">
-                                                    <li><div className="dropdown-item"
-                                                           role="button">Thêm vào danh sách phát</div></li>
-                                                    <li className="dropdown-divider"></li>
-                                                    <li><div className="dropdown-item"
-                                                           role="button">Phát</div></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                ))}
-                                {/*</div>*/}
+                                                    </i>
+                                                    </div>
+                                                    <ul className="dropdown-menu dropdown-menu-sm">
+                                                        <li>
+                                                            <div className="dropdown-item"
+                                                                 role="button">Thêm vào danh sách phát
+                                                            </div>
+                                                        </li>
+                                                        <li className="dropdown-divider"></li>
+                                                        <li>
+                                                            <div className="dropdown-item"
+                                                                 role="button"
+                                                                 onClick={() => {
+                                                                     handleToggleSongPlay(song.id);
+                                                                     updateCurrentSongAndSongs(song, listSong);
+                                                                 }}
+                                                            >Phát
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    ))}
+                                    {/*</div>*/}
+                                </div>
                             </div>
-                        </div>
                         )}
                     </div>
                 </div>

@@ -12,8 +12,20 @@ import {likeClickAPI} from "../api/LikesService/LikesService";
 import {saveNotify} from "../api/NotifyService/NotifyService";
 import {WebSocketContext} from "../WebSocketProvider";
 import {findAccountBySong} from "../api/songService/SongService";
+import _ from "lodash";
+import {toast} from "react-toastify";
+import {useSelector} from "react-redux";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import Button from "@mui/material/Button";
+import Modal from "@mui/material/Modal";
 
 function Top5Songs() {
+    const accountLogin = useSelector(state => state.account)
     const {currentSong, updateCurrentSongAndSongs} = useAudioPlayer();
     const {isPlaying, handlePlayToggle} = useContext(AudioPlayerContext);
     const [songs, setSongs] = useState([]);
@@ -21,6 +33,59 @@ function Top5Songs() {
     const [account, setAccount] = useState(JSON.parse(localStorage.getItem("data")));
     const {sendNotify} = useContext(WebSocketContext);
     const navigate = useNavigate();
+    const [open, setOpen] = React.useState(false);
+    const [playlist, setPlaylist] = useState([]);
+    const [selectedSongId, setSelectedSongId] = useState([]);
+    const [selectedPlaylist, setSelectedPlaylist] = useState([]);
+    // const [openSnackbar, setOpenSnackbar] = React.useState(false);
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+    };
+    const handleOpen = async (id) => {
+        if (_.isEmpty(accountLogin)) {
+            toast.warn("Bạn cần đăng nhập để sử dụng chức năng này");
+        } else {
+            try {
+                const response = await AxiosCustomize.get('/playlist/findByAccountId/' + accountLogin.id);
+                setSelectedSongId(id);
+                setPlaylist(response.data);
+                setOpen(true)
+            } catch (error) {
+                console.error('Lỗi khi lấy danh sách bài hát:', error);
+            }
+        }
+    };
+    const handleClose = () => setOpen(false);
+
+    const handleChangePlaylist = (event) => {
+        setSelectedPlaylist(event.target.value);
+        console.log(event.target.value)
+    };
+
+    const handleSave = async () => {
+        console.log('handleSave', selectedSongId, selectedPlaylist);
+        // TODO: Gọi API add song to playlist
+        try {
+            let playlistSong = {playlist: {id: selectedPlaylist}, song: {id: selectedSongId}}
+            const response = await AxiosCustomize.post('/playlist/saveToPlaylist', playlistSong);
+            toast.success('Thêm vào danh sách phát thành công');
+        } catch (error) {
+            console.error('Lỗi khi lấy danh sách bài hát:', error);
+        }
+        // Lưu xong thì đóng modal
+        handleClose();
+        // Đóng modal xong thì hiển thị thông báo thêm playlist thành công
+        // setOpenSnackbar(true);
+    };
+
     useEffect(() => {
         async function fetchData() {
             try {
@@ -160,44 +225,22 @@ function Top5Songs() {
                                     </div>
                                     <ul className="dropdown-menu dropdown-menu-sm">
                                         <li>
-                                            <div
-                                                className="dropdown-item"
-                                                role="button"
-                                            >
-                                                Add to playlist
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div
-                                                className="dropdown-item"
-                                                role="button"
-                                            >
-                                                Add to queue
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div
-                                                className="dropdown-item"
-                                                role="button"
-                                            >
-                                                Next to play
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div
-                                                className="dropdown-item"
-                                                role="button"
-                                            >
-                                                Share
+                                            <div className="dropdown-item"
+                                                 role="button"
+                                                 data-playlist-id="1" onClick={() => {
+                                                handleOpen(song.id)
+                                            }}>Thêm vào danh sách phát
                                             </div>
                                         </li>
                                         <li className="dropdown-divider"></li>
                                         <li>
-                                            <div
-                                                className="dropdown-item"
-                                                role="button"
-                                            >
-                                                Play
+                                            <div className="dropdown-item"
+                                                 role="button"
+                                                 onClick={() => {
+                                                     handleToggleSongPlay(song.id);
+                                                     updateCurrentSongAndSongs(song, songs);
+                                                 }}
+                                            >Phát
                                             </div>
                                         </li>
                                     </ul>
@@ -207,6 +250,39 @@ function Top5Songs() {
                     </div>
                 ))}
             </ul>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2" sx={{
+                        mb: 2
+                    }}>
+                        Vui lòng chọn Playlist muốn thêm
+                    </Typography>
+                    <FormControl sx={{
+                        mb: 2
+                    }} fullWidth>
+                        <InputLabel id="demo-simple-select-label">Chọn Playlist</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={selectedPlaylist}
+                            label="Chọn Playlist"
+                            onChange={handleChangePlaylist}
+                        >
+                            {playlist.map((item) =>
+                                (<MenuItem key={item.id} value={item.id}>{item.namePlaylist}</MenuItem>)
+                            )}
+                        </Select>
+                    </FormControl>
+                    <div style={{textAlign: 'right'}}>
+                        <Button variant="contained" onClick={handleSave}>Lưu</Button>
+                    </div>
+                </Box>
+            </Modal>
         </div>
     );
 }
