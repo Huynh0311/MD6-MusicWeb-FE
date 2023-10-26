@@ -19,6 +19,7 @@ import Select, {SelectChangeEvent} from '@mui/material/Select';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import {toast} from "react-toastify";
+import _ from "lodash";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -50,13 +51,17 @@ function SongList() {
     const [open, setOpen] = React.useState(false);
     // const [openSnackbar, setOpenSnackbar] = React.useState(false);
     const handleOpen = async (id) => {
-        try {
-            const response = await AxiosCustomize.get('/playlist/findByAccountId/' + accountLogin.id);
-            setSelectedSongId(id);
-            setPlaylist(response.data);
-            setOpen(true)
-        } catch (error) {
-            console.error('Lỗi khi lấy danh sách bài hát:', error);
+        if (_.isEmpty(accountLogin)) {
+            toast.warn("Bạn cần đăng nhập để sử dụng chức năng này");
+        } else {
+            try {
+                const response = await AxiosCustomize.get('/playlist/findByAccountId/' + accountLogin.id);
+                setSelectedSongId(id);
+                setPlaylist(response.data);
+                setOpen(true)
+            } catch (error) {
+                console.error('Lỗi khi lấy danh sách bài hát:', error);
+            }
         }
     };
     const handleClose = () => setOpen(false);

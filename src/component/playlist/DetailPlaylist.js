@@ -35,7 +35,7 @@ export default function DetailPlaylist() {
 
     const [open, setOpen] = React.useState(false);
     const handleOpen = (id) => {
-            setSongDeleteId(id);
+        setSongDeleteId(id);
         setOpen(true)
     };
     const [deleteSong, setDeleteSong] = useState(false);
@@ -65,29 +65,28 @@ export default function DetailPlaylist() {
         boxShadow: 24,
         p: 4,
     };
-const [songDeleteId, setSongDeleteId] = useState()
-
-
-    useEffect(() => {
-        findPlaylistById(id).then(res => {
-            setPlaylist({...res.data, isPlaying});
-            console.log(res.data);
-            if (songs) {
-                const updatedSongs = songs.map((song) => ({
-                    ...song,
-                    isPlaying: currentSong && currentSong.id === song.id ? isPlaying : false,
-                }));
-                setSongs(updatedSongs);
-            }
-            fetchPlaylistCount(id);
-            fetchAccount(id);
-        })
-    }, [isLikePlaylist, currentSong, updateCurrentSongAndSongs])
+    const [songDeleteId, setSongDeleteId] = useState()
 
     useEffect(() => {
         fetchSongs(id);
         setDeleteSong(false);
     }, [deleteSong, isLike]);
+
+    useEffect(() => {
+        findPlaylistById(id).then(res => {
+            setPlaylist({...res.data, isPlaying});
+            console.log(res.data);
+            // if (songs) {
+            //     const updatedSongs = songs.map((song) => ({
+            //         ...song,
+            //         isPlaying: currentSong && currentSong.id === song.id ? isPlaying : false,
+            //     }));
+            //     setSongs(updatedSongs);
+            // }
+            fetchPlaylistCount(id);
+            fetchAccount(id);
+        })
+    }, [isLikePlaylist, currentSong, updateCurrentSongAndSongs])
 
     const handleToggleSongPlay = (song1) => {
         const updateSongs = songs.map((song) => {
@@ -176,185 +175,186 @@ const [songDeleteId, setSongDeleteId] = useState()
 
     return (
         <>
-        <main id="page_content">
-            <div className="hero" style={{backgroundImage: "url(../../images/banner/event.jpg)"}}></div>
-            <div className="under-hero container">
-                <div className="section">
-                    <div className="row align-items-center">
-                        <div className="col-xl-3 col-md-4">
-                            <div className="cover cover--round">
-                                <div className="cover__image"><img src={playlist.playlistImg} alt={''}/>
+            <main id="page_content">
+                <div className="hero" style={{backgroundImage: "url(../../images/banner/event.jpg)"}}></div>
+                <div className="under-hero container">
+                    <div className="section">
+                        <div className="row align-items-center">
+                            <div className="col-xl-3 col-md-4">
+                                <div className="cover cover--round">
+                                    <div className="cover__image"><img src={playlist.playlistImg} alt={''}/>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="col-1 d-none d-xl-block"></div>
-                        <div className="col-md-8 mt-5 mt-md-0">
-                            <div className="d-flex flex-wrap mb-2"><span
-                                className="text-dark fs-4 fw-semi-bold pe-2">{playlist.namePlaylist}</span>
-                            </div>
-                            <p className="info-list info-list--dotted mb-3" style={{fontWeight: "bolder"}}>
-                                {count} bài hát có trong Playlist
-                            </p>
-                            <p className="mb-5">Tạo bởi:
-                                <a href="artist-details.html" className="text-dark fw-medium">{account.name}
-                                </a>
-                            </p>
-                            <ul className="info-list" style={{marginTop: "-30px", marginLeft: "-5px"}}>
-                                <li>
-                                    <div className="d-flex align-items-center">
-                                        <button type="button" id="play_all"
-                                                className="btn btn-icon btn-primary rounded-pill">
-                                            {playlist.isPlaying && isDuplicateSong ? (
-                                                <BsPauseFill role='button'
-                                                             onClick={() => {
-                                                                 handleToggleSongPlay(currentSong);
-                                                                 setIsDuplicateSong(true);
-                                                             }}
-                                                             style={{fontSize: "30px"}}
-                                                />
-                                            ) : (
-                                                <BsFillPlayFill role='button'
-                                                                onClick={() => {
-                                                                    if (currentSong === null) {
-                                                                        updateCurrentSongAndSongs(songs[0], songs);
-                                                                        handleToggleSongPlay(songs[0]);
-                                                                    } else {
-                                                                        updateCurrentSongAndSongs(songs[0], songs);
-                                                                        handleToggleSongPlay(songs[0]);
-                                                                    }
-                                                                }}
-                                                                style={{fontSize: "30px"}}
-                                                />
-                                            )}
-                                        </button>
-                                        <label htmlFor="play_all" className="ps-2 fw-semi-bold text-primary mb-0"
-                                               style={{cursor: 'pointer'}}>Phát Playlist
-                                        </label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <a role="button"
-                                       className="text-dark d-flex align-items-center"
-                                       aria-label="Favorite">
-                                        {playlist.isLiked === 1 ? (
-                                            <i className="fa-sharp fa-solid fa-heart"
-                                               style={{
-                                                   color: "#ff0000",
-                                                   fontSize: "24px"
-                                               }}
-                                               onClick={() => likePlaylistClick(playlist.id)}>
-                                            </i>
-                                        ) : (
-                                            <i className="ri-heart-line heart-empty"
-                                               onClick={() => likePlaylistClick(playlist.id)}
-                                            />
-                                        )}
-                                        <span className="ps-2 fw-medium">{playlist.likesQuantity}</span>
+                            <div className="col-1 d-none d-xl-block"></div>
+                            <div className="col-md-8 mt-5 mt-md-0">
+                                <div className="d-flex flex-wrap mb-2"><span
+                                    className="text-dark fs-4 fw-semi-bold pe-2">{playlist.namePlaylist}</span>
+                                </div>
+                                <p className="info-list info-list--dotted mb-3" style={{fontWeight: "bolder"}}>
+                                    {count} bài hát có trong Playlist
+                                </p>
+                                <p className="mb-5">Tạo bởi:
+                                    <a href="artist-details.html" className="text-dark fw-medium">{account.name}
                                     </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div className="section__head"><h3 className="mb-0" style={{marginTop: "30px"}}>Các bài hát có trong
-                        Playlist</h3></div>
-                    <div className="list list--order">
-                        <div className="row">
-                            {songs && songs.map((song) => (
-                                <div className="list__item list__playlist"
-                                     style={{width: "50%"}} key={song.id}>
-                                    <div className="list__cover">
-                                        <img src={song.imgSong}
-                                             alt="ảnh"/>
-                                        <a className="btn btn-play btn-sm btn-default btn-icon rounded-pill"
-                                            aria-label="Play pause">
-                                            {song.isPlaying ? (
-                                                <BsPauseFill role='button'
-                                                             onClick={() => {
-                                                                 handleToggleSongPlay(song);
-                                                                 updateCurrentSongAndSongs(song, songs);
-                                                             }}
-                                                             style={{fontSize: "30px"}}
-                                                />
+                                </p>
+                                <ul className="info-list" style={{marginTop: "-30px", marginLeft: "-5px"}}>
+                                    <li>
+                                        <div className="d-flex align-items-center">
+                                            <button type="button" id="play_all"
+                                                    className="btn btn-icon btn-primary rounded-pill">
+                                                {playlist.isPlaying && isDuplicateSong ? (
+                                                    <BsPauseFill role='button'
+                                                                 onClick={() => {
+                                                                     handleToggleSongPlay(currentSong);
+                                                                     setIsDuplicateSong(true);
+                                                                 }}
+                                                                 style={{fontSize: "30px"}}
+                                                    />
+                                                ) : (
+                                                    <BsFillPlayFill role='button'
+                                                                    onClick={() => {
+                                                                        if (currentSong === null) {
+                                                                            updateCurrentSongAndSongs(songs[0], songs);
+                                                                            handleToggleSongPlay(songs[0]);
+                                                                        } else {
+                                                                            updateCurrentSongAndSongs(songs[0], songs);
+                                                                            handleToggleSongPlay(songs[0]);
+                                                                        }
+                                                                    }}
+                                                                    style={{fontSize: "30px"}}
+                                                    />
+                                                )}
+                                            </button>
+                                            <label htmlFor="play_all" className="ps-2 fw-semi-bold text-primary mb-0"
+                                                   style={{cursor: 'pointer'}}>Phát Playlist
+                                            </label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a role="button"
+                                           className="text-dark d-flex align-items-center"
+                                           aria-label="Favorite">
+                                            {playlist.isLiked === 1 ? (
+                                                <i className="fa-sharp fa-solid fa-heart"
+                                                   style={{
+                                                       color: "#ff0000",
+                                                       fontSize: "24px"
+                                                   }}
+                                                   onClick={() => likePlaylistClick(playlist.id)}>
+                                                </i>
                                             ) : (
-                                                <BsFillPlayFill role='button'
-                                                                onClick={() => {
-                                                                    handleToggleSongPlay(song);
-                                                                    updateCurrentSongAndSongs(song, songs);
-                                                                }}
-                                                                style={{fontSize: "30px"}}
+                                                <i className="ri-heart-line heart-empty"
+                                                   onClick={() => likePlaylistClick(playlist.id)}
                                                 />
                                             )}
+                                            <span className="ps-2 fw-medium">{playlist.likesQuantity}</span>
                                         </a>
-                                    </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
 
-                                    <div className="list__content">
-                                        <Link to={`/song/detailSong/${song.id}`}>
-                                            <div className="list__title text-truncate">
-                                                {song.nameSong}
-                                            </div>
-                                        </Link>
-                                        <p className="list__subtitle text-truncate">
-                                                {song.nameSinger}
-                                        </p>
-                                    </div>
-                                    <ul className="list__option">
-                                        <li>
-                                            <a role="button"
-                                               className="d-inline-flex active"
-                                               aria-label="Favorite">
-                                                {song.isLiked === 1 ? (
-                                                    <i className="fa-sharp fa-solid fa-heart"
-                                                       style={{
-                                                           color: "#ff0000",
-                                                           fontSize: "24px"
-                                                       }}
-                                                       onClick={() => likeClick(song.id)}>
-                                                    </i>
+                        <div className="section__head"><h3 className="mb-0" style={{marginTop: "30px"}}>Các bài hát có
+                            trong
+                            Playlist</h3></div>
+                        <div className="list list--order">
+                            <div className="row">
+                                {songs.length !== 0 && songs.map((song) => (
+                                    <div className="list__item list__playlist"
+                                         style={{width: "50%"}} key={song.id}>
+                                        <div className="list__cover">
+                                            <img src={song.imgSong}
+                                                 alt="ảnh"/>
+                                            <a className="btn btn-play btn-sm btn-default btn-icon rounded-pill"
+                                               aria-label="Play pause">
+                                                {song.isPlaying ? (
+                                                    <BsPauseFill role='button'
+                                                                 onClick={() => {
+                                                                     handleToggleSongPlay(song);
+                                                                     updateCurrentSongAndSongs(song, songs);
+                                                                 }}
+                                                                 style={{fontSize: "30px"}}
+                                                    />
                                                 ) : (
-                                                    <i className="fa-sharp fa-regular fa-heart"
-                                                       onClick={() => likeClick(song.id)}
-                                                       style={{color: "#000000", fontSize: "24px"}}></i>
+                                                    <BsFillPlayFill role='button'
+                                                                    onClick={() => {
+                                                                        handleToggleSongPlay(song);
+                                                                        updateCurrentSongAndSongs(song, songs);
+                                                                    }}
+                                                                    style={{fontSize: "30px"}}
+                                                    />
                                                 )}
                                             </a>
-                                        </li>
-                                        <li className="dropstart d-inline-flex">
-                                            <a className="dropdown-link"
-                                               role="button"
-                                               data-bs-toggle="dropdown"
-                                               aria-label="Cover options"
-                                               aria-expanded="false"><i
-                                                className="ri-more-fill"></i>
-                                            </a>
-                                            <ul className="dropdown-menu dropdown-menu-sm">
-                                                { accountLogin && accountLogin.id === playlist.idAccount ?
+                                        </div>
+
+                                        <div className="list__content">
+                                            <Link to={`/song/detailSong/${song.id}`}>
+                                                <div className="list__title text-truncate">
+                                                    {song.nameSong}
+                                                </div>
+                                                <p className="list__subtitle text-truncate">
+                                                    {song.name}
+                                                </p>
+                                            </Link>
+                                        </div>
+                                        <ul className="list__option">
+                                            <li>
+                                                <a role="button"
+                                                   className="d-inline-flex active"
+                                                   aria-label="Favorite">
+                                                    {song.isLiked === 1 ? (
+                                                        <i className="fa-sharp fa-solid fa-heart"
+                                                           style={{
+                                                               color: "#ff0000",
+                                                               fontSize: "24px"
+                                                           }}
+                                                           onClick={() => likeClick(song.id)}>
+                                                        </i>
+                                                    ) : (
+                                                        <i className="fa-sharp fa-regular fa-heart"
+                                                           onClick={() => likeClick(song.id)}
+                                                           style={{color: "#000000", fontSize: "24px"}}></i>
+                                                    )}
+                                                </a>
+                                            </li>
+                                            <li className="dropstart d-inline-flex">
+                                                <a className="dropdown-link"
+                                                   role="button"
+                                                   data-bs-toggle="dropdown"
+                                                   aria-label="Cover options"
+                                                   aria-expanded="false"><i
+                                                    className="ri-more-fill"></i>
+                                                </a>
+                                                <ul className="dropdown-menu dropdown-menu-sm">
+                                                    {accountLogin && accountLogin.id === playlist.idAccount ?
+                                                        <li>
+                                                            <div className="dropdown-item" onClick={() => {
+                                                                handleOpen(song.id)
+                                                            }}
+                                                                 role="button">
+                                                                Xóa
+                                                            </div>
+                                                        </li>
+                                                        :
+                                                        <></>
+                                                    }
                                                     <li>
-                                                        <div className="dropdown-item" onClick={() => {
-                                                            handleOpen(song.id)
-                                                        }}
+                                                        <div className="dropdown-item"
                                                              role="button">
-                                                            Xóa
+                                                            Phát
                                                         </div>
                                                     </li>
-                                                    :
-                                                    <></>
-                                                }
-                                                <li>
-                                                    <div className="dropdown-item"
-                                                         role="button">
-                                                        Phát
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </div>
-                            ))}
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </main>
+            </main>
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -374,7 +374,7 @@ const [songDeleteId, setSongDeleteId] = useState()
                     </FormControl>
                     <div style={{textAlign: 'right'}}>
                         <Button variant="contained" onClick={handleDelete}>Xóa</Button>
-                        <Button variant="contained" onClick={handleClose} style={{marginLeft:"15px"}}>Đóng</Button>
+                        <Button variant="contained" onClick={handleClose} style={{marginLeft: "15px"}}>Đóng</Button>
                     </div>
                 </Box>
             </Modal>

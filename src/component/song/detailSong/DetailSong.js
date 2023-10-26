@@ -411,37 +411,15 @@ const DetailSong = () => {
                                                                 <li>
                                                                     <div className="dropdown-item"
                                                                          role="button"
-                                                                         data-favorite-id="1">Favorite
-                                                                    </div>
-                                                                </li>
-                                                                <li>
-                                                                    <div className="dropdown-item"
-                                                                         role="button"
-                                                                         data-playlist-id="1">Add to playlist
-                                                                    </div>
-                                                                </li>
-                                                                <li>
-                                                                    <div className="dropdown-item"
-                                                                         role="button"
-                                                                         data-queue-id="1">Add to queue
-                                                                    </div>
-                                                                </li>
-                                                                <li>
-                                                                    <div className="dropdown-item"
-                                                                         role="button"
-                                                                         data-next-id="1">Next to play
-                                                                    </div>
-                                                                </li>
-                                                                <li>
-                                                                    <div className="dropdown-item"
-                                                                         role="button">Share
+                                                                         data-playlist-id="1">
+                                                                        Thêm vào danh sách phát
                                                                     </div>
                                                                 </li>
                                                                 <li className="dropdown-divider"></li>
                                                                 <li>
                                                                     <div className="dropdown-item"
-                                                                         role="button"
-                                                                         data-play-id="1">Play
+                                                                         role="button">
+                                                                        Phát
                                                                     </div>
                                                                 </li>
                                                             </ul>
@@ -452,14 +430,14 @@ const DetailSong = () => {
                                                         <button type="button"
                                                                 className="btn btn-play btn-default btn-icon rounded-pill">
                                                             {rs.isPlaying ? (
-                                                                <AiOutlinePauseCircle
+                                                                <BsPauseFill
                                                                     onClick={() => {
                                                                         handleToggleRelatedSongClick(rs);
                                                                     }}
                                                                     style={{fontSize: "30px"}}
                                                                 />
                                                             ) : (
-                                                                <AiOutlinePlayCircle
+                                                                <BsFillPlayFill
                                                                     onClick={() => {
                                                                         handleToggleRelatedSongClick(rs);
                                                                     }}
@@ -469,13 +447,14 @@ const DetailSong = () => {
                                                         </button>
                                                     </div>
                                                     <div className="cover__foot">
+                                                        <Link to={"/song/detailSong/" + rs.id}>
                                                             <div
                                                                 className="cover__title text-truncate">{rs.nameSong}
                                                             </div>
-                                                        <p className="cover__subtitle text-truncate">
-                                                            {rs.nameSinger}
-                                                        </p>
-
+                                                            <p className="cover__subtitle text-truncate">
+                                                                {rs.nameSinger}
+                                                            </p>
+                                                        </Link>
                                                     </div>
                                                 </div>
 
@@ -507,7 +486,7 @@ const DetailSong = () => {
                                             </button>
                                         </div>
                                     </form>
-                                    {allComments.map((cm) => {
+                                    {allCurrentComments.map((cm) => {
                                         return (
                                             <div className="avatar avatar--lg align-items-start" key={cm.id}>
                                                 <div className="avatar__image"><img src={cm.account.img} alt="user"/>
@@ -516,19 +495,9 @@ const DetailSong = () => {
                                                     className="avatar__title mb-1">{cm.account.name}</span>
                                                     <span
                                                         className="avatar__subtitle mb-2">{cm.timeComment}</span>
-                                                    <div className="text-warning d-flex mb-1"><i
-                                                        className="ri-star-s-fill"></i>
-                                                        <i
-                                                            className="ri-star-s-fill"></i> <i
-                                                            className="ri-star-s-fill"></i>
-                                                        <i
-                                                            className="ri-star-s-fill"></i></div>
                                                     <p>{cm.content}</p>
                                                     <div className="btn btn-link">
-                                                        <div className="btn__wrap">
-                                                            <i className="ri-reply-line fs-6"></i>
-                                                            <span>Reply</span>
-                                                        </div>
+
                                                     </div>
                                                 </div>
                                             </div>

@@ -525,7 +525,7 @@ $(document).ready(function () {
                 (l = Utils.getLocalItem(s)) && (i = e.extend({}, i, l)),
                     y(),
                     (n = a.createElement("div")),
-                    (r = `<a href="javascript:void(0);" id="${d}_toggler">Settings</a>\n                    <div class="${d}__wrapper">\n                        <div class="${d}__head">${p}</div>\n                        <div class="${d}__body">`),
+                    (r = `<a href="javascript:void(0);" id="${d}_toggler">Cài đặt</a>\n                    <div class="${d}__wrapper">\n                        <div class="${d}__head">${p}</div>\n                        <div class="${d}__body">`),
                     (r += f(c, "Theme", "theme")),
                     (r += f(u, "Header", "header")),
                     (r += f(u, "Sidebar", "sidebar")),
