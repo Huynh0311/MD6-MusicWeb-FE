@@ -88,6 +88,7 @@ const CreateSong = () => {
                 let obj = response.data;
                 navigate(`/song/detailSong/${obj.id}`);
                 navigate(0);
+
             } catch (error) {
                 console.log(error)
             }
