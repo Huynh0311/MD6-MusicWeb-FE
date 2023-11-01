@@ -1,0 +1,72 @@
+
+.card header{
+    background-color: orange;
+}
+
+.card-title {
+    text-align: center;
+}
+
+.btn{
+    margin: 2px;;
+}
+.divbtn{
+    float: left;
+}
+
+/*.img-fixed-position{*/
+/*    width: 250px;*/
+/*    padding: 20px;*/
+/*}*/
+
+.namesong-width{
+    min-width: 300px;
+    max-width: 300px;
+}
+
+.descrip-width{
+    min-width: 500px;
+    max-width: 500px;
+}
+
+
+.custom-button{
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.tr-title-position{
+    text-align: center;
+}
+
+.tr-data-position{
+    position: inherit;
+    height: 60px;
+}
+
+.count-numb-rs{
+
+    counter-reset: my-sec-counter;
+}
+
+.count-numb::before {
+    counter-increment: my-sec-counter;
+    content:  counter(my-sec-counter) " ";
+}
+
+.container-fluid {
+    position: absolute;
+    top: 30%;
+    left: 16%;
+    width: 82%;
+    padding-right: var(--bs-gutter-x, 10px);
+    padding-left: var(--bs-gutter-x, 10px);
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.col-md-10 {
+    position: relative;
+    top: -80px;
+
+}

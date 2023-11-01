@@ -3,22 +3,24 @@ import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {toast} from 'react-toastify';
+import * as Yup from "yup";
 
-const RegisterComponent = ({setShowNavbar}) => {
+
+const validateSchema = Yup.object().shape({
+    confirmPassword: Yup.string()
+        .oneOf([Yup.ref('password'), null], 'Mật khẩu xác nhận phải trùng khớp với mật khẩu')
+        .required('Xác nhận mật khẩu không được để trống'),
+});
+const RegisterComponent = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
-    useEffect(() => {
-        setShowNavbar(false);
-        return () => {
-            setShowNavbar(true);
-        };
-    }, [setShowNavbar]);
+
     const validatePassword = (value) => {
         let errorMessage = '';
         if (!value) {
-            errorMessage = 'Mật khẩu phải có ít nhất 8 kí tự chữ và 1 kí tự số';
-        } else if (!/^(?=.*\d).{8,}$/.test(value)) {
-            errorMessage = 'Mật khẩu phải có ít nhất 8 kí tự chữ và 1 kí tự số';
+            errorMessage = 'Mật khẩu phải có ít nhất 8 kí tự chữ và ít nhất 1 kí tự số';
+        } else if (!/^(?=.*\d)[\w\d]{8,}$/.test(value)) {
+            errorMessage = 'Mật khẩu phải có ít nhất 8 kí tự chữ và ít nhất 1 kí tự số';
         }
         return errorMessage;
     };
@@ -35,8 +37,8 @@ const RegisterComponent = ({setShowNavbar}) => {
         let errorMessage = '';
         if (!value) {
             errorMessage = 'Tên không được để trống';
-        } else if (!/^(?=.*[a-zA-Z])[a-zA-Z0-9\s]*$/.test(value)) {
-            errorMessage = 'Tên không được chứa kí tự đặc biệt và phải chứa ít nhất 1 chữ';
+        } else if (!/^[^\s].*[^\s]$/.test(value)) {
+            errorMessage = 'Không được có dấu cách ở đầu và cuối';
         }
         return errorMessage;
     };
@@ -52,13 +54,6 @@ const RegisterComponent = ({setShowNavbar}) => {
     };
 
 
-    // const validateConfirmPassword = (value, { values }) => {
-    //     let errorMessage = '';
-    //     if (value !== values.password) {
-    //         errorMessage = 'Mật khẩu xác nhận không khớp';
-    //     }
-    //     return errorMessage;
-    // };
     return (
         <div>
             <Formik initialValues={{
@@ -71,62 +66,36 @@ const RegisterComponent = ({setShowNavbar}) => {
                 role: {
                     id: 1
                 }
-            }} onSubmit={(values) => {
-                if (values.password !== values.confirmPassword) {
-                    toast.error('Mật khẩu xác nhận không đúng', {
-                        position: "top-center",
-                        autoClose: 2000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "light",
-                    });
-                    return;
-                }
-                axios.post('http://localhost:8080/api/auth/register', values, {
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    }
-                }).then(() => {
-                    navigate('/login');
-                    toast.success('🦄 Wow so easy!', {
-                        position: "top-center",
-                        autoClose: 3000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "light",
-                    });
-                }).catch(error => {
-                    toast.error('Ôi,hỏng!', {
-                        position: "top-center",
-                        autoClose: 2000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "light",
-                    });
-                })
-            }}>
+            }}
+                    validationSchema={validateSchema}
+                    onSubmit={(values) => {
+                        console.log(values)
+                        axios.post('http://localhost:8080/api/auth/register', values, {
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(() => {
+                            navigate('/login');
+                            toast.success('Đăng kí thành công');
+                        }).catch(error => {
+                            if(error.response.status === 409){
+                                toast.error(error.response.data);
+                            }else {
+                                toast.error("Đăng kí thất bại");
+                            }
+                        })
+                    }}>
                 <Form>
                     <div id="wrapper">
                         <div className="auth py-5">
                             <div className="container">
                                 <div className="row">
-                                    <div className="col-xl-5 col-lg-7 col-md-9 col-sm-11 mx-auto">
+                                    <div className="col-xl-5 col-lg-7 col-md-9 col-sm-11 modal-login">
                                         <div className="card">
-                                            <div className="card-body p-sm-5"><h4>Register with <span
-                                                className="text-primary">Listen</span></h4>
-                                                <p className="fs-6">It's time to join with Listen and gain full awesome
-                                                    music
-                                                    experience.</p>
+                                            <div className="card-body p-sm-5"><h4>Đăng kí <span
+                                                className="text-primary"></span></h4>
+                                                <p className="fs-6">Đã đến lúc tham gia Nghe và có được trải nghiệm âm nhạc tuyệt vời.</p>
                                                 <div className="mb-3"><label htmlFor="email"
                                                                              className="form-label fw-medium">Email</label>
                                                     <Field type="text" id="email" className="form-control"
@@ -136,7 +105,7 @@ const RegisterComponent = ({setShowNavbar}) => {
                                                                                                className="error-message"/>  </span>
                                                 </div>
                                                 <div className="mb-3"><label htmlFor="c_password"
-                                                                             className="form-label fw-medium">Name
+                                                                             className="form-label fw-medium">Tên người dùng
                                                 </label> <Field type="text" id="name"
                                                                 name={'name'}
                                                                 className="form-control" validate={validateName}/></div>
@@ -145,7 +114,7 @@ const RegisterComponent = ({setShowNavbar}) => {
                                                                                            className="error-message"/>  </span>
                                                 <div className="mb-2">
                                                     <label htmlFor="password" className="form-label fw-medium">
-                                                        Password
+                                                        Mật khẩu
                                                     </label>
                                                     <Field type="password" id="password" name="password"
                                                            className="form-control" validate={validatePassword}/>
@@ -154,8 +123,8 @@ const RegisterComponent = ({setShowNavbar}) => {
                                                                                                className="error-message"/></span>
                                                 </div>
                                                 <div className="mb-2"><label htmlFor="password"
-                                                                             className="form-label fw-medium">Confirm
-                                                    Password</label>
+                                                                             className="form-label fw-medium">Xác nhận mật khẩu
+                                                    </label>
                                                     <Field type="password" id="confirmPassword" name="confirmPassword"
                                                            className="form-control"/>
                                                 </div>
@@ -163,22 +132,18 @@ const RegisterComponent = ({setShowNavbar}) => {
                                                                                            component="div"
                                                                                            className="error-message"></ErrorMessage> </span>
                                                 <div className="mb-3"><label htmlFor="phone"
-                                                                             className="form-label fw-medium">Phone
-                                                </label> <Field type="text" id="phone" name={'phone'}
+                                                                             className="form-label fw-medium">Số điện thoại                                                </label> <Field type="text" id="phone" name={'phone'}
                                                                 className="form-control" validate={validatePhone}/>
                                                     <span style={{color: "red"}}><ErrorMessage name="phone"
                                                                                                component="div"
                                                                                                className="error-message"/> </span>
                                                 </div>
                                                 <div className="mb-5">
-                                                    <button id="btn-form" className="btn btn-primary w-100">Save
+                                                    <button id="btn-form" className="btn btn-primary w-100">Đăng kí
                                                     </button>
                                                 </div>
-                                                <div className="mb-4">
-                                                    <div className="auth__or mx-auto fw-medium"></div>
-                                                </div>
-                                                <p>Do you have an Account?<br/><Link to={'/login'}
-                                                                                     className="fw-medium external">Login</Link>
+                                                <p>Bạn đã có tài khoản?<br/><Link to={'/login'}
+                                                                                     className="fw-medium external">Đăng nhập</Link>
                                                 </p>
                                             </div>
                                         </div>

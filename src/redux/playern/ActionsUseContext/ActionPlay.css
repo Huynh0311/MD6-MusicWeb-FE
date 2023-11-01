@@ -1,0 +1,76 @@
+.iconify--mdi {
+    color: #000000 !important;
+}
+
+.body-player {
+    position: relative;
+}
+
+.prev_next {
+    position: absolute;
+    top: 48%;
+    display: flex;
+    justify-content: space-around;
+    width: 40%;
+    font-size: 40px;
+    color: #000000 !important;
+}
+
+.prev {
+    cursor: pointer;
+}
+
+.next {
+    cursor: pointer;
+}
+
+.rhap_container {
+    background: #f7f7f9;
+}
+
+.rhap_controls-section {
+    color: #000000 !important;
+}
+
+.rhap_progress-section {
+    color: #000000 !important;
+}
+
+
+.rhap_main-controls-button {
+    color: #000000 !important;
+}
+
+.rhap_main-controls-button path {
+    color: #196EED !important;
+}
+
+.rhap_main-controls {
+    z-index: 999;
+}
+
+.rhap_rewind-button path,
+.rhap_forward-button path {
+    color: #000000 !important;
+}
+
+.rhap_progress-filled,
+.rhap_progress-indicator {
+    background-color: #196EED !important;
+}
+
+.rhap_progress-bar {
+    background-color: #88abe3 !important;
+}
+
+.rhap_download-progress{
+    background-color: #196EED !important;
+}
+
+.rhap_button-clear.rhap_volume-button {
+    color: #000000 !important;
+}
+
+.rhap_volume-bar, .rhap_volume-indicator {
+    background-color: #8c8c8c;
+}
